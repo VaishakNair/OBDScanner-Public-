@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">OBDScanner</string>
+    <string name="connectivity">Connectivity</string>
+    <string name="bluetooth_connection_status" formatted="false">Bluetooth: %s</string>
+    <string name="obd_connection_status" formatted="false">OBD Adapter: %s</string>
+    <string name="connectivity_tips">&#8226; Make sure that your phone is connected to the OBD adapter via Bluetooth\n</string>
+    <string name="bluetooth_permission_request_rationale">89 bhp requires Bluetooth permission to connect to OBD adapter. Please grant the permission.</string>
+    <string name="bluetooth_permission_request">89 bhp requires Bluetooth permission to connect to OBD adapter. No location data is collected by the app. Please grant the permission</string>
+</resources>
