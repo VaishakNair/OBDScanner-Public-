@@ -12,10 +12,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.enums.HandlerMessageCodes
-import pw.softwareengineer.v89bhp.R
-import pw.softwareengineer.v89bhp.enums.HandlerMessageCodes
 import java.io.IOException
-import java.util.*
+import java.util.UUID
 
 
 object BluetoothHelper {
@@ -50,12 +48,24 @@ object BluetoothHelper {
      */
     fun turnOff() {
         socket?.close()
-        bluetoothAdapter?.disable()
+        // Future versions of Android won't support disabling of Bluetooth. So commented out:
+//        try {
+//            bluetoothAdapter?.disable()
+//        } catch (ex: SecurityException) {
+//            Log.e(TAG, "Bluetooth permission(s) not granted", ex)
+//        }
         _connecting.value = false
     }
 
     fun queryPairedDevices(): List<BluetoothDevice>? =
-        bluetoothAdapter?.bondedDevices?.toList()
+        try {
+            bluetoothAdapter?.bondedDevices?.toList()
+        } catch (ex: SecurityException) {
+            // TODO Find usages and add logic to handle this exception:
+            Log.e(TAG, "Bluetooth permission(s) not granted", ex)
+            emptyList()
+        }
+
 
 
     fun connect(mHandler: Handler?, bluetoothDevice: BluetoothDevice?) {
@@ -100,7 +110,7 @@ object BluetoothHelper {
                     try {
                         Log.i(TAG, "Trying to connect to ${bluetoothDevice.name}")
                         it.connect()
-                        connected()
+                        connected(bluetoothDevice.name)
                         _connecting.postValue(false)
                         Log.i(TAG, "Connected to ${bluetoothDevice.name}")
                     } catch (ex: IOException) {
@@ -111,12 +121,25 @@ object BluetoothHelper {
                             Log.e(TAG, "Unable to close() socket during connection failure", ex)
                         }
                         _connecting.postValue(false)
-                        connectionFailed()
+                        connectionFailed(applicationContext.getString(
+                            R.string.bluetooth_connect_failed,
+                            bluetoothDevice.name, "BluetoothSocket.connect() threw IOException"
+                        ))
                     }
                 }
             } catch (ex: IOException) {
                 Log.e(TAG, "Unable to create bluetooth socket.", ex)
-                connectionFailed()
+                connectionFailed(applicationContext.getString(
+                    R.string.bluetooth_connect_failed,
+                    bluetoothDevice.name, "Unable to create bluetooth socket."
+                ))
+                _connecting.postValue(false)
+            } catch (ex: SecurityException) {
+                Log.e(TAG, "Bluetooth permission(s) not granted", ex)
+                connectionFailed(applicationContext.getString(
+                    R.string.bluetooth_connect_failed,
+                    bluetoothDevice.name, "Bluetooth permission(s) not granted."
+                ))
                 _connecting.postValue(false)
             }
         }
@@ -126,34 +149,30 @@ object BluetoothHelper {
             _connecting.value = false
         }
 
-        private fun connected() {
+        private fun connected(deviceName: String) {
             // Send a success message back to the view model
             Log.i(TAG, "Connected")
             val msg = mHandler?.obtainMessage(
                 HandlerMessageCodes.MESSAGE_SNACKBAR.ordinal,
                 1,
                 -1,
-                applicationContext.getString(R.string.bluetooth_connected, bluetoothDevice.name)
+                applicationContext.getString(R.string.bluetooth_connected, deviceName)
             )
 
-            mHandler?.sendMessage(msg)
+            mHandler?.sendMessage(msg!!)
         }
 
-        private fun connectionFailed() {
+        private fun connectionFailed(errorMessage: String) {
             // Send a failure message back to the view model
             Log.i(TAG, "Connection failed!")
             val msg = mHandler?.obtainMessage(
                 HandlerMessageCodes.MESSAGE_SNACKBAR.ordinal,
                 0,
                 -1,
-                applicationContext.getString(
-                    R.string.bluetooth_connect_failed,
-                    bluetoothDevice.name
-                )
-
+                errorMessage
             )
 
-            mHandler?.sendMessage(msg)
+            mHandler?.sendMessage(msg!!)
         }
     }
 }

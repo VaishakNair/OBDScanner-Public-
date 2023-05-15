@@ -2,7 +2,9 @@ package `in`.v89bhp.obdscanner.ui.connectivity
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -15,9 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.ui.theme.OBDScannerTheme
 
@@ -31,44 +32,89 @@ fun Connectivity(
 ) {
     Column {
         // Camera permission state
-        val bluetoothConnectPermissionState = rememberPermissionState(
-            android.Manifest.permission.BLUETOOTH_CONNECT
+
+        val bluetoothMultiplePermissionsState = rememberMultiplePermissionsState(
+            listOf(
+                android.Manifest.permission.BLUETOOTH_CONNECT,
+                android.Manifest.permission.BLUETOOTH_SCAN,
+            )
         )
 
-        if (bluetoothConnectPermissionState.status.isGranted) {
+        if (bluetoothMultiplePermissionsState.allPermissionsGranted) {
             // TODO Check if Bluetooth is turned on or not. If not, pop the dialog to turn bluetooth on.
             ConnectivityCard()
             TipCard()
         } else {
+
             Column {
-                val textToShow = stringResource(id = if (bluetoothConnectPermissionState.status.shouldShowRationale) {
-                    // If the user has denied the permission but the rationale can be shown,
-                    // then gently explain why the app requires this permission
-                    R.string.bluetooth_permission_request_rationale
-                } else {
-                    // If it's the first time the user lands on this feature, or the user
-                    // doesn't want to be asked again for this permission, explain that the
-                    // permission is required
-                    R.string.bluetooth_permission_request
-                })
-                Text(textToShow)
-                Button(onClick = { bluetoothConnectPermissionState.launchPermissionRequest() }) {
-                    Text("Request permission")
+                Text(
+                    getTextToShowGivenPermissions( // TODO Tweak the logic of this function
+                        bluetoothMultiplePermissionsState.revokedPermissions,
+                        bluetoothMultiplePermissionsState.shouldShowRationale
+                    )
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Button(onClick = { bluetoothMultiplePermissionsState.launchMultiplePermissionRequest() }) {
+                    Text("Request permissions")
                 }
             }
         }
+
     }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+private fun getTextToShowGivenPermissions(
+    permissions: List<PermissionState>,
+    shouldShowRationale: Boolean
+): String {
+    val revokedPermissionsSize = permissions.size
+    if (revokedPermissionsSize == 0) return ""
+
+    val textToShow = StringBuilder().apply {
+        append("The ")
+    }
+
+    for (i in permissions.indices) {
+        textToShow.append(permissions[i].permission)
+        when {
+            revokedPermissionsSize > 1 && i == revokedPermissionsSize - 2 -> {
+                textToShow.append(", and ")
+            }
+
+            i == revokedPermissionsSize - 1 -> {
+                textToShow.append(" ")
+            }
+
+            else -> {
+                textToShow.append(", ")
+            }
+        }
+    }
+    textToShow.append(if (revokedPermissionsSize == 1) "permission is" else "permissions are")
+    textToShow.append(
+        if (shouldShowRationale) {// Shown when user has denied a previous permission request.
+            " important. Please grant all of them for the app to function properly."
+        } else {
+            " denied. The app cannot function without them."
+        }
+    )
+    return textToShow.toString()
 }
 
 @Composable
 fun ConnectivityCard(modifier: Modifier = Modifier) {
-    Card(modifier = modifier
-        .fillMaxWidth()
-        .padding(8.dp)) {
-        Column(modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(text = stringResource(id = R.string.bluetooth_connection_status).format("Connected"))
             Text(text = stringResource(id = R.string.obd_connection_status).format("Connected"))
         }
@@ -77,13 +123,17 @@ fun ConnectivityCard(modifier: Modifier = Modifier) {
 
 @Composable
 fun TipCard(modifier: Modifier = Modifier) {
-    Card(modifier = modifier
-        .fillMaxWidth()
-        .padding(8.dp)) {
-        Column(modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(text = stringResource(id = R.string.connectivity_tips))
 
         }
