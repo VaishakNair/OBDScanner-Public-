@@ -36,6 +36,7 @@ fun Connectivity(
         )
 
         if (bluetoothConnectPermissionState.status.isGranted) {
+            // TODO Check if Bluetooth is turned on or not. If not, pop the dialog to turn bluetooth on.
             ConnectivityCard()
             TipCard()
         } else {
