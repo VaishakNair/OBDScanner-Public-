@@ -8,4 +8,7 @@
     <string name="bluetooth_permission_request">89 bhp requires Bluetooth permission to connect to OBD adapter. No location data is collected by the app. Please grant the permission</string>
     <string name="bluetooth_connected" formatted="false">Connected to %s</string>
     <string name="bluetooth_connect_failed" formatted="false">Unable to connect to %s. Reason: %s</string>
+    <string name="connection_step_1_instructions">1. Turn <b>OFF</b> your vehicle\'s ignition.\n\n2. Connect an <b>ELM327 Bluetooth OBD</b> adapter to your vehicle\'s <b>OBD port</b>.
+    The adapter can be bought from any online shopping site for as low as 7 USD. If you don\'t know the location of the port, please perform a Google search using your vehicle\'s make and model.\n\n3. Turn <b>ON</b> your vehicle\'s ignition.
+    The engine may or may not be running. While scanning for trouble codes the engine should not be running.\n\n4. Proceed to the next step.</string>
 </resources>

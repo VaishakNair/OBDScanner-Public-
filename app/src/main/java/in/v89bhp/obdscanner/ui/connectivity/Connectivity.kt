@@ -31,7 +31,6 @@ fun Connectivity(
     )
 ) {
     Column {
-        // Camera permission state
 
         val bluetoothMultiplePermissionsState = rememberMultiplePermissionsState(
             listOf(
@@ -42,8 +41,7 @@ fun Connectivity(
 
         if (bluetoothMultiplePermissionsState.allPermissionsGranted) {
             // TODO Check if Bluetooth is turned on or not. If not, pop the dialog to turn bluetooth on.
-            ConnectivityCard()
-            TipCard()
+            ConnectionSetupPager()
         } else {
 
             Column {
