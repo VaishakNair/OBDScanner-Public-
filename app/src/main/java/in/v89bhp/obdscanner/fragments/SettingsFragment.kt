@@ -1,9 +1,5 @@
 package `in`.v89bhp.obdscanner.fragments
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -11,11 +7,13 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
-import com.github.anastr.speedviewlib.*
+import com.github.anastr.speedviewlib.AwesomeSpeedometer
+import com.github.anastr.speedviewlib.DeluxeSpeedView
+import com.github.anastr.speedviewlib.RaySpeedometer
+import com.github.anastr.speedviewlib.SpeedView
+import com.github.anastr.speedviewlib.TubeSpeedometer
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.helpers.Utilities
-
-import kotlin.system.exitProcess
 
 
 class SettingsFragment : PreferenceFragmentCompat() {

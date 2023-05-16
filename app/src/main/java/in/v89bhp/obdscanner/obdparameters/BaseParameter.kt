@@ -14,10 +14,9 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.preference.PreferenceManager
 import com.github.anastr.speedviewlib.Speedometer
-
-import pw.softwareengineer.v89bhp.BuildConfig
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.helpers.Utilities
+import pw.softwareengineer.v89bhp.BuildConfig
 import pw.softwareengineer.v89bhp.ui.dialogs.GaugeSettingsDialogFragment
 import pw.softwareengineer.v89bhp.viewmodels.GaugesViewModel
 

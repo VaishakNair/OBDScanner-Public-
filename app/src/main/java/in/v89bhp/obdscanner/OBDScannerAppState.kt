@@ -1,7 +1,6 @@
 package `in`.v89bhp.obdscanner
 
 import android.content.Context
-import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext

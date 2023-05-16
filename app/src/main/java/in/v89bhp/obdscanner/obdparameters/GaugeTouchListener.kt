@@ -8,11 +8,10 @@ import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import androidx.core.view.GestureDetectorCompat
-import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.google.android.material.snackbar.Snackbar
-import pw.softwareengineer.v89bhp.BuildConfig
 import `in`.v89bhp.obdscanner.R
+import pw.softwareengineer.v89bhp.BuildConfig
 import pw.softwareengineer.v89bhp.viewmodels.GaugesViewModel
 
 /**

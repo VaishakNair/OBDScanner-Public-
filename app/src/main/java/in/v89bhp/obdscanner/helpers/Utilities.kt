@@ -4,11 +4,9 @@ package `in`.v89bhp.obdscanner.helpers
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
-import androidx.preference.R
 import `in`.v89bhp.obdscanner.BuildConfig
 import `in`.v89bhp.obdscanner.MainActivity
 import `in`.v89bhp.obdscanner.Screen
-import java.util.*
 import kotlin.system.exitProcess
 
 object Utilities {

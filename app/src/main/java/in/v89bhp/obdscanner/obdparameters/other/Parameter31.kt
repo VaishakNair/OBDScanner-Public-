@@ -1,13 +1,9 @@
 package `in`.v89bhp.obdscanner.obdparameters.other
 
 import android.content.Context
-import android.util.Log
-import androidx.lifecycle.ViewModel
 import androidx.preference.PreferenceManager
-import `in`.v89bhp.obdscanner.BuildConfig.APP_NAME
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.helpers.Utilities
-import java.lang.StringBuilder
 
 /**
  * Distance since diagnostic

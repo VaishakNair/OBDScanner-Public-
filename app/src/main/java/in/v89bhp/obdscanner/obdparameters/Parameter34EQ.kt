@@ -3,12 +3,10 @@ package `in`.v89bhp.obdscanner.obdparameters
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.preference.PreferenceManager
 import com.github.anastr.speedviewlib.Gauge
 import `in`.v89bhp.obdscanner.BuildConfig.APP_NAME
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.helpers.ScalingFactors
-import `in`.v89bhp.obdscanner.helpers.Utilities
 
 /**
  * Wide range O2 sensor equivalence ratio (Bank 1 Sensor 1)

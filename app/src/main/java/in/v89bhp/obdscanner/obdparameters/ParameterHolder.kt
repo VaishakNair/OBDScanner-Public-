@@ -1,8 +1,5 @@
 package `in`.v89bhp.obdscanner.obdparameters
 
-import android.util.Log
-import `in`.v89bhp.obdscanner.BuildConfig.APP_NAME
-
 object ParameterHolder {
     private val _parameterList = mutableListOf<BaseParameter>()
 

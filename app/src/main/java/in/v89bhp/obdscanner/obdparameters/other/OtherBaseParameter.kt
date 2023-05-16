@@ -2,13 +2,8 @@ package `in`.v89bhp.obdscanner.obdparameters.other
 
 import android.content.Context
 import android.util.Log
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.widget.FrameLayout
-import androidx.lifecycle.ViewModel
-import com.github.anastr.speedviewlib.AwesomeSpeedometer
 import `in`.v89bhp.obdscanner.BuildConfig
 import `in`.v89bhp.obdscanner.helpers.Utilities
-import pw.softwareengineer.v89bhp.viewmodels.GaugesViewModel
 
 abstract class OtherBaseParameter(
     val context: Context, val pid: String) {
