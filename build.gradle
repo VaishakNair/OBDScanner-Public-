@@ -3,6 +3,8 @@ buildscript {
     ext {
         compose_ui_version = '1.4.3'
         nav_version = '2.5.3'
+        compileSdkVersion = 33
+        minSdkVersion = 31
     }
 }
 

@@ -7,10 +7,15 @@ android {
     namespace 'in.v89bhp.obdscanner'
     compileSdk 33
 
+
+    buildFeatures {
+        buildConfig true
+    }
+
     defaultConfig {
         applicationId "in.v89bhp.obdscanner"
-        minSdk 31
-        targetSdk 33
+        minSdk rootProject.ext.minSdkVersion
+        targetSdk rootProject.ext.compileSdkVersion
         versionCode 1
         versionName "1.0"
 
@@ -18,12 +23,20 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
+
     }
 
     buildTypes {
+
+        debug {
+            buildConfigField("String", "APP_NAME", "\"89bhp\"")
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "APP_NAME", "\"89bhp\"")
         }
     }
     compileOptions {
@@ -59,6 +72,9 @@ dependencies {
     implementation "androidx.compose.material3:material3:1.0.1"
     implementation "androidx.navigation:navigation-compose:$nav_version"
     implementation "com.google.accompanist:accompanist-permissions:0.31.2-alpha"
+
+    // SpeedView Gauges
+    implementation project(':speedview')
 
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.0") {

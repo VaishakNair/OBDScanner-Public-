@@ -1,5 +1,9 @@
+<!DOCTYPE resources [
+    <!ENTITY oxygen "Oxygen">
+    ]>
 <resources>
     <string name="app_name">OBDScanner</string>
+    <string name="oxygen">&oxygen;</string>
     <string name="connectivity">Connectivity</string>
     <string name="bluetooth_connection_status" formatted="false">Bluetooth: %s</string>
     <string name="obd_connection_status" formatted="false">OBD Adapter: %s</string>
@@ -11,4 +15,212 @@
     <string name="connection_step_1_instructions">1. Turn <b>OFF</b> your vehicle\'s ignition.\n\n2. Connect an <b>ELM327 Bluetooth OBD</b> adapter to your vehicle\'s <b>OBD port</b>.
     The adapter can be bought from any online shopping site for as low as 7 USD. If you don\'t know the location of the port, please perform a Google search using your vehicle\'s make and model.\n\n3. Turn <b>ON</b> your vehicle\'s ignition.
     The engine may or may not be running. While scanning for trouble codes the engine should not be running.\n\n4. Proceed to the next step.</string>
+
+    <string name="bluetooth_off">89 bhp requires Bluetooth to connect to OBD adapter. Currently Bluetooth is turned OFF.</string>
+    <string name="turn_bluetooth_on">Turn Bluetooth on</string>
+    <string name="paired_device_connected_hint" formatted="false">89 bhp is now connected to %s. Click \'Next\' to proceed. If the connected device is not the OBD adapter, please
+    select one from the list. If your adapter is not present in the list, please <b>pair</b> it by clicking the \'+\' icon above.</string>
+    <string name="no_paired_device_connected_hint">Please select a paired OBD adapter from the list below. It will usually have \'OBD\' in its name. If not found, please <b>pair</b>
+    an adapter by clicking the \'+\' icon above.</string>
+    <string name="pair">Pair</string>
+    <string name="obd_adapter">OBD Adapter</string>
+    <string name="vehicle_ecu">Vehicle ECU</string>
+    <string name="colon" translatable="false">:</string>
+    <string name="connected">Connected</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="connection_successful">89 bhp is now connected to your vehicle. Have fun!</string>
+    <string name="unsupported_parameter">This parameter is not supported by your vehicle\'s ECU</string>
+    <string name="connect">Connect</string>
+    <string name="o1_b1">&oxygen; Sensor 1: Present at Bank 1</string>
+    <string name="o2_b1">&oxygen; Sensor 2: Present at Bank 1</string>
+    <string name="o3_b1">&oxygen; Sensor 3: Present at Bank 1</string>
+    <string name="o4_b1">&oxygen; Sensor 4: Present at Bank 1</string>
+    <string name="o1_b2">&oxygen; Sensor 1: Present at Bank 2</string>
+    <string name="o2_b2">&oxygen; Sensor 2: Present at Bank 2</string>
+    <string name="o3_b2">&oxygen; Sensor 3: Present at Bank 2</string>
+    <string name="o4_b2">&oxygen; Sensor 4: Present at Bank 2</string>
+    <string name="fuel_status_not_running">Fuel system status: Engine is not running</string>
+    <string name="fuel_status_1">Fuel system 1 status</string>
+    <string name="fuel_status_2">Fuel system 2 status</string>
+    <string name="fuel_system_open_loop">Open loop - has not yet satisfied conditions to go closed loop</string>
+    <string name="fuel_system_closed_loop">Closed loop - using &oxygen; sensor(s) as feedback for fuel control</string>
+    <string name="fuel_system_open_loop_driving_cond">Open loop due to driving conditions (e.g. power enrichment, deceleration enleanment)</string>
+    <string name="fuel_system_open_loop_fault">Open loop due to detected system fault</string>
+    <string name="fuel_system_closed_loop_fault">Closed loop, but fault with at least one &oxygen; sensor - maybe using single &oxygen; sensor for fuel control</string>
+    <string name="no_data" translatable="false">NO DATA</string>
+    <string name="mil_engine_run_time">Time run by engine while check engine light is activated (min)</string>
+    <string name="time_run_since_dtc_cleared">Time run by engine since diagnostic trouble codes cleared (min)</string>
+    <string name="engine_total_run_time">Total engine run time (hrs)</string>
+    <string name="engine_total_idle_time">Total idle run time (hrs)</string>
+    <string name="distance_mil_on">Distance travelled while check engine light is activated</string>
+    <string name="warm_ups_since_dtc_cleared">Number of warm-ups since diagnostic trouble codes cleared</string>
+    <string name="distance_since_dtc_cleared">Distance since diagnostic trouble codes cleared</string>
+    <string name="maf_a_supported">MAF Sensor A: Supported</string>
+    <string name="maf_b_supported">MAF Sensor B: Supported</string>
+    <string name="ect_1_supported">Engine coolant temperature sensor 1: Supported</string>
+    <string name="ect_2_supported">Engine coolant temperature sensor 2: Supported</string>
+    <string name="frp_atmos">Fuel rail pressure at engine referenced to atmosphere</string>
+    <string name="intake_mani_abs_pres">Intake manifold absolute pressure</string>
+    <string name="rpm" translatable="false">RPM</string>
+    <string name="vehicle_speed">Vehicle speed</string>
+    <string name="ign_timing_advance_1">Ignition timing advance for #1 cylinder</string>
+    <string name="intake_air_temperature">Intake air temperature</string>
+    <string name="stft_b2_s3">Short term fuel trim (Bank 2 Sensor 3)</string>
+    <string name="oxygen_sensor_b2_s3">&oxygen; sensor (Bank 2 Sensor 3)</string>
+    <string name="stft_b2_s4">Short term fuel trim (Bank 2 Sensor 4)</string>
+    <string name="oxygen_sensor_b2_s4">&oxygen; sensor (Bank 2 Sensor 4)</string>
+    <string name="wide_range_o2_b2_s3">Wide range &oxygen; sensor (Bank 2 Sensor 3)</string>
+    <string name="wide_range_o2_b2_s4">Wide range &oxygen; sensor (Bank 2 Sensor 4)</string>
+    <string name="egr_valve_flow">EGR valve flow</string>
+    <string name="evaporative_purge_flow">Evaporative purge flow</string>
+    <string name="fuel_level">Fuel level</string>
+    <string name="equi_ratio_b2_s3">Equivalence ratio (Bank 2 Sensor 3)</string>
+    <string name="equi_ratio_b2_s4">Equivalence ratio (Bank 2 Sensor 4)</string>
+    <string name="cat_temp_b1_s1">Catalyst temperature (Bank 1 Sensor 1)</string>
+    <string name="cat_temp_b2_s1">Catalyst temperature (Bank 2 Sensor 1)</string>
+    <string name="cat_temp_b1_s2">Catalyst temperature (Bank 1 Sensor 2)</string>
+    <string name="cat_temp_b2_s2">Catalyst temperature (Bank 2 Sensor 2)</string>
+    <string name="engine_load">Engine load</string>
+    <string name="engine_oil_temp">Engine oil temperature</string>
+    <string name="fi_timing">Fuel injection timing</string>
+    <string name="engine_fuel_rate">Engine fuel rate</string>
+    <string name="engine_coolant_temp">Engine coolant temperature</string>
+    <string name="ltft_b1">Long term fuel trim (Bank 1)</string>
+    <string name="ltft_b2">Long term fuel trim (Bank 2)</string>
+    <string name="maf_rate">Mass air flow rate</string>
+    <string name="absolute_throttle_position">Absolute throttle position</string>
+    <string name="stft_b1_s1">Short term fuel trim (Bank 1 Sensor 1)</string>
+    <string name="oxygen_sensor_b1_s1">&oxygen; sensor (Bank 1 Sensor 1)</string>
+    <string name="stft_b1_s2">Short term fuel trim (Bank 1 Sensor 2)</string>
+    <string name="oxygen_sensor_b1_s2">&oxygen; sensor (Bank 1 Sensor 2)</string>
+    <string name="stft_b1_s3">Short term fuel trim (Bank 1 Sensor 3)</string>
+    <string name="oxygen_sensor_b1_s3">&oxygen; sensor (Bank 1 Sensor 3)</string>
+    <string name="stft_b1_s4">Short term fuel trim (Bank 1 Sensor 4)</string>
+    <string name="oxygen_sensor_b1_s4">&oxygen; sensor (Bank 1 Sensor 4)</string>
+    <string name="stft_b2_s1">Short term fuel trim (Bank 2 Sensor 1)</string>
+    <string name="oxygen_sensor_b2_s1">&oxygen; sensor (Bank 2 Sensor 1)</string>
+    <string name="stft_b2_s2">Short term fuel trim (Bank 2 Sensor 2)</string>
+    <string name="oxygen_sensor_b2_s2">&oxygen; sensor (Bank 2 Sensor 2)</string>
+    <string name="frp_mani_vac">Fuel rail pressure relative to manifold vacuum</string>
+    <string name="frp_gdi_diesel">Fuel rail pressure for GDI and diesel engines</string>
+    <string name="wide_range_o2_b1_s1">Wide range &oxygen; sensor (Bank 1 Sensor 1)</string>
+    <string name="wide_range_o2_b1_s2">Wide range &oxygen; sensor (Bank 1 Sensor 2)</string>
+    <string name="wide_range_o2_b1_s3">Wide range &oxygen; sensor (Bank 1 Sensor 3)</string>
+    <string name="wide_range_o2_b1_s4">Wide range &oxygen; sensor (Bank 1 Sensor 4)</string>
+    <string name="wide_range_o2_b2_s1">Wide range &oxygen; sensor (Bank 2 Sensor 1)</string>
+    <string name="wide_range_o2_b2_s2">Wide range &oxygen; sensor (Bank 2 Sensor 2)</string>
+    <string name="evap_system_vap_pres">Evap system vapour pressure</string>
+    <string name="barometric_pres">Barometric pressure</string>
+    <string name="equi_ratio_b1_s1">Equivalence ratio (Bank 1 Sensor 1)</string>
+    <string name="equi_ratio_b1_s2">Equivalence ratio (Bank 1 Sensor 2)</string>
+    <string name="equi_ratio_b1_s3">Equivalence ratio (Bank 1 Sensor 3)</string>
+    <string name="equi_ratio_b1_s4">Equivalence ratio (Bank 1 Sensor 4)</string>
+    <string name="equi_ratio_b2_s1">Equivalence ratio (Bank 2 Sensor 1)</string>
+    <string name="equi_ratio_b2_s2">Equivalence ratio (Bank 2 Sensor 2)</string>
+    <string name="battery_ecu_voltage">Battery/ Control module voltage</string>
+    <string name="abs_load_value">Absolute load value</string>
+    <string name="relative_throttle_position">Relative throttle position</string>
+    <string name="ambient_air_temperature">Ambient air temperature</string>
+    <string name="evap_sys_vap_pres_wide_range">Evap system vapour pressure (wide range)</string>
+    <string name="secondary_stft_b1">Secondary short term fuel trim (Bank 1)</string>
+    <string name="secondary_ltft_b1">Secondary long term fuel trim (Bank 1)</string>
+    <string name="secondary_stft_b2">Secondary short term fuel trim (Bank 2)</string>
+    <string name="secondary_ltft_b2">Secondary long term fuel trim (Bank 2)</string>
+    <string name="boost_pressure_a">Boost pressure (A)</string>
+    <string name="boost_pressure_b">Boost pressure (B)</string>
+    <string name="turbo_rpm_a">Turbo RPM (A)</string>
+    <string name="turbo_rpm_b">Turbo RPM (B)</string>
+    <string name="vin">Vehicle Identification Number (VIN)</string>
+    <string name="obd_protocol">OBD Protocol</string>
+    <string name="narrowband">Narrowband</string>
+    <string name="wideband" translatable="false">Wideband</string>
+    <string name="misfire" translatable="false">Misfire</string>
+    <string name="fuel_system">Fuel System</string>
+    <string name="comprehensive_componenet">Comprehensive Component</string>
+    <string name="catalyst">Catalyst</string>
+    <string name="heated_catalyst">Heated Catalyst</string>
+    <string name="evaporative_system">Evaporative System</string>
+    <string name="secondary_air_system">Secondary Air System</string>
+    <string name="a_c_sys_refrigerant">A/C System Refrigerant</string>
+    <string name="oxygen_sensor">&oxygen; Sensor</string>
+    <string name="oxygen_sensor_heater">&oxygen; Sensor Heater</string>
+    <string name="egr_sys">EGR System</string>
+    <string name="disabled">Disabled</string>
+    <string name="complete">Complete</string>
+    <string name="incomplete">Incomplete</string>
+    <string name="connection_error">Connection error. Make sure that the OBD adapter is connected via Bluetooth.</string>
+    <string name="obd_error_1">Error occurred while receiving response from OBD adapter.</string>
+    <string name="ign_off_error">ECU is not returning any response. Make sure that the ignition is ON and try again.</string>
+    <string name="non_critical_error">Non-critical error</string>
+    <string name="obd_busy_error">OBD bus is busy. Please wait and try again.</string>
+    <string name="sending_failed">Sending failed.</string>
+    <string name="percentage">Percentage</string>
+    <string name="absolute">Absolute</string>
+    <string name="voltage">Voltage</string>
+    <string name="gp_abs_load_value">Absolute Load Value</string>
+    <string name="gp_ambient_air">Ambient Air</string>
+    <string name="gp_baro_pres">Barometric Pressure</string>
+    <string name="gp_battery_ecu">Battery/ Control Module</string>
+    <string name="gp_boost_pres">Boost Pressure</string>
+    <string name="gp_turbo_a">Turbo A</string>
+    <string name="gp_turbo_b">Turbo B</string>
+    <string name="gp_catalyst_temp">Catalyst Temperature</string>
+    <string name="b1_s1">Bank 1 Sensor 1</string>
+    <string name="b1_s2">Bank 1 Sensor 2</string>
+    <string name="b1_s3">Bank 1 Sensor 3</string>
+    <string name="b1_s4">Bank 1 Sensor 4</string>
+    <string name="b2_s1">Bank 2 Sensor 1</string>
+    <string name="b2_s2">Bank 2 Sensor 2</string>
+    <string name="b2_s3">Bank 2 Sensor 3</string>
+    <string name="b2_s4">Bank 2 Sensor 4</string>
+    <string name="gp_coolant_temp">Coolant Temperature</string>
+    <string name="gp_egr_valve">EGR Valve</string>
+    <string name="flow_percentage">Flow percentage</string>
+    <string name="gp_engine_fuel_rate">Engine Fuel Rate</string>
+    <string name="litres_per_hour">Litres per hour</string>
+    <string name="gp_engine_load">Engine Load</string>
+    <string name="calculated_engine_load">Calculated engine load</string>
+    <string name="gp_engine_oil">Engine Oil</string>
+    <string name="gp_equi_ratio">Equivalence Ratio</string>
+    <string name="gp_evap_system">Evap System</string>
+    <string name="vapour_pressure">Vapour pressure</string>
+    <string name="vapour_pressure_wide_range">Vapour pressure (wide range)</string>
+    <string name="gp_evap_purge">Evaporative Purge</string>
+    <string name="gp_fuel_injection_timing">Fuel Injection Timing</string>
+    <string name="degrees">Degrees</string>
+    <string name="gp_fuel_level">Fuel Level</string>
+    <string name="gp_fuel_rail_pres">Fuel Rail Pressure</string>
+    <string name="atmosphere_relative">Relative to atmosphere</string>
+    <string name="manifold_vacuum_relative">Relative to manifold vacuum</string>
+    <string name="gp_ignition_advance">Ignition Timing Advance</string>
+    <string name="cylinder_1">#1 Cylinder</string>
+    <string name="gp_intake_manifold">Intake Manifold</string>
+    <string name="abs_pres">Absolute pressure</string>
+    <string name="gp_ltft">Long Term Fuel Trim</string>
+    <string name="bank_1">Bank 1</string>
+    <string name="bank_2">Bank 2</string>
+    <string name="gp_ltft_sec">Long Term Fuel Trim (Secondary)</string>
+    <string name="gp_maf">Mass Air Flow</string>
+    <string name="gp_o2_sen_volt">&oxygen; Sensor Voltage</string>
+    <string name="gp_stft">Short Term Fuel Trim</string>
+    <string name="gp_stft_sec">Short Term Fuel Trim (Secondary)</string>
+    <string name="speedometer">Speedometer</string>
+    <string name="tachometer">Tachometer</string>
+    <string name="engine_rpm">Engine RPM</string>
+    <string name="gp_throttle_pos">Throttle Position</string>
+    <string name="relative">Relative</string>
+    <string name="wideband_o2_current">Wideband &oxygen; Sensor Current</string>
+    <string name="wideband_o2_voltage">Wideband &oxygen; Sensor Voltage</string>
+    <string name="gdi_diesel_engines">GDI and diesel engines</string>
+    <string name="air_temp">Air temperature</string>
+    <string name="english" translatable="false">English</string>
+    <string name="language">Language</string>
+    <string name="hindi" translatable="false">हिन्दी</string>
+    <string name="select_language">Select a language</string>
+    <string name="toggle_hud">Toggle HUD</string>
+    <string name="hud_no_movement">Turn off HUD mode to move gauge</string>
+    <string name="audio_alert">Audio alert</string>
+    <string name="oxygen_sensor_type_bank_1" formatted="false">Bank 1 Sensor %d: %s\n</string>
+    <string name="oxygen_sensor_type_bank_2" formatted="false">Bank 2 Sensor %d: %s\n</string>
+    <string name="type_title">Type</string>
 </resources>

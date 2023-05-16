@@ -13,4 +13,7 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "OBDScanner"
-include ':app'
+
+include ':app', ':speedview'
+project(':speedview').projectDir=file('/home/vaishak/Coder/Android/AndroidLibraries/ThirdPartyLibraries/SpeedView-master/speedviewlib')
+
