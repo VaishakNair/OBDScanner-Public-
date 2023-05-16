@@ -2,7 +2,6 @@ package `in`.v89bhp.obdscanner.obdparameters.other
 
 import android.content.Context
 import `in`.v89bhp.obdscanner.R
-import `in`.v89bhp.obdscanner.R
 
 /**
  * Time run by the engine while MIL is

@@ -1,0 +1,43 @@
+<androidx.preference.PreferenceScreen
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <Preference
+            app:key="gaugeType"
+            app:title="@string/gauge"
+            app:fragment="pw.softwareengineer.v89bhp.ui.GaugeTypePickerFragment"/>
+
+    <PreferenceCategory
+            app:title="@string/units">
+        <ListPreference
+                app:title="@string/distance"
+                app:key="distance"
+                app:entries="@array/distance_pref_entries"
+                app:entryValues="@array/distance_pref_values"
+                app:defaultValue="km"/>
+
+        <ListPreference
+                app:title="@string/temperature"
+                app:key="temperature"
+                app:entries="@array/temperature_pref_entries"
+                app:entryValues="@array/temperature_pref_values"
+                app:defaultValue="c"/>
+
+        <ListPreference
+                app:title="@string/pressure"
+                app:key="pressure"
+                app:entries="@array/pressure_pref_entries"
+                app:entryValues="@array/pressure_pref_values"
+                app:defaultValue="p"/>
+
+    </PreferenceCategory>
+
+    <ListPreference
+            app:title="@string/language"
+            app:key="language"
+            app:entries="@array/language_pref_entries"
+            app:entryValues="@array/language_pref_values"
+            app:defaultValue="en"/>
+
+
+</androidx.preference.PreferenceScreen>

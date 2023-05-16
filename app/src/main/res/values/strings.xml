@@ -223,4 +223,24 @@
     <string name="oxygen_sensor_type_bank_1" formatted="false">Bank 1 Sensor %d: %s\n</string>
     <string name="oxygen_sensor_type_bank_2" formatted="false">Bank 2 Sensor %d: %s\n</string>
     <string name="type_title">Type</string>
+    <string name="settings">Settings</string>
+    <string name="distance">Distance</string>
+    <string name="kilometre">Kilometre</string>
+    <string name="mile">Mile</string>
+    <string name="temperature">Temperature</string>
+    <string name="celsius">Celsius</string>
+    <string name="fahrenheit">Fahrenheit</string>
+    <string name="psi">PSI</string>
+    <string name="bar">Bar</string>
+    <string name="pressure">Pressure</string>
+    <string name="units">Units</string>
+    <string name="gauge">Gauge</string>
+    <string name="gauge_types">Gauge Types</string>
+    <string name="awesome_speedometer">Awesome Speedometer</string>
+    <string name="tube_speedometer">Tube Speedometer</string>
+    <string name="speed_view">Speed View</string>
+    <string name="deluxe_speed_view">Deluxe Speed View</string>
+    <string name="ray_speedometer">Ray Speedometer</string>
+    <string name="share_app">Share App</string>
+
 </resources>

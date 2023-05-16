@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="distance_pref_entries">
+        <item>@string/kilometre</item>
+        <item>@string/mile</item>
+    </array>
+    <array name="distance_pref_values">
+        <item>km</item>
+        <item>m</item>
+    </array>
+
+    <array name="temperature_pref_entries">
+        <item>@string/celsius</item>
+        <item>@string/fahrenheit</item>
+    </array>
+    <array name="temperature_pref_values">
+        <item>c</item>
+        <item>f</item>
+    </array>
+
+    <array name="pressure_pref_entries">
+        <item>@string/psi</item>
+        <item>@string/bar</item>
+    </array>
+    <array name="pressure_pref_values">
+        <item>p</item>
+        <item>b</item>
+    </array>
+    <array name="language_pref_entries">
+        <item>@string/english</item>
+        <item>@string/hindi</item>
+    </array>
+    <array name="language_pref_values">
+        <item>en</item>
+        <item>hi</item>
+    </array>
+</resources>

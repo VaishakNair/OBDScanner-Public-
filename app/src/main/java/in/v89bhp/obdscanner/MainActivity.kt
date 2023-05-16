@@ -22,9 +22,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    OBDScannerApp()
+                    OBDScannerApp() // TODO Pass in destination that needs to be opened (when settings is changed).
                 }
             }
         }
+    }
+
+    companion object {
+        const val EXTRA_DESTINATION_ID = "extra_dest_id"
     }
 }

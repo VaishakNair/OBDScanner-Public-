@@ -1,8 +1,15 @@
 package `in`.v89bhp.obdscanner.helpers
 
 
+import android.app.Activity
+import android.content.Intent
 import android.util.Log
+import androidx.preference.R
+import `in`.v89bhp.obdscanner.BuildConfig
+import `in`.v89bhp.obdscanner.MainActivity
+import `in`.v89bhp.obdscanner.Screen
 import java.util.*
+import kotlin.system.exitProcess
 
 object Utilities {
 
@@ -115,4 +122,16 @@ object Utilities {
             "USER2 CAN (11* bit ID, 50* kbaud)" -> 0xC
             else -> -1
         }
+
+    fun restartApplication(activity: Activity, destinationId: String = Screen.Home.route /*This is the home dest*/) {
+        // Restart application:
+        val homeActivityClass: Class<*> = Class.forName("in.v89bhp.obdscanner.MainActivity")
+        val intent = Intent(
+            activity,
+            homeActivityClass
+        ).putExtra(MainActivity.EXTRA_DESTINATION_ID, destinationId)
+        activity.finishAffinity() // Finishes all activities.
+        activity.startActivity(intent)    // Start the launch activity
+        exitProcess(0)
+    }
 }

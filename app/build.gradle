@@ -76,6 +76,9 @@ dependencies {
     // SpeedView Gauges
     implementation project(':speedview')
 
+    // Preference
+    implementation "androidx.preference:preference:$rootProject.preferenceVersion"
+
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.0") {
             because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")

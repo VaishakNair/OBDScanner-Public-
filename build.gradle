@@ -5,6 +5,7 @@ buildscript {
         nav_version = '2.5.3'
         compileSdkVersion = 33
         minSdkVersion = 31
+        preferenceVersion = "1.2.0"
     }
 }
 
