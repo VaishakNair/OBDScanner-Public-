@@ -20,7 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidViewBinding
 import `in`.v89bhp.obdscanner.R
+import `in`.v89bhp.obdscanner.databinding.SettingsFragmentLayoutBinding
+import `in`.v89bhp.obdscanner.fragments.SettingsFragment
 import `in`.v89bhp.obdscanner.ui.connectivity.Connectivity
 import kotlinx.coroutines.launch
 
@@ -79,6 +82,7 @@ fun Home(
 //            }
             when (selectedItem) {
                 NavDrawerItem.CONNECTIVITY -> Connectivity()
+                NavDrawerItem.SETTINGS -> SettingsFragment()
 //                NavDrawerItem.ABOUT -> About() // TODO
                 else -> throw AssertionError("Home navigation drawer selection. Shouldn't reach here")
             }
@@ -89,5 +93,14 @@ fun Home(
 }
 
 enum class NavDrawerItem(@DrawableRes val icon: Int, val label: String) {
-    CONNECTIVITY(R.drawable.baseline_bluetooth_connected_24, "Connectivity")
+    CONNECTIVITY(R.drawable.baseline_bluetooth_connected_24, "Connectivity"),
+    SETTINGS(R.drawable.baseline_settings_24, "Settings")
+}
+
+@Composable
+fun SettingsFragment() {
+    AndroidViewBinding(SettingsFragmentLayoutBinding::inflate) {
+//        val myFragment = fragmentContainerView. // TODO Find instance to the fragment.
+
+    }
 }

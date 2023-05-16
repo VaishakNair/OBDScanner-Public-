@@ -10,6 +10,7 @@ android {
 
     buildFeatures {
         buildConfig true
+        viewBinding true
     }
 
     defaultConfig {
@@ -78,6 +79,9 @@ dependencies {
 
     // Preference
     implementation "androidx.preference:preference:$rootProject.preferenceVersion"
+
+    // Android view binding (For including settings fragment inside a composable:
+    implementation "androidx.compose.ui:ui-viewbinding:1.4.3"
 
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.0") {
