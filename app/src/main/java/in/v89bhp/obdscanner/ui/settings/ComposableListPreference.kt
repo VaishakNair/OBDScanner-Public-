@@ -61,7 +61,7 @@ fun ComposableListPreference(
             verticalArrangement = Arrangement.Center
         ) {
             Text(text = title,
-            fontSize = 18.sp)
+            fontSize = 16.sp)
             Text(
                 text = summary,
                 fontSize = 14.sp
