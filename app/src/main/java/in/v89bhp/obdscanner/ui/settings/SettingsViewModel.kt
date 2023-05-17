@@ -1,13 +1,13 @@
-package `in`.v89bhp.obdscanner.ui.home
+package `in`.v89bhp.obdscanner.ui.settings
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 
-class HomeViewModel(
+class SettingsViewModel(
     application: Application
 ) : AndroidViewModel(application) {
     companion object {
-        private const val TAG = "HomeViewModel"
+        private const val TAG = "SettingsViewModel"
     }
 
 

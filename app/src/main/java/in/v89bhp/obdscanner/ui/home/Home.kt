@@ -25,6 +25,7 @@ import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.databinding.SettingsFragmentLayoutBinding
 import `in`.v89bhp.obdscanner.fragments.SettingsFragment
 import `in`.v89bhp.obdscanner.ui.connectivity.Connectivity
+import `in`.v89bhp.obdscanner.ui.settings.Settings
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,7 +83,7 @@ fun Home(
 //            }
             when (selectedItem) {
                 NavDrawerItem.CONNECTIVITY -> Connectivity()
-                NavDrawerItem.SETTINGS -> SettingsFragmentScreen()
+                NavDrawerItem.SETTINGS -> Settings()
 //                NavDrawerItem.ABOUT -> About() // TODO
                 else -> throw AssertionError("Home navigation drawer selection. Shouldn't reach here")
             }
