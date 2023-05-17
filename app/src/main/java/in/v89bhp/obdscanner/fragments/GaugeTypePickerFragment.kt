@@ -10,6 +10,7 @@ import androidx.preference.PreferenceManager
 import com.github.anastr.speedviewlib.*
 import `in`.v89bhp.obdscanner.databinding.GaugeTypePickerFragmentBinding
 import kotlinx.android.synthetic.main.gauge_type_picker_fragment.*
+import `in`.v89bhp.obdscanner.R
 
 class GaugeTypePickerFragment : Fragment() {
 
@@ -37,7 +38,7 @@ class GaugeTypePickerFragment : Fragment() {
 
 
 
-        PreferenceManager.getDefaultSharedPreferences(requireContext()).getString("gaugeType", null)?.let {
+        PreferenceManager.getDefaultSharedPreferences(requireActivity().applicationContext).getString("gaugeType", null)?.let {
             selectRadioButton(it)
         } ?: awesomeSpeedometerRadioButton.setChecked(true)
     }
@@ -75,7 +76,7 @@ class GaugeTypePickerFragment : Fragment() {
             else -> AwesomeSpeedometer::class.java.name
         }
 
-        PreferenceManager.getDefaultSharedPreferences(context).edit()
+        PreferenceManager.getDefaultSharedPreferences(requireActivity().applicationContext).edit()
             .putString("gaugeType", gaugeType).apply()
     }
 
