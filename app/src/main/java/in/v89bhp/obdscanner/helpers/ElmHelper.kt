@@ -3,6 +3,7 @@ package `in`.v89bhp.obdscanner.helpers
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -58,7 +59,7 @@ object ElmHelper {
      */
     private val _ecuInitialized = MutableLiveData<Boolean>(false)
     val ecuInitialized: LiveData<Boolean>
-    get() = _ecuInitialized
+        get() = _ecuInitialized
 
     /**
      * Send a single command to ELM327 and return the response. The command
@@ -82,11 +83,13 @@ object ElmHelper {
                 // any other app. This is the first command in the
                 // initiation sequence chain of commands
             }
+
             _ecuInitialized.value!!.not() -> {
                 ecuInitializationHandler.reset()
                 mHandler = ecuInitializationHandler
                 connectedThread!!.send("0100\r")// Initializes ECU and fetches supported PIDs for service $01
             }
+
             else -> connectedThread!!.send(command)
         }
     }
@@ -126,7 +129,10 @@ object ElmHelper {
 
         override fun run() {
             if (inputStream == null) {
-                transmissionError(applicationContext.getString(R.string.connection_error), resetInitSequence = true)
+                transmissionError(
+                    applicationContext.getString(R.string.connection_error),
+                    resetInitSequence = true
+                )
                 return
             }
 
@@ -135,10 +141,16 @@ object ElmHelper {
                     inputStream?.read(byteBuffer)
 
                 } catch (ex: IOException) {
-                    transmissionError(applicationContext.getString(R.string.obd_error_1), resetInitSequence = true)
+                    transmissionError(
+                        applicationContext.getString(R.string.obd_error_1),
+                        resetInitSequence = true
+                    )
                     return
                 } catch (ex: NullPointerException) {
-                    transmissionError(applicationContext.getString(R.string.obd_error_1), resetInitSequence = true)
+                    transmissionError(
+                        applicationContext.getString(R.string.obd_error_1),
+                        resetInitSequence = true
+                    )
                     return
                 }
 
@@ -158,7 +170,8 @@ object ElmHelper {
                             noDataCount = 0
                             transmissionError(
                                 applicationContext.getString(R.string.ign_off_error),
-                                HandlerMessageCodes.MESSAGE_ERROR_IGNITION_OFF.ordinal, resetInitSequence = true
+                                HandlerMessageCodes.MESSAGE_ERROR_IGNITION_OFF.ordinal,
+                                resetInitSequence = true
                             )
                             return
                         }
@@ -169,18 +182,21 @@ object ElmHelper {
                         stringBuilder.contains(Utilities.UNABLE_TO_CONNECT, true) -> {
                             transmissionError(
                                 applicationContext.getString(R.string.ign_off_error),
-                                HandlerMessageCodes.MESSAGE_ERROR_IGNITION_OFF.ordinal, resetInitSequence = false
+                                HandlerMessageCodes.MESSAGE_ERROR_IGNITION_OFF.ordinal,
+                                resetInitSequence = false
                             )
                             stringBuilder.clear()
                             return
                         }
+
                         stringBuilder.contains(Utilities.BUFFER_FULL, true) ||
                                 stringBuilder.contains(Utilities.BUS_ERROR, true) ||
                                 stringBuilder.contains(Utilities.CAN_ERROR, true) ||
                                 stringBuilder.contains(Utilities.DATA_ERROR, true) -> {
                             transmissionError(
                                 applicationContext.getString(R.string.non_critical_error),
-                                HandlerMessageCodes.MESSAGE_ERROR_IGNORABLE.ordinal, resetInitSequence = false
+                                HandlerMessageCodes.MESSAGE_ERROR_IGNORABLE.ordinal,
+                                resetInitSequence = false
                             )
                             stringBuilder.clear()
                             return
@@ -189,7 +205,8 @@ object ElmHelper {
                         stringBuilder.contains(Utilities.BUS_BUSY, true) -> {
                             transmissionError(
                                 applicationContext.getString(R.string.obd_busy_error),
-                                HandlerMessageCodes.MESSAGE_ERROR_BUS_BUSY.ordinal, resetInitSequence = false
+                                HandlerMessageCodes.MESSAGE_ERROR_BUS_BUSY.ordinal,
+                                resetInitSequence = false
                             )
                             stringBuilder.clear()
                             return
@@ -207,7 +224,8 @@ object ElmHelper {
                                 else -> HandlerMessageCodes.MESSAGE_RESPONSE.ordinal
                             },
                             -1, -1,
-                            stringBuilder.dropLast(1).toString().removePrefix("SEARCHING...\r")// Remove the trailing '>' and
+                            stringBuilder.dropLast(1).toString()
+                                .removePrefix("SEARCHING...\r")// Remove the trailing '>' and
                             // 'SEARCHING...\r' prefix that is returned when ELM327 searches for a OBD-II protocol for the
                             // vehicle before finding and fixing one.
                         )
@@ -225,10 +243,16 @@ object ElmHelper {
 
             } catch (ex: IOException) {
                 Log.i(TAG, "Exception during write", ex)
-                transmissionError(applicationContext.getString(R.string.sending_failed), resetInitSequence = false)
+                transmissionError(
+                    applicationContext.getString(R.string.sending_failed),
+                    resetInitSequence = false
+                )
             } catch (ex: NullPointerException) {
                 Log.i(TAG, "Exception during write NPE", ex)
-                transmissionError(applicationContext.getString(R.string.sending_failed), resetInitSequence = false)
+                transmissionError(
+                    applicationContext.getString(R.string.sending_failed),
+                    resetInitSequence = false
+                )
             }
 
         }
@@ -244,13 +268,17 @@ object ElmHelper {
     }
 
     @Synchronized
-    private fun transmissionError(errorMessage: String, arg1: Int = -1, resetInitSequence: Boolean) {
+    private fun transmissionError(
+        errorMessage: String,
+        arg1: Int = -1,
+        resetInitSequence: Boolean
+    ) {
         // Send a failure message back to the view model
         Log.i(TAG, "Connection Error")
 
         connectedThread = null
 
-        if(resetInitSequence) {
+        if (resetInitSequence) {
             elmInitialized.postValue(false)
         }
 
@@ -263,13 +291,17 @@ object ElmHelper {
             -1,
             errorMessage
         )
-        mHandler?.sendMessage(msg)
+        mHandler?.sendMessage(msg!!)
     }
 
     @SuppressLint("HandlerLeak")
-    private val elmInitializationHandler = object : Handler() {
+    private val elmInitializationHandler = object : Handler(Looper.getMainLooper()) {
 
-        override fun handleMessage(msg: Message?) {
+        override fun handleMessage(msg: Message) {
+            if (msg == null) {// TODO We are force-casting the message passed into this handler from msg? to msg!!
+                // Might need logic to handle null messages. Haven't encountered any so far.
+            }
+
             val response: String = msg?.obj as String
             when (msg?.what) {
                 HandlerMessageCodes.MESSAGE_ERROR.ordinal -> {
@@ -281,7 +313,7 @@ object ElmHelper {
                             response
                         )
 
-                    viewModelHandler?.sendMessage(viewModelMsg)
+                    viewModelHandler?.sendMessage(viewModelMsg!!)
                 }
 
                 HandlerMessageCodes.MESSAGE_RESPONSE.ordinal -> {
@@ -318,13 +350,17 @@ object ElmHelper {
     }
 
     @SuppressLint("HandlerLeak")
-    private val ecuInitializationHandler = object : Handler() {
+    private val ecuInitializationHandler = object : Handler(Looper.getMainLooper()) {
         private lateinit var ecuLines: MutableList<String>
         private var ecuLinesIndex: Int = 0
-        private  val supportedPids: MutableSet<String> = mutableSetOf()
+        private val supportedPids: MutableSet<String> = mutableSetOf()
         private var nextSupported = 0
 
-        override fun handleMessage(msg: Message?) {
+        override fun handleMessage(msg: Message) {
+            if (msg == null) {// TODO We are force-casting the message passed into this handler from msg? to msg!!
+                                // Might need logic to handle null messages. Haven't encountered any so far.
+            }
+
             val response: String = msg?.obj as String
             when (msg?.what) {
                 HandlerMessageCodes.MESSAGE_ERROR.ordinal -> {
@@ -336,9 +372,8 @@ object ElmHelper {
                             response
                         )
 
-                    viewModelHandler?.sendMessage(viewModelMsg)
+                    viewModelHandler?.sendMessage(viewModelMsg!!)
                 }
-
 
 
                 HandlerMessageCodes.MESSAGE_RESPONSE_INITIALIZATION.ordinal -> {
@@ -349,16 +384,17 @@ object ElmHelper {
                         it != ' '
                     }
 
-                    if (_response.contains("NODATA").not() && _response.startsWith("7F").not()) {// ECU is online and has been initialized
+                    if (_response.contains("NODATA").not() && _response.startsWith("7F")
+                            .not()
+                    ) {// ECU is online and has been initialized
                         // Parse and store supported PIDs of service $01. It might be a multiline response.
                         ecuLines = Utilities.splitMultilineResponse(_response)
 
                         addSupportedPids()
                     } else {
-                       sendIgnitionOffMessageToViewModelHandler(response)
+                        sendIgnitionOffMessageToViewModelHandler(response)
                     }
                 }
-
 
 
                 HandlerMessageCodes.MESSAGE_RESPONSE.ordinal -> {
@@ -369,10 +405,12 @@ object ElmHelper {
                         it != ' '
                     }
 
-                    if (_response.contains("NODATA").not() && _response.startsWith("7F").not()) {// ECU is online and has been initialized
+                    if (_response.contains("NODATA").not() && _response.startsWith("7F")
+                            .not()
+                    ) {// ECU is online and has been initialized
                         // Parse and store supported PIDs of service $01. It might be a multiline response.
-                        for(ecuLine in Utilities.splitMultilineResponse(_response)) {//
-                            if(ecuLines.contains(ecuLine).not()) {
+                        for (ecuLine in Utilities.splitMultilineResponse(_response)) {//
+                            if (ecuLines.contains(ecuLine).not()) {
                                 ecuLines.plusAssign(ecuLine)
                             }
                         }
@@ -388,14 +426,27 @@ object ElmHelper {
             val ecuLine = ecuLines[ecuLinesIndex++]
             Log.i(TAG, "Ecu lines: $ecuLines. Current ecu line: $ecuLine")
 
-            nextSupported = Utilities.decodeSupportedPIDs(ecuLine, Integer.parseInt(ecuLine.substring(2, 4), 16), supportedPids)
-            Log.i(TAG, "Supported PIDs by 0100: $supportedPids. Next supported (Int): $nextSupported")
+            nextSupported = Utilities.decodeSupportedPIDs(
+                ecuLine,
+                Integer.parseInt(ecuLine.substring(2, 4), 16),
+                supportedPids
+            )
+            Log.i(
+                TAG,
+                "Supported PIDs by 0100: $supportedPids. Next supported (Int): $nextSupported"
+            )
 
-            if(nextSupported == 0) {
-                if(ecuLinesIndex < ecuLines.size) {// Process PIDs supported by the next ECU
+            if (nextSupported == 0) {
+                if (ecuLinesIndex < ecuLines.size) {// Process PIDs supported by the next ECU
                     addSupportedPids()
                 } else {
-                    SupportedPidsHolder.ecuList.add(SupportedPidsHolder.EcuSupportedPids("01", "ECU#1", supportedPids))
+                    SupportedPidsHolder.ecuList.add(
+                        SupportedPidsHolder.EcuSupportedPids(
+                            "01",
+                            "ECU#1",
+                            supportedPids
+                        )
+                    )
                     _ecuInitialized.value = true // ECU is online. Switch to view model handler
                     // and execute the original command that was sent
                     mHandler = viewModelHandler
@@ -415,7 +466,7 @@ object ElmHelper {
                     response
                 )
 
-            viewModelHandler?.sendMessage(viewModelMsg)
+            viewModelHandler?.sendMessage(viewModelMsg!!)
         }
 
         fun reset() {
