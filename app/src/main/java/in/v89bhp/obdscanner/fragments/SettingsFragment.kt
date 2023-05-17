@@ -54,7 +54,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 it.summary = it.entries[it.findIndexOfValue(newValue as String)]
 
                 handler.postDelayed(Runnable {
-                    Utilities.restartApplication(requireActivity(), "settingsfragment")
+//                    Utilities.restartApplication(requireActivity(), "settingsfragment") TODO Restart app when settings changed.
                 }, 100)
 
                 true

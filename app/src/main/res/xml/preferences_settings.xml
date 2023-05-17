@@ -5,7 +5,7 @@
     <Preference
             app:key="gaugeType"
             app:title="@string/gauge"
-            app:fragment="pw.softwareengineer.v89bhp.ui.GaugeTypePickerFragment"/>
+            app:fragment="in.v89bhp.obdscanner.fragments.GaugeTypePickerFragment"/>
 
     <PreferenceCategory
             app:title="@string/units">

@@ -82,7 +82,7 @@ fun Home(
 //            }
             when (selectedItem) {
                 NavDrawerItem.CONNECTIVITY -> Connectivity()
-                NavDrawerItem.SETTINGS -> SettingsFragment()
+                NavDrawerItem.SETTINGS -> SettingsFragmentScreen()
 //                NavDrawerItem.ABOUT -> About() // TODO
                 else -> throw AssertionError("Home navigation drawer selection. Shouldn't reach here")
             }
@@ -98,7 +98,7 @@ enum class NavDrawerItem(@DrawableRes val icon: Int, val label: String) {
 }
 
 @Composable
-fun SettingsFragment() {
+fun SettingsFragmentScreen() {
     AndroidViewBinding(SettingsFragmentLayoutBinding::inflate) {
 //        val myFragment = fragmentContainerView. // TODO Find instance to the fragment.
 
