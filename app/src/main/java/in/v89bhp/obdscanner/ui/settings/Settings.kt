@@ -12,7 +12,7 @@ const val SHARED_PREF_FILE_NAME = "shared_pref_settings"
 
 @Composable
 fun Settings(modifier: Modifier = Modifier) {
-    Column(modifier = modifier.padding(start = 50.dp)) {
+    Column() {
         ComposableListPreference(
             sharedPrefs = LocalContext.current.getSharedPreferences(SHARED_PREF_FILE_NAME, MODE_PRIVATE),
             title = "Distance",
