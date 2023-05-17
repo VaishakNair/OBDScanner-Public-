@@ -12,8 +12,6 @@ import com.google.android.material.textfield.TextInputLayout
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.obdparameters.BaseParameter
 import `in`.v89bhp.obdscanner.obdparameters.ParameterHolder
-import kotlinx.android.synthetic.main.gauge_settings_dialog.*
-
 
 
 class GaugeSettingsDialogFragment : DialogFragment() {
