@@ -89,7 +89,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
 
         findPreference<Preference>("gaugeType")?.let {
-            val gaugeType: String? = PreferenceManager.getDefaultSharedPreferences(context!!)
+            val gaugeType: String? = PreferenceManager.getDefaultSharedPreferences(requireContext())
                 .getString("gaugeType", null)
             val gaugeName = gaugeType?.let { gaugeType ->
                 getGaugeName(gaugeType)

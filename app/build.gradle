@@ -1,6 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
 }
 
 android {
@@ -11,6 +14,11 @@ android {
     buildFeatures {
         buildConfig true
         viewBinding true
+
+    }
+
+    dataBinding {
+        enabled = true
     }
 
     defaultConfig {
@@ -82,6 +90,10 @@ dependencies {
 
     // Android view binding (For including settings fragment inside a composable:
     implementation "androidx.compose.ui:ui-viewbinding:1.4.3"
+
+    // Old Android material library for GaugeSettingsDialogFragment TODO To be removed when compose UI is implemented:
+    implementation "com.google.android.material:material:1.2.0-alpha03"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
 
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.0") {

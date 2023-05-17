@@ -11,8 +11,9 @@ import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.isVisible
 import com.google.android.material.snackbar.Snackbar
 import `in`.v89bhp.obdscanner.R
-import pw.softwareengineer.v89bhp.BuildConfig
-import pw.softwareengineer.v89bhp.viewmodels.GaugesViewModel
+import `in`.v89bhp.obdscanner.BuildConfig
+import `in`.v89bhp.obdscanner.ui.gauges.GaugesViewModel
+
 
 /**
  *
@@ -71,14 +72,14 @@ class GaugeTouchListener(
 
     private inner class LongPressListener : GestureDetector.SimpleOnGestureListener() {
 
-        override fun onDown(event: MotionEvent?): Boolean {
+        override fun onDown(event: MotionEvent): Boolean {
             dx = view.x - (event?.rawX ?: 0.0f)
             dy = view.y - (event?.rawY ?: 0.0f)
 
             return true
         }
 
-        override fun onLongPress(e: MotionEvent?) {
+        override fun onLongPress(e: MotionEvent) {
             if((view.parent as ViewGroup).scaleX == -1.0f) {// Restrict gauge movement when HUD mode
                 // is turned on.
                 Snackbar.make(view, R.string.hud_no_movement, Snackbar.LENGTH_LONG).show()
@@ -101,7 +102,7 @@ class GaugeTouchListener(
         }
 
 
-        override fun onDoubleTap(e: MotionEvent?): Boolean = view.parent.let {
+        override fun onDoubleTap(e: MotionEvent): Boolean = view.parent.let {
 
             (it as ViewGroup).removeView(view)
             ParameterHolder.removeParameter(baseParameter)
@@ -109,7 +110,7 @@ class GaugeTouchListener(
             true
         }
 
-        override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
+        override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
             Log.i(TAG, "onSingleTapConfirmed")
             val settingsIcon = (view as FrameLayout).getChildAt(1)
             settingsIcon.visibility = if(settingsIcon.isVisible) View.GONE else View.VISIBLE
@@ -119,7 +120,7 @@ class GaugeTouchListener(
 
     private inner class PinchListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
         private var scaleFactor: Float = view.scaleX
-        override fun onScale(detector: ScaleGestureDetector?): Boolean {
+        override fun onScale(detector: ScaleGestureDetector): Boolean {
 
             scaleFactor *= detector?.scaleFactor ?: 0.0f
             scaleFactor = Math.max(0.5f, Math.min(scaleFactor, 3f))

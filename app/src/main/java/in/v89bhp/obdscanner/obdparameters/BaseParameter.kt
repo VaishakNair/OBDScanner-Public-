@@ -16,9 +16,10 @@ import androidx.preference.PreferenceManager
 import com.github.anastr.speedviewlib.Speedometer
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.helpers.Utilities
-import pw.softwareengineer.v89bhp.BuildConfig
-import pw.softwareengineer.v89bhp.ui.dialogs.GaugeSettingsDialogFragment
-import pw.softwareengineer.v89bhp.viewmodels.GaugesViewModel
+import `in`.v89bhp.obdscanner.BuildConfig
+import `in`.v89bhp.obdscanner.fragments.GaugeSettingsDialogFragment
+import `in`.v89bhp.obdscanner.ui.gauges.GaugesViewModel
+
 
 /**
  * Convert dp to pixel. Logic copied from *Gauge* class of *speedview* library.

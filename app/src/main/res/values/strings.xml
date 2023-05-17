@@ -242,5 +242,8 @@
     <string name="deluxe_speed_view">Deluxe Speed View</string>
     <string name="ray_speedometer">Ray Speedometer</string>
     <string name="share_app">Share App</string>
+    <string name="gauge_operations">Gauge Operations</string>
+    <string name="gauge_operations_list">&#8226; <b>Single tap</b> to toggle gauge settings icon\n&#8226; <b>Pinch</b> to resize\n&#8226; <b>Long press</b> to move\n&#8226; <b>Double tap</b> to delete</string>
+
 
 </resources>
