@@ -94,11 +94,3 @@ enum class NavDrawerItem(@DrawableRes val icon: Int, val label: String) {
     CONNECTIVITY(R.drawable.baseline_bluetooth_connected_24, "Connectivity"),
     SETTINGS(R.drawable.baseline_settings_24, "Settings")
 }
-
-//@Composable
-//fun SettingsFragmentScreen() {
-//    AndroidViewBinding(SettingsFragmentLayoutBinding::inflate) {
-////        val myFragment = fragmentContainerView. // TODO Find instance to the fragment.
-//
-//    }
-//}
