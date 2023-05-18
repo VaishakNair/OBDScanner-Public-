@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import `in`.v89bhp.obdscanner.ui.home.Home
+import `in`.v89bhp.obdscanner.ui.settings.GaugeTypePicker
 
 /**
  * Screen containing the Navigation host composable with nav drawer component:

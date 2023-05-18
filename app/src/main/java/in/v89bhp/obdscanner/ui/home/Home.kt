@@ -20,10 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidViewBinding
 import `in`.v89bhp.obdscanner.R
-import `in`.v89bhp.obdscanner.databinding.SettingsFragmentLayoutBinding
-import `in`.v89bhp.obdscanner.fragments.SettingsFragment
 import `in`.v89bhp.obdscanner.ui.connectivity.Connectivity
 import `in`.v89bhp.obdscanner.ui.settings.Settings
 import kotlinx.coroutines.launch

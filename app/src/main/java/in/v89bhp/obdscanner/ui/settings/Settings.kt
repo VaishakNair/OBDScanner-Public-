@@ -6,19 +6,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.preference.PreferenceManager
 import com.github.anastr.speedviewlib.AwesomeSpeedometer
 import com.github.anastr.speedviewlib.DeluxeSpeedView
 import com.github.anastr.speedviewlib.RaySpeedometer
 import com.github.anastr.speedviewlib.SpeedView
 import com.github.anastr.speedviewlib.TubeSpeedometer
 import `in`.v89bhp.obdscanner.R
+import `in`.v89bhp.obdscanner.Screen
 
 const val SHARED_PREF_FILE_NAME = "shared_pref_settings"
 
 @Composable
 fun Settings(onNavigateTo: (route: String) -> Unit, modifier: Modifier = Modifier) {
     val sharedPrefs =
-        LocalContext.current.getSharedPreferences(SHARED_PREF_FILE_NAME, MODE_PRIVATE)
+        PreferenceManager.getDefaultSharedPreferences(LocalContext.current)
     Column() {
 
         val gaugeName = getGaugeName(
@@ -32,6 +34,7 @@ fun Settings(onNavigateTo: (route: String) -> Unit, modifier: Modifier = Modifie
             summary = gaugeName,
             onClick = {
                 // TODO Navigate to GaugeTypePickerFragment
+                onNavigateTo(Screen.GaugeTypePicker.route)
             })
 
         ComposablePreferenceCategory(title = "Units") {
