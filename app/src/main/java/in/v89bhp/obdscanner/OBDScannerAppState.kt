@@ -16,6 +16,8 @@ import androidx.navigation.compose.rememberNavController
 sealed class Screen(val route: String) {
     object Home : Screen("home")
 
+    object GaugeTypePicker : Screen("gaugetypepicker")
+
     object Note : Screen("note/{fileName}") {
         fun createRoute(fileName: String) = "note/$fileName"
     }

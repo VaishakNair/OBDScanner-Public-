@@ -22,6 +22,11 @@ fun OBDScannerApp(appState: OBDScannerAppState = rememberOBDScannerAppState()) {
                 }
             )
         }
+        composable(Screen.GaugeTypePicker.route) { backStackEntry ->
+
+            GaugeTypePicker()
+        }
+
 // TODO
 
 

@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Home(
-    onNavigateTo: (destination: String) -> Unit,
+    onNavigateTo: (route: String) -> Unit,
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         viewModelStoreOwner = LocalContext.current as ComponentActivity
@@ -83,7 +83,7 @@ fun Home(
 //            }
             when (selectedItem) {
                 NavDrawerItem.CONNECTIVITY -> Connectivity()
-                NavDrawerItem.SETTINGS -> Settings()
+                NavDrawerItem.SETTINGS -> Settings(onNavigateTo = onNavigateTo)
 //                NavDrawerItem.ABOUT -> About() // TODO
                 else -> throw AssertionError("Home navigation drawer selection. Shouldn't reach here")
             }
@@ -98,10 +98,10 @@ enum class NavDrawerItem(@DrawableRes val icon: Int, val label: String) {
     SETTINGS(R.drawable.baseline_settings_24, "Settings")
 }
 
-@Composable
-fun SettingsFragmentScreen() {
-    AndroidViewBinding(SettingsFragmentLayoutBinding::inflate) {
-//        val myFragment = fragmentContainerView. // TODO Find instance to the fragment.
-
-    }
-}
+//@Composable
+//fun SettingsFragmentScreen() {
+//    AndroidViewBinding(SettingsFragmentLayoutBinding::inflate) {
+////        val myFragment = fragmentContainerView. // TODO Find instance to the fragment.
+//
+//    }
+//}

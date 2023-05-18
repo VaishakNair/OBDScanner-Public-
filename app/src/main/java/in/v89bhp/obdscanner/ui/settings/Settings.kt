@@ -5,15 +5,37 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.github.anastr.speedviewlib.AwesomeSpeedometer
+import com.github.anastr.speedviewlib.DeluxeSpeedView
+import com.github.anastr.speedviewlib.RaySpeedometer
+import com.github.anastr.speedviewlib.SpeedView
+import com.github.anastr.speedviewlib.TubeSpeedometer
+import `in`.v89bhp.obdscanner.R
 
 const val SHARED_PREF_FILE_NAME = "shared_pref_settings"
 
 @Composable
-fun Settings(modifier: Modifier = Modifier) {
+fun Settings(onNavigateTo: (route: String) -> Unit, modifier: Modifier = Modifier) {
+    val sharedPrefs =
+        LocalContext.current.getSharedPreferences(SHARED_PREF_FILE_NAME, MODE_PRIVATE)
     Column() {
+
+        val gaugeName = getGaugeName(
+            gaugeType = sharedPrefs.getString(
+                "gaugeType",
+                AwesomeSpeedometer::class.java.name
+            )!!
+        )
+        ComposablePreference(
+            title = "Gauge",
+            summary = gaugeName,
+            onClick = {
+                // TODO Navigate to GaugeTypePickerFragment
+            })
+
         ComposablePreferenceCategory(title = "Units") {
-            val sharedPrefs =
-                LocalContext.current.getSharedPreferences(SHARED_PREF_FILE_NAME, MODE_PRIVATE)
+
             ComposableListPreference(
                 sharedPrefs = sharedPrefs,
                 title = "Distance",
@@ -45,3 +67,14 @@ fun Settings(modifier: Modifier = Modifier) {
     }
 
 }
+
+@Composable
+fun getGaugeName(gaugeType: String) =
+    when (gaugeType) {
+        AwesomeSpeedometer::class.java.name -> stringResource(R.string.awesome_speedometer)
+        TubeSpeedometer::class.java.name -> stringResource(R.string.tube_speedometer)
+        SpeedView::class.java.name -> stringResource(R.string.speed_view)
+        DeluxeSpeedView::class.java.name -> stringResource(R.string.deluxe_speed_view)
+        RaySpeedometer::class.java.name -> stringResource(R.string.ray_speedometer)
+        else -> stringResource(R.string.awesome_speedometer)
+    }
