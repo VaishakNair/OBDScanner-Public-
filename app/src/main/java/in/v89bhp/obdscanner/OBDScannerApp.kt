@@ -10,7 +10,7 @@ import `in`.v89bhp.obdscanner.ui.settings.GaugeTypePicker
  * Screen containing the Navigation host composable with nav drawer component:
  */
 @Composable
-fun OBDScannerApp(appState: OBDScannerAppState = rememberOBDScannerAppState()) {
+fun OBDScannerApp(onFinish: () -> Unit, appState: OBDScannerAppState = rememberOBDScannerAppState()) {
 
     NavHost(
         navController = appState.navController,
@@ -20,18 +20,18 @@ fun OBDScannerApp(appState: OBDScannerAppState = rememberOBDScannerAppState()) {
             Home(
                 onNavigateTo = { route ->
                     appState.navigateTo(route, backStackEntry)
-                }
+                },
+                onFinish = onFinish
             )
         }
         composable(Screen.GaugeTypePicker.route) { backStackEntry ->
-
             GaugeTypePicker()
         }
 
 // TODO
 
 
-    //        composable(Screen.Note.route) { backStackEntry ->
+        //        composable(Screen.Note.route) { backStackEntry ->
 //            Note(fileName = backStackEntry.arguments?.getString("fileName")!!,
 //                navigateBack = { appState.navigateBack() })
 //        }
