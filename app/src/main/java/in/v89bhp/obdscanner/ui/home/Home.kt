@@ -44,6 +44,7 @@ fun Home(
         viewModelStoreOwner = LocalContext.current as ComponentActivity
     ),
 ) {
+    val HOME_ITEM = NavDrawerItem.CONNECTIVITY // TODO Set appropriate home item.
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var selectedItem by remember { mutableStateOf(NavDrawerItem.CONNECTIVITY) }
@@ -120,7 +121,10 @@ fun Home(
         Log.i("Home Composable", "Drawer state on back pressed: ${drawerState.isOpen}")
         if (drawerState.isOpen) {
             scope.launch { drawerState.close() }
-        } else {
+        } else if(selectedItem != HOME_ITEM) {
+            selectedItem = HOME_ITEM
+        }
+        else {
            onFinish()
         }
     }
