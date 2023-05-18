@@ -21,11 +21,12 @@ fun OBDScannerApp(onFinish: () -> Unit, appState: OBDScannerAppState = rememberO
                 onNavigateTo = { route ->
                     appState.navigateTo(route, backStackEntry)
                 },
+
                 onFinish = onFinish
             )
         }
         composable(Screen.GaugeTypePicker.route) { backStackEntry ->
-            GaugeTypePicker()
+            GaugeTypePicker( navigateBack = {appState.navigateBack()})
         }
 
 // TODO

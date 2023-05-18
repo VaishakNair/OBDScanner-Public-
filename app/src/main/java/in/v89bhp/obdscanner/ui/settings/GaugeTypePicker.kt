@@ -2,6 +2,7 @@ package `in`.v89bhp.obdscanner.ui.settings
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -20,7 +21,9 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GaugeTypePicker(modifier: Modifier = Modifier) {
+fun GaugeTypePicker(
+    navigateBack: () -> Unit,
+    modifier: Modifier = Modifier) {
     Scaffold(topBar = {
         TopAppBar(
             title = {
@@ -31,14 +34,10 @@ fun GaugeTypePicker(modifier: Modifier = Modifier) {
             },
             navigationIcon = {
                 IconButton(onClick = {
-                    // TODO
-                    with(drawerState) {
-                        if (isOpen) scope.launch { close() }
-                        else scope.launch { open() }
-                    }
+                   navigateBack()
                 }) {
                     Icon(
-                        imageVector = Icons.Default.M,
+                        imageVector = Icons.Default.ArrowBack,
                         contentDescription = "Back"
                     )
                 }
