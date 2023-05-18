@@ -30,7 +30,7 @@ fun Connectivity(
         viewModelStoreOwner = LocalContext.current as ComponentActivity
     )
 ) {
-    Column {
+    Column(modifier = modifier) {
 
         val bluetoothMultiplePermissionsState = rememberMultiplePermissionsState(
             listOf(

@@ -1,6 +1,5 @@
 package `in`.v89bhp.obdscanner.ui.settings
 
-import android.content.Context.MODE_PRIVATE
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,13 +14,12 @@ import com.github.anastr.speedviewlib.TubeSpeedometer
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.Screen
 
-const val SHARED_PREF_FILE_NAME = "shared_pref_settings"
 
 @Composable
 fun Settings(onNavigateTo: (route: String) -> Unit, modifier: Modifier = Modifier) {
     val sharedPrefs =
         PreferenceManager.getDefaultSharedPreferences(LocalContext.current)
-    Column() {
+    Column(modifier = modifier) {
 
         val gaugeName = getGaugeName(
             gaugeType = sharedPrefs.getString(
