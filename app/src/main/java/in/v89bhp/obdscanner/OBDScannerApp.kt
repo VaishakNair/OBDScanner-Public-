@@ -1,16 +1,23 @@
 package `in`.v89bhp.obdscanner
 
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import `in`.v89bhp.obdscanner.ui.home.Home
+import `in`.v89bhp.obdscanner.ui.home.HomeViewModel
+import `in`.v89bhp.obdscanner.ui.home.NavDrawerItem
 import `in`.v89bhp.obdscanner.ui.settings.GaugeTypePicker
 
 /**
  * Screen containing the Navigation host composable with nav drawer component:
  */
 @Composable
-fun OBDScannerApp(onFinish: () -> Unit, appState: OBDScannerAppState = rememberOBDScannerAppState()) {
+fun OBDScannerApp(onFinish: () -> Unit, appState: OBDScannerAppState = rememberOBDScannerAppState(),
+homeViewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+    viewModelStoreOwner = LocalContext.current as ComponentActivity
+)) {
 
     NavHost(
         navController = appState.navController,
@@ -26,7 +33,10 @@ fun OBDScannerApp(onFinish: () -> Unit, appState: OBDScannerAppState = rememberO
             )
         }
         composable(Screen.GaugeTypePicker.route) { backStackEntry ->
-            GaugeTypePicker( navigateBack = {appState.navigateBack()})
+            GaugeTypePicker( navigateBack = {
+                homeViewModel.selectedItem = NavDrawerItem.SETTINGS // Returning from Gauge type picker option of settings. Show settings screen
+                appState.navigateBack()
+            })
         }
 
 // TODO

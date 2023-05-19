@@ -1,7 +1,6 @@
 package `in`.v89bhp.obdscanner.ui.home
 
 
-import android.app.Activity
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -42,12 +41,12 @@ fun Home(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         viewModelStoreOwner = LocalContext.current as ComponentActivity
-    ),
+    )
 ) {
-    val HOME_ITEM = NavDrawerItem.CONNECTIVITY // TODO Set appropriate home item.
+
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-    var selectedItem by remember { mutableStateOf(NavDrawerItem.CONNECTIVITY) }
+//    var selectedItem by remember { mutableStateOf(NavDrawerItem.CONNECTIVITY) }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -63,10 +62,10 @@ fun Home(
                             )
                         },
                         label = { Text(navDrawerItem.label) },
-                        selected = navDrawerItem == selectedItem,
+                        selected = navDrawerItem == homeViewModel.selectedItem,
                         onClick = {
                             scope.launch { drawerState.close() }
-                            selectedItem = navDrawerItem
+                            homeViewModel.selectedItem = navDrawerItem
                         },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                     )
@@ -99,7 +98,7 @@ fun Home(
                         }
                     })
             }) { contentPadding ->
-                when (selectedItem) {
+                when (homeViewModel.selectedItem) {
                     NavDrawerItem.CONNECTIVITY -> Connectivity(
                         modifier = Modifier.padding(
                             contentPadding
@@ -121,11 +120,10 @@ fun Home(
         Log.i("Home Composable", "Drawer state on back pressed: ${drawerState.isOpen}")
         if (drawerState.isOpen) {
             scope.launch { drawerState.close() }
-        } else if(selectedItem != HOME_ITEM) {
-            selectedItem = HOME_ITEM
-        }
-        else {
-           onFinish()
+        } else if (homeViewModel.selectedItem != homeViewModel.HOME_ITEM) {
+            homeViewModel.selectedItem = homeViewModel.HOME_ITEM
+        } else {
+            onFinish()
         }
     }
 
