@@ -1,7 +1,6 @@
 package `in`.v89bhp.obdscanner.ui.home
 
 
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
@@ -37,7 +36,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun Home(
     onNavigateTo: (route: String) -> Unit,
-    onFinish: () -> Unit,
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         viewModelStoreOwner = LocalContext.current as ComponentActivity
@@ -46,7 +44,6 @@ fun Home(
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
-//    var selectedItem by remember { mutableStateOf(NavDrawerItem.CONNECTIVITY) }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -110,20 +107,20 @@ fun Home(
                         modifier = Modifier.padding(contentPadding)
                     )
 //                NavDrawerItem.ABOUT -> About() // TODO
-                    else -> throw AssertionError("Home navigation drawer selection. Shouldn't reach here")
                 }
             }
         }
     )
 
-    BackHandler() {
-        Log.i("Home Composable", "Drawer state on back pressed: ${drawerState.isOpen}")
-        if (drawerState.isOpen) {
-            scope.launch { drawerState.close() }
-        } else if (homeViewModel.selectedItem != homeViewModel.HOME_ITEM) {
-            homeViewModel.selectedItem = homeViewModel.HOME_ITEM
-        } else {
-            onFinish()
+    if (drawerState.isOpen || homeViewModel.selectedItem != HomeViewModel.HOME_ITEM) {
+        // IMPORTANT: Enable BackHandler() only when needed. Otherwise it affects
+        // how the UI gets composed.
+        BackHandler() {
+            if (drawerState.isOpen) {
+                scope.launch { drawerState.close() }
+            } else if (homeViewModel.selectedItem != HomeViewModel.HOME_ITEM) {
+                homeViewModel.selectedItem = HomeViewModel.HOME_ITEM
+            }
         }
     }
 

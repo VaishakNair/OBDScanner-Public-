@@ -14,7 +14,7 @@ import `in`.v89bhp.obdscanner.ui.settings.GaugeTypePicker
  * Screen containing the Navigation host composable with nav drawer component:
  */
 @Composable
-fun OBDScannerApp(onFinish: () -> Unit, appState: OBDScannerAppState = rememberOBDScannerAppState(),
+fun OBDScannerApp(appState: OBDScannerAppState = rememberOBDScannerAppState(),
 homeViewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
     viewModelStoreOwner = LocalContext.current as ComponentActivity
 )) {
@@ -27,9 +27,7 @@ homeViewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
             Home(
                 onNavigateTo = { route ->
                     appState.navigateTo(route, backStackEntry)
-                },
-
-                onFinish = onFinish
+                }
             )
         }
         composable(Screen.GaugeTypePicker.route) { backStackEntry ->
