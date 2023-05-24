@@ -47,6 +47,8 @@ fun ConnectionSetupPager() {
                 else -> throw AssertionError("Illegal argument")
             }
         }
+
+        // Step indicator with forward and backward arrows:
         Row(
             Modifier
                 .height(80.dp)

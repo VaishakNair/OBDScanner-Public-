@@ -1,7 +1,11 @@
 package `in`.v89bhp.obdscanner.ui.connectivity
 
+import android.annotation.SuppressLint
 import android.app.Application
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.content.Context
+import android.content.Intent
 import androidx.compose.runtime.*
 import androidx.lifecycle.AndroidViewModel
 import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
@@ -27,7 +31,11 @@ class BluetoothConnectionViewModel(
         } ?: false
     }
 
-
+    @SuppressLint("MissingPermission")
+    fun turnBluetoothOn(context: Context) {
+        val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+        context.startActivity(enableBtIntent)
+    }
 
 
 }

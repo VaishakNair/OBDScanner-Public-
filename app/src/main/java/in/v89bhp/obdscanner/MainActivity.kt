@@ -41,31 +41,23 @@ class MainActivity : FragmentActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        applicationContext.registerReceiver(btStateChangedReceiver, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
-    }
-
-    override fun onPause() {
-        super.onPause()
-        applicationContext?.unregisterReceiver(btStateChangedReceiver)
-    }
-
-    private val btStateChangedReceiver = object : BroadcastReceiver() {
-        override fun onReceive(p0: Context?, intent: Intent?) {
-            bluetoothConnectionViewModel.updateBtEnabledStatus()
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun startBtEnableActivity() {
-        val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-        startActivityForResult(enableBtIntent, ActivityRequestCodes.REQUEST_ENABLE_BT.ordinal + 1)
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        applicationContext.registerReceiver(btStateChangedReceiver, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
+//    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//        applicationContext?.unregisterReceiver(btStateChangedReceiver)
+//    }
+//
+//    private val btStateChangedReceiver = object : BroadcastReceiver() {
+//        override fun onReceive(p0: Context?, intent: Intent?) {
+//            bluetoothConnectionViewModel.updateBtEnabledStatus()
+//        }
+//    }
 
 
-}
 
-enum class ActivityRequestCodes {
-    REQUEST_ENABLE_BT, REQUEST_CHECK_LOCATION_SETTINGS
+
 }

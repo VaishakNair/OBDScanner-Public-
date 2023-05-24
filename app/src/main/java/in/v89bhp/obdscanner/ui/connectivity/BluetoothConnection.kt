@@ -1,9 +1,15 @@
 package `in`.v89bhp.obdscanner.ui.connectivity
 
 import android.annotation.SuppressLint
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +23,8 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
+import androidx.compose.runtime.*
 
 @Composable
 fun BluetoothConnection(
@@ -34,16 +43,49 @@ fun BluetoothConnection(
         viewModelStoreOwner = LocalContext.current as ComponentActivity
     )
 ) {
+    SystemBroadcastReceiver(BluetoothAdapter.ACTION_STATE_CHANGED) { intent ->
+        viewModel.updateBtEnabledStatus()
+    }
+
     if (!viewModel.isBtEnabled) {
-        TurnBluetoothOn()
+        val context = LocalContext.current
+        TurnBluetoothOn({viewModel.turnBluetoothOn(context)})
     } else {
         // TODO
     }
 }
 
+@Composable
+fun SystemBroadcastReceiver(
+    systemAction: String,
+    onSystemEvent: (intent: Intent?) -> Unit
+) {
+    // Grab the current context in this part of the UI tree
+    val context = LocalContext.current
+
+    // Safely use the latest onSystemEvent lambda passed to the function
+    val currentOnSystemEvent by rememberUpdatedState(onSystemEvent)
+
+    // If either context or systemAction changes, unregister and register again
+    DisposableEffect(context, systemAction) {
+        val intentFilter = IntentFilter(systemAction)
+        val broadcast = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                currentOnSystemEvent(intent)
+            }
+        }
+
+        context.registerReceiver(broadcast, intentFilter)
+
+        // When the effect leaves the Composition, remove the callback
+        onDispose {
+            context.unregisterReceiver(broadcast)
+        }
+    }
+}
 
 @Composable
-fun TurnBluetoothOn(modifier: Modifier = Modifier) {
+fun TurnBluetoothOn(onClick: () -> Unit, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -54,7 +96,9 @@ fun TurnBluetoothOn(modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.bodyLarge,
             modifier = modifier.padding(8.dp)
         )
-        Button(onClick = { /*TODO*/ }) {
+        Button(onClick = onClick,
+        modifier = Modifier.align(Alignment.CenterHorizontally)
+            .padding(8.dp)) {
             Text(text = stringResource(R.string.turn_bluetooth_on))
         }
     }
@@ -107,6 +151,7 @@ fun PairedDevices(pairedDevices: List<BluetoothDevice>, modifier: Modifier = Mod
 }
 
 
+/////////////////////////////////////////// Previews ////////////////////////////////
 @Preview
 @Composable
 fun CircularProgressPreview() {
@@ -117,6 +162,12 @@ fun CircularProgressPreview() {
 @Composable
 fun PairedDevicesPreview() {
 //    PairedDevices(listOf(BluetoothDevicz("1", "boAt"), BluetoothDevicz("2", "Jabra")))
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TurnBluetoothOnPreview() {
+    TurnBluetoothOn(onClick = { /*TODO*/ })
 }
 
 data class BluetoothDevicz(val address: String, val name: String)
