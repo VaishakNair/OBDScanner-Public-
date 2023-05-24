@@ -37,5 +37,10 @@ class BluetoothConnectionViewModel(
         context.startActivity(enableBtIntent)
     }
 
+    fun queryPairedDevices() {
+        pairedDevices.clear()
+        BluetoothHelper.queryPairedDevices()?.let { pairedDevices.addAll(it) }
+    }
+
 
 }

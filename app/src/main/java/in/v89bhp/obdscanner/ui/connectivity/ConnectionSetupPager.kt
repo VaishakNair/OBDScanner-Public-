@@ -1,5 +1,6 @@
 package `in`.v89bhp.obdscanner.ui.connectivity
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +22,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,7 +32,12 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Composable
-fun ConnectionSetupPager() {
+fun ConnectionSetupPager(
+    modifier: Modifier = Modifier,
+    viewModel: ConnectionSetupPagerViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        viewModelStoreOwner = LocalContext.current as ComponentActivity
+    )
+) {
     Box {
         val pageCount = 3
         val pagerState = rememberPagerState()
@@ -92,7 +99,7 @@ fun ConnectionSetupPager() {
                 onClick = {
                     coroutineScope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
                 },
-                enabled = pagerState.currentPage != pageCount - 1
+                enabled = pagerState.currentPage != pageCount - 1 && viewModel.isNextButtonEnabled
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),

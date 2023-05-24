@@ -41,6 +41,9 @@ fun BluetoothConnection(
     modifier: Modifier = Modifier,
     viewModel: BluetoothConnectionViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         viewModelStoreOwner = LocalContext.current as ComponentActivity
+    ),
+    connectionSetupPagerViewModel: ConnectionSetupPagerViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        viewModelStoreOwner = LocalContext.current as ComponentActivity
     )
 ) {
     SystemBroadcastReceiver(BluetoothAdapter.ACTION_STATE_CHANGED) { intent ->
@@ -50,8 +53,11 @@ fun BluetoothConnection(
     if (!viewModel.isBtEnabled) {
         val context = LocalContext.current
         TurnBluetoothOn({viewModel.turnBluetoothOn(context)})
+        connectionSetupPagerViewModel.isNextButtonEnabled = false
     } else {
-        // TODO
+
+        viewModel.queryPairedDevices()
+
     }
 }
 
