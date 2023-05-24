@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,9 +21,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -34,7 +31,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
-import androidx.compose.runtime.*
 
 @Composable
 fun BluetoothConnection(
@@ -46,17 +42,22 @@ fun BluetoothConnection(
         viewModelStoreOwner = LocalContext.current as ComponentActivity
     )
 ) {
+    val context = LocalContext.current
+
     SystemBroadcastReceiver(BluetoothAdapter.ACTION_STATE_CHANGED) { intent ->
         viewModel.updateBtEnabledStatus()
     }
 
     if (!viewModel.isBtEnabled) {
-        val context = LocalContext.current
-        TurnBluetoothOn({viewModel.turnBluetoothOn(context)})
+
+        TurnBluetoothOn({ viewModel.turnBluetoothOn(context) })
         connectionSetupPagerViewModel.isNextButtonEnabled = false
     } else {
-
         viewModel.queryPairedDevices()
+
+        PairedDevices(
+            pairedDevices = viewModel.pairedDevices,
+            onPair = { viewModel.showBluetoothSettings(context) })
 
     }
 }
@@ -102,9 +103,12 @@ fun TurnBluetoothOn(onClick: () -> Unit, modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.bodyLarge,
             modifier = modifier.padding(8.dp)
         )
-        Button(onClick = onClick,
-        modifier = Modifier.align(Alignment.CenterHorizontally)
-            .padding(8.dp)) {
+        Button(
+            onClick = onClick,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(8.dp)
+        ) {
             Text(text = stringResource(R.string.turn_bluetooth_on))
         }
     }
@@ -127,30 +131,57 @@ fun CircularProgress(text: String, modifier: Modifier = Modifier) {
 
 @SuppressLint("MissingPermission")
 @Composable
-fun PairedDevices(pairedDevices: List<BluetoothDevice>, modifier: Modifier = Modifier) {
-    val bluetoothSocket = BluetoothHelper.socket
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = modifier.padding(16.dp)
-    ) {
-        items(pairedDevices, key = { it.address }) { bluetoothDevice ->
-            val connected =
-                bluetoothSocket?.let { it.isConnected && it.remoteDevice.name == bluetoothDevice!!.name }
-                    ?: false
-            Column(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    text = bluetoothDevice.name,
+fun PairedDevices(
+    pairedDevices: List<BluetoothDevice>,
+    onPair: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    if (pairedDevices.isEmpty()) {// No paired devices:
+        Card(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Text(
+                text = stringResource(id = R.string.no_paired_bluetooth_devices),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = modifier.padding(8.dp)
+            )
+            Button(
+                onClick = onPair,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(8.dp)
+            ) {
+                Text(text = stringResource(R.string.pair))
+            }
+        }
+    } else {
 
+        val bluetoothSocket = BluetoothHelper.socket
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = modifier.padding(16.dp)
+        ) {
+            items(pairedDevices, key = { it.address }) { bluetoothDevice ->
+                val connected =
+                    bluetoothSocket?.let { it.isConnected && it.remoteDevice.name == bluetoothDevice!!.name }
+                        ?: false
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = bluetoothDevice.name,
+
+                        )
+                    Text(
+                        text = if (connected) "Connected" else "Disconnected",
+                        color = colorResource(
+                            id = if (connected) android.R.color.holo_green_light else
+                                android.R.color.holo_red_light
+                        ),
+                        modifier = Modifier.padding(top = 8.dp)
                     )
-                Text(
-                    text = if (connected) "Connected" else "Disconnected",
-                    color = colorResource(
-                        id = if (connected) android.R.color.holo_green_light else
-                            android.R.color.holo_red_light
-                    ),
-                    modifier = Modifier.padding(top = 8.dp)
-                )
-                Divider(modifier = Modifier.padding(top = 8.dp))
+                    Divider(modifier = Modifier.padding(top = 8.dp))
+                }
             }
         }
     }

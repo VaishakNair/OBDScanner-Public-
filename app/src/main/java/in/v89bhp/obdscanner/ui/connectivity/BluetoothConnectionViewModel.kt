@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.content.Intent
+import android.provider.Settings
 import androidx.compose.runtime.*
 import androidx.lifecycle.AndroidViewModel
 import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
@@ -40,6 +41,10 @@ class BluetoothConnectionViewModel(
     fun queryPairedDevices() {
         pairedDevices.clear()
         BluetoothHelper.queryPairedDevices()?.let { pairedDevices.addAll(it) }
+    }
+
+    fun showBluetoothSettings(context: Context) {
+        context.startActivity(Intent(Settings.ACTION_BLUETOOTH_SETTINGS))
     }
 
 

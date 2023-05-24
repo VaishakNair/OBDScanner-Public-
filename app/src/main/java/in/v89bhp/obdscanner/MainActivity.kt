@@ -43,5 +43,6 @@ class MainActivity : FragmentActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.updateBtEnabledStatus()
+        viewModel.queryPairedDevices()
     }
 }
