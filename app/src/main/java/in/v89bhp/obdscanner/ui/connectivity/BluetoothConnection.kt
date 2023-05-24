@@ -57,7 +57,10 @@ fun BluetoothConnection(
 
         PairedDevices(
             pairedDevices = viewModel.pairedDevices,
-            onPair = { viewModel.showBluetoothSettings(context) })
+            onPair = { viewModel.showBluetoothSettings(context) },
+            updateNextButtonEnabled = { enabled ->
+                connectionSetupPagerViewModel.isNextButtonEnabled = enabled
+            })
 
     }
 }
@@ -134,6 +137,7 @@ fun CircularProgress(text: String, modifier: Modifier = Modifier) {
 fun PairedDevices(
     pairedDevices: List<BluetoothDevice>,
     onPair: () -> Unit,
+    updateNextButtonEnabled: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (pairedDevices.isEmpty()) {// No paired devices:
@@ -157,36 +161,94 @@ fun PairedDevices(
             }
         }
     } else {
+        Column() {
+            PairedDeviceHintCard(pairedDevices, onPair, updateNextButtonEnabled)
 
-        val bluetoothSocket = BluetoothHelper.socket
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = modifier.padding(16.dp)
-        ) {
-            items(pairedDevices, key = { it.address }) { bluetoothDevice ->
-                val connected =
-                    bluetoothSocket?.let { it.isConnected && it.remoteDevice.name == bluetoothDevice!!.name }
-                        ?: false
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = bluetoothDevice.name,
+            val bluetoothSocket = BluetoothHelper.socket
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = modifier.padding(16.dp)
+            ) {
+                items(pairedDevices, key = { it.address }) { bluetoothDevice ->
+                    val connected =
+                        bluetoothSocket?.let { it.isConnected && it.remoteDevice.name == bluetoothDevice!!.name }
+                            ?: false
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            text = bluetoothDevice.name,
 
+                            )
+                        Text(
+                            text = if (connected) "Connected" else "Disconnected",
+                            color = colorResource(
+                                id = if (connected) android.R.color.holo_green_light else
+                                    android.R.color.holo_red_light
+                            ),
+                            modifier = Modifier.padding(top = 8.dp)
                         )
-                    Text(
-                        text = if (connected) "Connected" else "Disconnected",
-                        color = colorResource(
-                            id = if (connected) android.R.color.holo_green_light else
-                                android.R.color.holo_red_light
-                        ),
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                    Divider(modifier = Modifier.padding(top = 8.dp))
+                        Divider(modifier = Modifier.padding(top = 8.dp))
+                    }
                 }
             }
         }
     }
 }
 
+
+@SuppressLint("MissingPermission")
+@Composable
+fun PairedDeviceHintCard(
+    pairedDevices: List<BluetoothDevice>,
+    onPair: () -> Unit,
+    updateNextButtonEnabled: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+
+        if (pairedDevices.isNotEmpty()) {
+            val bluetoothSocket =
+                BluetoothHelper.socket // Socket that's currently in the bt helper. It may be null, connected or disconnected
+            var connected = false
+            var connectedDeviceName: String? = null
+            for (bluetoothDevice in pairedDevices) {
+                bluetoothSocket?.let {
+                    if (it.isConnected && it.remoteDevice.name == bluetoothDevice.name) {
+                        connected = true
+                        connectedDeviceName = bluetoothDevice.name
+                    }
+                }
+            }
+
+
+            updateNextButtonEnabled(connected)
+            val pairedDevicesHint = if (connected) stringResource(
+                id = R.string.paired_device_connected_hint
+            ).format(connectedDeviceName)
+            else stringResource(
+                id =
+                R.string.no_paired_device_connected_hint
+            )
+            Text(
+                text = pairedDevicesHint,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = modifier.padding(8.dp)
+            )
+            Button(
+                onClick = onPair,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(8.dp)
+            ) {
+                Text(text = stringResource(R.string.pair))
+            }
+        }
+
+    }
+}
 
 /////////////////////////////////////////// Previews ////////////////////////////////
 @Preview
