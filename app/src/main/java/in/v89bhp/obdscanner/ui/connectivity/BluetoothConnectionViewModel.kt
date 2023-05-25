@@ -64,8 +64,8 @@ class BluetoothConnectionViewModel(
             when (msg?.what) {
                 HandlerMessageCodes.MESSAGE_SNACKBAR.ordinal -> {
                     if(msg.arg1 == 0) {// Connection attempt failed. No need to display for successful connection as it is
-                        // handled by the bluetooth connectivity header in MainActivity.
-//                        _errorMessage.value = msg.obj as String TODO Wire error message display logic
+                        // updated in the paired devices list with a Green 'Connected' icon and also in the
+                        // paired devices hint card.
                         errorMessage = msg.obj as String
                         showErrorDialog = true
                     }
