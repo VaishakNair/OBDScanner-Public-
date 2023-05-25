@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,26 +40,27 @@ fun ConnectionStatus(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            TextInCircle(text = "89 bhp", modifier = Modifier.background(PurpleGrey40))
+            TextInCircle(text = "89 bhp")
 
             Divider(modifier = Modifier.width(45.dp))
 
-            TextInCircle(text = "OBD Adapter", modifier = Modifier.background(PurpleGrey40))
+            TextInCircle(text = "OBD Adapter")
 
             Divider(modifier = Modifier.width(45.dp))
 
-            TextInCircle(text = "Vehicle ECU", modifier = Modifier.background(PurpleGrey40))
+            TextInCircle(text = "Vehicle ECU")
         }
 
     }
 }
 
 @Composable
-fun TextInCircle(text: String, modifier: Modifier = Modifier) {
+fun TextInCircle(text: String, background: Color = PurpleGrey40, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .padding(2.dp)
             .clip(CircleShape)
+            .background(background)
             .size(90.dp)
 
     ) {
@@ -83,10 +85,10 @@ fun RowPreview() {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        TextInCircle(text = "89 bhp", modifier = Modifier.background(PurpleGrey40))
+        TextInCircle(text = "89 bhp")
         Divider(modifier = Modifier.width(45.dp))
-        TextInCircle(text = "OBD Adapter", modifier = Modifier.background(PurpleGrey40))
+        TextInCircle(text = "OBD Adapter")
         Divider(modifier = Modifier.width(45.dp))
-        TextInCircle(text = "Vehicle ECU", modifier = Modifier.background(PurpleGrey40))
+        TextInCircle(text = "Vehicle ECU")
     }
 }
