@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -58,9 +59,10 @@ fun BluetoothConnection(
         PairedDevices(
             pairedDevices = viewModel.pairedDevices,
             onPair = { viewModel.showBluetoothSettings(context) },
-            updateNextButtonEnabled = { enabled ->
+            onUpdateNextButtonEnabled = { enabled ->
                 connectionSetupPagerViewModel.isNextButtonEnabled = enabled
-            })
+            },
+        onConnect = {bluetoothDevice -> viewModel.connect(bluetoothDevice) })
 
     }
 }
@@ -137,7 +139,8 @@ fun CircularProgress(text: String, modifier: Modifier = Modifier) {
 fun PairedDevices(
     pairedDevices: List<BluetoothDevice>,
     onPair: () -> Unit,
-    updateNextButtonEnabled: (Boolean) -> Unit,
+    onUpdateNextButtonEnabled: (Boolean) -> Unit,
+    onConnect: (BluetoothDevice) -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (pairedDevices.isEmpty()) {// No paired devices:
@@ -162,7 +165,8 @@ fun PairedDevices(
         }
     } else {
         Column() {
-            PairedDeviceHintCard(pairedDevices, onPair, updateNextButtonEnabled)
+
+            PairedDeviceHintCard(pairedDevices, onPair, onUpdateNextButtonEnabled)
 
             val bluetoothSocket = BluetoothHelper.socket
             LazyColumn(
@@ -173,7 +177,12 @@ fun PairedDevices(
                     val connected =
                         bluetoothSocket?.let { it.isConnected && it.remoteDevice.name == bluetoothDevice!!.name }
                             ?: false
-                    Column(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.fillMaxWidth()
+                        .clickable {
+                            if (!connected) {
+                                onConnect(bluetoothDevice)
+                            }
+                        }) {
                         Text(
                             text = bluetoothDevice.name,
 

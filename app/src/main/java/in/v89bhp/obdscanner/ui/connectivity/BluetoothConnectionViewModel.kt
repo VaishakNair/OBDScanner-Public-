@@ -6,9 +6,13 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.provider.Settings
 import androidx.compose.runtime.*
 import androidx.lifecycle.AndroidViewModel
+import `in`.v89bhp.obdscanner.enums.HandlerMessageCodes
 import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
 
 class BluetoothConnectionViewModel(
@@ -47,5 +51,23 @@ class BluetoothConnectionViewModel(
         context.startActivity(Intent(Settings.ACTION_BLUETOOTH_SETTINGS))
     }
 
+    fun connect(bluetoothDevice: BluetoothDevice) {
+        BluetoothHelper.connect(mHandler, bluetoothDevice)
+    }
+
+    /** Handles responses from worker threads */
+    private val mHandler = @SuppressLint("HandlerLeak")
+    object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            when (msg?.what) {
+                HandlerMessageCodes.MESSAGE_SNACKBAR.ordinal -> {
+                    if(msg.arg1 == 0) {// Connection attempt failed. No need to display for successful connection as it is
+                        // handled by the bluetooth connectivity header in MainActivity.
+//                        _errorMessage.value = msg.obj as String TODO Wire error message display logic
+                    }
+                }
+            }
+        }
+    }
 
 }
