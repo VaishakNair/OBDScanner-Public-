@@ -50,7 +50,7 @@ fun ConnectionSetupPager(
             when (page) { // TODO Add new connection screens here:
                 0 -> BluetoothIntro()
                 1 -> BluetoothConnection()
-                2 -> BluetoothIntro()
+                2 -> ConnectionStatus()
                 else -> throw AssertionError("Illegal argument")
             }
         }
