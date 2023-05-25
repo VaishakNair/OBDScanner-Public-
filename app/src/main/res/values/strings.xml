@@ -18,7 +18,7 @@
 
     <string name="bluetooth_off">89 bhp requires Bluetooth to connect to OBD adapter. Currently Bluetooth is turned OFF.</string>
     <string name="turn_bluetooth_on">Turn Bluetooth on</string>
-    <string name="paired_device_connected_hint" formatted="false">89 bhp is now connected to %s. Proceed to the next step. If the connected device is not the OBD adapter, please
+    <string name="paired_device_connected_hint" formatted="false">89 bhp is now connected to \'%s\'. Proceed to the next step. If the connected device is not the OBD adapter, please
     select one from the list. If your adapter is not present in the list, please <b>pair</b> it by clicking the \'Pair\' button below.</string>
     <string name="no_paired_device_connected_hint">Please select a paired OBD adapter from the list below. It will usually have \'OBD\' in its name. If not found, please <b>pair</b>
     an adapter by clicking the \'Pair\' button below.</string>
