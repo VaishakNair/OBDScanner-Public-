@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothSocket
 import android.content.Context
 import android.os.Handler
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,6 +15,7 @@ import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.enums.HandlerMessageCodes
 import java.io.IOException
 import java.util.UUID
+import androidx.compose.runtime.*
 
 
 object BluetoothHelper {
@@ -34,13 +36,13 @@ object BluetoothHelper {
 
     lateinit var applicationContext: Context
 
-    private val _connecting = MutableLiveData(false)
+    private var _connecting by mutableStateOf(false)
 
     /**
      *  Is observed by ***BluetoothFragment*** to
      *  show/ hide the 'Connecting...' progress bar.
      */
-    val connecting: LiveData<Boolean>
+    val connecting: Boolean
         get() = _connecting
 
     /**
@@ -54,7 +56,7 @@ object BluetoothHelper {
 //        } catch (ex: SecurityException) {
 //            Log.e(TAG, "Bluetooth permission(s) not granted", ex)
 //        }
-        _connecting.value = false
+        _connecting = false
     }
 
     fun queryPairedDevices(): List<BluetoothDevice>? =
@@ -86,7 +88,7 @@ object BluetoothHelper {
 
     private class ConnectThread(val bluetoothDevice: BluetoothDevice) : Thread() {
         override fun run() {
-            _connecting.postValue(true)
+            _connecting = true
             // Close any existing connection:
             socket?.let {
                 it.close()
@@ -111,7 +113,7 @@ object BluetoothHelper {
                         Log.i(TAG, "Trying to connect to ${bluetoothDevice.name}")
                         it.connect()
                         connected(bluetoothDevice.name)
-                        _connecting.postValue(false)
+                        _connecting = false
                         Log.i(TAG, "Connected to ${bluetoothDevice.name}")
                     } catch (ex: IOException) {
                         Log.i(TAG, "it.connect() threw IOException.")
@@ -120,7 +122,7 @@ object BluetoothHelper {
                         } catch (ex: IOException) {
                             Log.e(TAG, "Unable to close() socket during connection failure", ex)
                         }
-                        _connecting.postValue(false)
+                        _connecting = false
                         connectionFailed(applicationContext.getString(
                             R.string.bluetooth_connect_failed,
                             bluetoothDevice.name, "BluetoothSocket.connect() threw IOException"
@@ -133,20 +135,20 @@ object BluetoothHelper {
                     R.string.bluetooth_connect_failed,
                     bluetoothDevice.name, "Unable to create bluetooth socket."
                 ))
-                _connecting.postValue(false)
+                _connecting = false
             } catch (ex: SecurityException) {
                 Log.e(TAG, "Bluetooth permission(s) not granted", ex)
                 connectionFailed(applicationContext.getString(
                     R.string.bluetooth_connect_failed,
                     bluetoothDevice.name, "Bluetooth permission(s) not granted."
                 ))
-                _connecting.postValue(false)
+                _connecting = false
             }
         }
 
         fun close() {
             socket?.close()
-            _connecting.value = false
+            _connecting = false
         }
 
         private fun connected(deviceName: String) {

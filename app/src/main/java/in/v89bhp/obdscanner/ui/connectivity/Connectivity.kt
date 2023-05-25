@@ -34,6 +34,7 @@ fun Connectivity(
 
         val bluetoothMultiplePermissionsState = rememberMultiplePermissionsState(
             listOf(
+                android.Manifest.permission.BLUETOOTH,
                 android.Manifest.permission.BLUETOOTH_CONNECT,
                 android.Manifest.permission.BLUETOOTH_SCAN,
             )

@@ -48,22 +48,25 @@ fun BluetoothConnection(
     SystemBroadcastReceiver(BluetoothAdapter.ACTION_STATE_CHANGED) { intent ->
         viewModel.updateBtEnabledStatus()
     }
-
-    if (!viewModel.isBtEnabled) {
-
-        TurnBluetoothOn({ viewModel.turnBluetoothOn(context) })
-        connectionSetupPagerViewModel.isNextButtonEnabled = false
+    if (BluetoothHelper.connecting) {
+        CircularProgress(text = stringResource(R.string.connecting))
     } else {
-        viewModel.queryPairedDevices()
+        if (!viewModel.isBtEnabled) {
 
-        PairedDevices(
-            pairedDevices = viewModel.pairedDevices,
-            onPair = { viewModel.showBluetoothSettings(context) },
-            onUpdateNextButtonEnabled = { enabled ->
-                connectionSetupPagerViewModel.isNextButtonEnabled = enabled
-            },
-        onConnect = {bluetoothDevice -> viewModel.connect(bluetoothDevice) })
+            TurnBluetoothOn({ viewModel.turnBluetoothOn(context) })
+            connectionSetupPagerViewModel.isNextButtonEnabled = false
+        } else {
+            viewModel.queryPairedDevices()
 
+            PairedDevices(
+                pairedDevices = viewModel.pairedDevices,
+                onPair = { viewModel.showBluetoothSettings(context) },
+                onUpdateNextButtonEnabled = { enabled ->
+                    connectionSetupPagerViewModel.isNextButtonEnabled = enabled
+                },
+                onConnect = { bluetoothDevice -> viewModel.connect(bluetoothDevice) })
+
+        }
     }
 }
 
@@ -177,7 +180,8 @@ fun PairedDevices(
                     val connected =
                         bluetoothSocket?.let { it.isConnected && it.remoteDevice.name == bluetoothDevice!!.name }
                             ?: false
-                    Column(modifier = Modifier.fillMaxWidth()
+                    Column(modifier = Modifier
+                        .fillMaxWidth()
                         .clickable {
                             if (!connected) {
                                 onConnect(bluetoothDevice)

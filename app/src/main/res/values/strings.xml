@@ -18,8 +18,8 @@
 
     <string name="bluetooth_off">89 bhp requires Bluetooth to connect to OBD adapter. Currently Bluetooth is turned OFF.</string>
     <string name="turn_bluetooth_on">Turn Bluetooth on</string>
-    <string name="paired_device_connected_hint" formatted="false">89 bhp is now connected to %s. Click \'Next\' to proceed. If the connected device is not the OBD adapter, please
-    select one from the list. If your adapter is not present in the list, please <b>pair</b> it by clicking the \'+\' icon above.</string>
+    <string name="paired_device_connected_hint" formatted="false">89 bhp is now connected to %s. Proceed to the next step. If the connected device is not the OBD adapter, please
+    select one from the list. If your adapter is not present in the list, please <b>pair</b> it by clicking the \'Pair\' button below.</string>
     <string name="no_paired_device_connected_hint">Please select a paired OBD adapter from the list below. It will usually have \'OBD\' in its name. If not found, please <b>pair</b>
     an adapter by clicking the \'Pair\' button below.</string>
     <string name="pair">Pair</string>
@@ -245,5 +245,5 @@
     <string name="gauge_operations">Gauge Operations</string>
     <string name="gauge_operations_list">&#8226; <b>Single tap</b> to toggle gauge settings icon\n&#8226; <b>Pinch</b> to resize\n&#8226; <b>Long press</b> to move\n&#8226; <b>Double tap</b> to delete</string>
     <string name="no_paired_bluetooth_devices">No paired Bluetooth device. Please pair with the <b>OBD</b> adapter that you connected in step 1 by clicking the \'Pair\' button below</string>
-
+    <string name="connecting">Connecting…</string>
 </resources>
