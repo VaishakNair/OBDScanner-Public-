@@ -125,7 +125,7 @@ object BluetoothHelper {
                         _connecting = false
                         connectionFailed(applicationContext.getString(
                             R.string.bluetooth_connect_failed,
-                            bluetoothDevice.name, "BluetoothSocket.connect() threw IOException"
+                            bluetoothDevice.name, "BluetoothSocket.connect() threw IOException. Make sure that the device is powered on and ready to accept connections."
                         ))
                     }
                 }

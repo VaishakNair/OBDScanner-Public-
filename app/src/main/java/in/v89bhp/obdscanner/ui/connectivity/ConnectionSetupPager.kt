@@ -99,7 +99,7 @@ fun ConnectionSetupPager(
                 onClick = {
                     coroutineScope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
                 },
-                enabled = pagerState.currentPage != pageCount - 1 && viewModel.isNextButtonEnabled
+                enabled = pagerState.currentPage == 0 || (pagerState.currentPage != pageCount - 1 && viewModel.isNextButtonEnabled)
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_arrow_forward_ios_24),

@@ -16,12 +16,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,6 +69,27 @@ fun BluetoothConnection(
                 onConnect = { bluetoothDevice -> viewModel.connect(bluetoothDevice) })
 
         }
+    }
+    // Error Dialog for bluetooth connection errors:
+    if (viewModel.showErrorDialog) {
+
+        AlertDialog(onDismissRequest = { viewModel.showErrorDialog = false },
+            title = {
+                Text(text = stringResource(id = R.string.error))
+            },
+            text = {
+                Text(text = viewModel.errorMessage)
+            },
+            confirmButton = { },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.showErrorDialog = false
+                    }
+                ) {
+                    Text(stringResource(R.string.dismiss))
+                }
+            })
     }
 }
 

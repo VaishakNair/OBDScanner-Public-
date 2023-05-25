@@ -25,6 +25,8 @@ class BluetoothConnectionViewModel(
     var isConnecting by mutableStateOf(false)
     var pairedDevices = mutableListOf<BluetoothDevice>().toMutableStateList()
     var isBtEnabled by mutableStateOf(false)
+    var showErrorDialog by mutableStateOf(false)
+    lateinit var errorMessage: String
 
     val bluetoothAdapter
         get() = BluetoothHelper.bluetoothAdapter
@@ -64,6 +66,8 @@ class BluetoothConnectionViewModel(
                     if(msg.arg1 == 0) {// Connection attempt failed. No need to display for successful connection as it is
                         // handled by the bluetooth connectivity header in MainActivity.
 //                        _errorMessage.value = msg.obj as String TODO Wire error message display logic
+                        errorMessage = msg.obj as String
+                        showErrorDialog = true
                     }
                 }
             }
