@@ -4,7 +4,6 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,10 +21,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import `in`.v89bhp.obdscanner.R
+import androidx.constraintlayout.compose.ConstraintLayout
 import `in`.v89bhp.obdscanner.ui.theme.PurpleGrey40
 
 @Composable
@@ -61,25 +58,10 @@ fun ConnectionStatus(
         }
 
 
-
-        Row(modifier = Modifier.padding(4.dp).fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically) {
-            Text(text = stringResource(id = R.string.obd_adapter),
-                modifier = Modifier.width(110.dp))
-            Text(text = " : ")
-            Text(text = "Connected",
-                modifier = Modifier.width(110.dp)) // TODO
-        }
-        Row(modifier = Modifier.padding(4.dp).fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically) {
-            Text(text = stringResource(id = R.string.vehicle_ecu),
-                modifier = Modifier.width(110.dp))
-            Text(text = " : ")
-            Text(text = "Disconnected",
-                modifier = Modifier.width(110.dp)) // TODO
-        }
+        ConnectionStatusHints(
+            obdAdapterStatusHint = "Connected",
+            vehicleECUStatusHint = "Disconnected"
+        ) // TODO
     }
 }
 
@@ -104,53 +86,53 @@ fun TextInCircle(text: String, background: Color = PurpleGrey40, modifier: Modif
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun RowPreview() {
-    Card(
-        modifier = Modifier
+fun ConnectionStatusHints(
+    obdAdapterStatusHint: String,
+    vehicleECUStatusHint: String,
+    modifier: Modifier = Modifier
+) {
+    ConstraintLayout(
+        modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
-
-
+            .padding(8.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            TextInCircle(text = "89 bhp")
+        val (obdAdapter, colon1, colon2, obdAdapterStatus, vehicleECU, vehicleECUStatus) = createRefs()
 
-            Divider(modifier = Modifier.width(45.dp))
+        Text(text = "OBD Adapter",
+            modifier = Modifier.constrainAs(obdAdapter) {
+                start.linkTo(parent.start)
+                top.linkTo(parent.top)
+            })
 
-            TextInCircle(text = "OBD Adapter")
+        Text(text = ":",
+            modifier = Modifier.constrainAs(colon1) {
+                start.linkTo(obdAdapter.end, margin = 8.dp)
+                top.linkTo(obdAdapter.top)
+            })
 
-            Divider(modifier = Modifier.width(45.dp))
+        Text(text = obdAdapterStatusHint,
+            modifier = Modifier.constrainAs(obdAdapterStatus) {
+                start.linkTo(colon1.end, margin = 8.dp)
+                top.linkTo(colon1.top)
+            })
 
-            TextInCircle(text = "Vehicle ECU")
-        }
+        Text(text = "Vehicle ECU",
+            modifier = Modifier.constrainAs(vehicleECU) {
+                start.linkTo(obdAdapter.start)
+                top.linkTo(obdAdapter.bottom, margin = 8.dp)
+            })
 
+        Text(text = ":",
+            modifier = Modifier.constrainAs(colon2) {
+                start.linkTo(colon1.start)
+                top.linkTo(vehicleECU.top)
+            })
 
-
-        Row(modifier = Modifier.padding(8.dp).fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically) {
-            Text(text = stringResource(id = R.string.obd_adapter),
-            modifier = Modifier.width(100.dp))
-            Text(text = " : ")
-            Text(text = "Connected",
-                modifier = Modifier.width(100.dp)) // TODO
-        }
-        Row(modifier = Modifier.padding(8.dp).fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically) {
-            Text(text = stringResource(id = R.string.vehicle_ecu),
-            modifier = Modifier.width(100.dp))
-            Text(text = " : ")
-            Text(text = "Disconnected",
-                modifier = Modifier.width(100.dp)) // TODO
-        }
+        Text(text = vehicleECUStatusHint,
+            modifier = Modifier.constrainAs(vehicleECUStatus) {
+                start.linkTo(obdAdapterStatus.start)
+                top.linkTo(colon2.top)
+            })
     }
 }
