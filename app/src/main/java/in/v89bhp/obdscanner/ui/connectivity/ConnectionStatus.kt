@@ -4,12 +4,14 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
@@ -21,8 +23,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import `in`.v89bhp.obdscanner.R
+import `in`.v89bhp.obdscanner.helpers.ElmHelper
+import `in`.v89bhp.obdscanner.ui.theme.HoloGreenLight
 import `in`.v89bhp.obdscanner.ui.theme.PurpleGrey40
 
 @Composable
@@ -32,6 +38,56 @@ fun ConnectionStatus(
         viewModelStoreOwner = LocalContext.current as ComponentActivity
     )
 ) {
+    with(viewModel) {
+        if (isFirstTime) {
+            if (isConnecting.not()) {
+                loadConnectionStatus()
+            }
+            isFirstTime = false
+        }
+    }
+
+    if (viewModel.isConnecting) {
+        CircularProgress(text = stringResource(R.string.connecting))
+    } else if (viewModel.isError) {// Error card for bluetooth connection errors:
+        ErrorCard(
+            errorMessage = viewModel.errorMessage,
+            onClick = { viewModel.loadConnectionStatus() })
+
+    } else {
+        ConnectionStatusCard(onTryAgain = { viewModel.loadConnectionStatus() })
+    }
+
+
+}
+
+@Composable
+fun ErrorCard(errorMessage: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Text(
+            text = errorMessage,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = modifier.padding(8.dp)
+        )
+        Button(
+            onClick = onClick,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(8.dp)
+        ) {
+            Text(text = stringResource(R.string.try_again))
+        }
+    }
+}
+
+@Composable
+fun ConnectionStatusCard(onTryAgain: () -> Unit, modifier: Modifier = Modifier) {
+    val isElmInitialized = ElmHelper.elmInitialized.value as Boolean
+    val isECUInitialized = ElmHelper.ecuInitialized.value as Boolean
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -46,27 +102,57 @@ fun ConnectionStatus(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            TextInCircle(text = "89 bhp")
+            TextInCircle(
+                text = stringResource(id = R.string.app_name),
+                background = colorResource(id = android.R.color.holo_green_light)
+            )
 
             Divider(modifier = Modifier.width(45.dp))
 
-            TextInCircle(text = "OBD Adapter")
+            TextInCircle(
+                text = stringResource(id = R.string.obd_adapter),
+                background = if (isElmInitialized) HoloGreenLight else PurpleGrey40
+            )
 
             Divider(modifier = Modifier.width(45.dp))
 
-            TextInCircle(text = "Vehicle ECU")
+            TextInCircle(
+                text = stringResource(id = R.string.vehicle_ecu),
+                background = if (isECUInitialized) HoloGreenLight else PurpleGrey40
+            )
         }
 
 
         ConnectionStatusHints(
-            obdAdapterStatusHint = "Connected",
-            vehicleECUStatusHint = "Disconnected"
+            obdAdapterStatusHint = stringResource(id = if (isElmInitialized) R.string.connected else R.string.disconnected),
+            vehicleECUStatusHint = stringResource(id = if (isECUInitialized) R.string.connected else R.string.disconnected)
         ) // TODO
+
+        if (isElmInitialized && isECUInitialized) {
+            Text(text = stringResource(R.string.connection_successful))
+        } else if (isElmInitialized && isECUInitialized.not()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text(text = stringResource(R.string.ign_off_error)) // TODO
+                Button(// TODO Button visibility
+                    onClick = onTryAgain,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(8.dp)
+                ) {
+                    Text(text = stringResource(R.string.try_again))
+                }
+            }
+        }
+
     }
 }
 
 @Composable
-fun TextInCircle(text: String, background: Color = PurpleGrey40, modifier: Modifier = Modifier) {
+fun TextInCircle(text: String, modifier: Modifier = Modifier, background: Color = PurpleGrey40) {
     Box(
         modifier = modifier
             .padding(2.dp)

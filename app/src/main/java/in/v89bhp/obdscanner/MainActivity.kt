@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentActivity
 import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
 import `in`.v89bhp.obdscanner.helpers.ElmHelper
 import `in`.v89bhp.obdscanner.ui.connectivity.BluetoothConnectionViewModel
+import `in`.v89bhp.obdscanner.ui.connectivity.ConnectionStatusViewModel
 import `in`.v89bhp.obdscanner.ui.theme.OBDScannerTheme
 
 class MainActivity : FragmentActivity() {
@@ -20,7 +21,8 @@ class MainActivity : FragmentActivity() {
         const val EXTRA_DESTINATION_ID = "extra_dest_id"
     }
 
-    private val viewModel by viewModels<BluetoothConnectionViewModel>()
+    private val bluetoothConnectionViewModel by viewModels<BluetoothConnectionViewModel>()
+    private val connectionStatusViewModel by viewModels<ConnectionStatusViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -42,7 +44,13 @@ class MainActivity : FragmentActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.updateBtEnabledStatus()
-        viewModel.queryPairedDevices()
+        bluetoothConnectionViewModel.updateBtEnabledStatus()
+        bluetoothConnectionViewModel.queryPairedDevices()
+
+        if(connectionStatusViewModel.isConnecting.not()) {
+            connectionStatusViewModel.loadConnectionStatus()
+        }
+
+
     }
 }
