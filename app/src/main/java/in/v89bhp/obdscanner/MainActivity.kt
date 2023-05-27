@@ -22,7 +22,7 @@ class MainActivity : FragmentActivity() {
     }
 
     private val bluetoothConnectionViewModel by viewModels<BluetoothConnectionViewModel>()
-    private val connectionStatusViewModel by viewModels<ConnectionStatusViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,11 +46,5 @@ class MainActivity : FragmentActivity() {
         super.onResume()
         bluetoothConnectionViewModel.updateBtEnabledStatus()
         bluetoothConnectionViewModel.queryPairedDevices()
-
-        if(connectionStatusViewModel.isConnecting.not()) {
-            connectionStatusViewModel.loadConnectionStatus()
-        }
-
-
     }
 }
