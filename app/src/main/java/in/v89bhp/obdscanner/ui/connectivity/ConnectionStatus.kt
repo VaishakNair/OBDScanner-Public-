@@ -48,16 +48,20 @@ fun ConnectionStatus(
         }
     }
 
-    if (viewModel.isConnecting) {
-        CircularProgress(text = stringResource(R.string.connecting))
-    } else if (viewModel.isError) {// Error card for bluetooth connection errors:
-        ErrorCard(
-            errorMessage = viewModel.errorMessage,
-            onClick = { viewModel.loadConnectionStatus() })
+    Box(modifier = modifier) {
+        if (viewModel.isConnecting) {
+            CircularProgress(text = stringResource(R.string.connecting))
+        } else if (viewModel.isError) {// Error card for bluetooth connection errors:
+            ErrorCard(
+                errorMessage = viewModel.errorMessage,
+                onClick = { viewModel.loadConnectionStatus() })
 
-    } else {
-        ConnectionStatusCard(onTryAgain = { viewModel.loadConnectionStatus() })
+        } else {
+            // Contains the three circles and other text showing connection status from 89 bhp to OBD adapter and vehicle ECU
+            ConnectionStatusCard(onTryAgain = { viewModel.loadConnectionStatus() })
+        }
     }
+
 
 
 }
