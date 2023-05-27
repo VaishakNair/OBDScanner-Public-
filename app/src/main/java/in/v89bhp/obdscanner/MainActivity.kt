@@ -11,7 +11,6 @@ import androidx.fragment.app.FragmentActivity
 import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
 import `in`.v89bhp.obdscanner.helpers.ElmHelper
 import `in`.v89bhp.obdscanner.ui.connectivity.BluetoothConnectionViewModel
-import `in`.v89bhp.obdscanner.ui.connectivity.ConnectionStatusViewModel
 import `in`.v89bhp.obdscanner.ui.theme.OBDScannerTheme
 
 class MainActivity : FragmentActivity() {

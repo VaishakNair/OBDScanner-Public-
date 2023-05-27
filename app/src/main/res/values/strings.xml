@@ -2,7 +2,7 @@
     <!ENTITY oxygen "Oxygen">
     ]>
 <resources>
-    <string name="app_name">OBDScanner</string>
+    <string name="app_name">89 bhp</string>
     <string name="oxygen">&oxygen;</string>
     <string name="connectivity">Connectivity</string>
     <string name="bluetooth_connection_status" formatted="false">Bluetooth: %s</string>

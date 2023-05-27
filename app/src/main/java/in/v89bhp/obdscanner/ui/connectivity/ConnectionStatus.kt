@@ -29,6 +29,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.helpers.ElmHelper
 import `in`.v89bhp.obdscanner.ui.theme.HoloGreenLight
+import `in`.v89bhp.obdscanner.ui.theme.HoloRedLight
 import `in`.v89bhp.obdscanner.ui.theme.PurpleGrey40
 
 @Composable
@@ -89,7 +90,7 @@ fun ConnectionStatusCard(onTryAgain: () -> Unit, modifier: Modifier = Modifier) 
     val isElmInitialized = ElmHelper.elmInitialized.value as Boolean
     val isECUInitialized = ElmHelper.ecuInitialized.value as Boolean
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(16.dp)
 
@@ -104,17 +105,23 @@ fun ConnectionStatusCard(onTryAgain: () -> Unit, modifier: Modifier = Modifier) 
         ) {
             TextInCircle(
                 text = stringResource(id = R.string.app_name),
-                background = colorResource(id = android.R.color.holo_green_light)
+                background = HoloGreenLight
             )
 
-            Divider(modifier = Modifier.width(45.dp))
+            Divider(
+                modifier = Modifier.width(45.dp),
+                color = if (isElmInitialized) HoloGreenLight else PurpleGrey40
+            )
 
             TextInCircle(
                 text = stringResource(id = R.string.obd_adapter),
                 background = if (isElmInitialized) HoloGreenLight else PurpleGrey40
             )
 
-            Divider(modifier = Modifier.width(45.dp))
+            Divider(
+                modifier = Modifier.width(45.dp),
+                color = if (isECUInitialized) HoloGreenLight else PurpleGrey40
+            )
 
             TextInCircle(
                 text = stringResource(id = R.string.vehicle_ecu),
@@ -126,24 +133,29 @@ fun ConnectionStatusCard(onTryAgain: () -> Unit, modifier: Modifier = Modifier) 
         ConnectionStatusHints(
             obdAdapterStatusHint = stringResource(id = if (isElmInitialized) R.string.connected else R.string.disconnected),
             vehicleECUStatusHint = stringResource(id = if (isECUInitialized) R.string.connected else R.string.disconnected)
-        ) // TODO
+        )
 
-        if (isElmInitialized && isECUInitialized) {
-            Text(text = stringResource(R.string.connection_successful))
-        } else if (isElmInitialized && isECUInitialized.not()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            ) {
-                Text(text = stringResource(R.string.ign_off_error)) // TODO
-                Button(// TODO Button visibility
-                    onClick = onTryAgain,
+        if (isElmInitialized) {
+            if (isECUInitialized) {
+                Text(
+                    text = stringResource(R.string.connection_successful),
+                    modifier = Modifier.padding(8.dp)
+                )
+            } else {
+                Column(
                     modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
+                        .fillMaxWidth()
                         .padding(8.dp)
                 ) {
-                    Text(text = stringResource(R.string.try_again))
+                    Text(text = stringResource(R.string.ign_off_error))
+                    Button(
+                        onClick = onTryAgain,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(8.dp)
+                    ) {
+                        Text(text = stringResource(R.string.try_again))
+                    }
                 }
             }
         }
@@ -185,40 +197,46 @@ fun ConnectionStatusHints(
     ) {
         val (obdAdapter, colon1, colon2, obdAdapterStatus, vehicleECU, vehicleECUStatus) = createRefs()
 
-        Text(text = "OBD Adapter",
+        Text(text = stringResource(R.string.obd_adapter),
             modifier = Modifier.constrainAs(obdAdapter) {
                 start.linkTo(parent.start)
                 top.linkTo(parent.top)
             })
 
-        Text(text = ":",
+        Text(text = stringResource(R.string.colon),
             modifier = Modifier.constrainAs(colon1) {
                 start.linkTo(obdAdapter.end, margin = 8.dp)
                 top.linkTo(obdAdapter.top)
             })
 
-        Text(text = obdAdapterStatusHint,
+        Text(
+            text = obdAdapterStatusHint,
             modifier = Modifier.constrainAs(obdAdapterStatus) {
                 start.linkTo(colon1.end, margin = 8.dp)
                 top.linkTo(colon1.top)
-            })
+            },
+            color = if (obdAdapterStatusHint == stringResource(id = R.string.connected)) HoloGreenLight else HoloRedLight
+        )
 
-        Text(text = "Vehicle ECU",
+        Text(text = stringResource(R.string.vehicle_ecu),
             modifier = Modifier.constrainAs(vehicleECU) {
                 start.linkTo(obdAdapter.start)
                 top.linkTo(obdAdapter.bottom, margin = 8.dp)
             })
 
-        Text(text = ":",
+        Text(text = stringResource(R.string.colon),
             modifier = Modifier.constrainAs(colon2) {
                 start.linkTo(colon1.start)
                 top.linkTo(vehicleECU.top)
             })
 
-        Text(text = vehicleECUStatusHint,
+        Text(
+            text = vehicleECUStatusHint,
             modifier = Modifier.constrainAs(vehicleECUStatus) {
                 start.linkTo(obdAdapterStatus.start)
                 top.linkTo(colon2.top)
-            })
+            },
+            color = if (vehicleECUStatusHint == stringResource(id = R.string.connected)) HoloGreenLight else HoloRedLight
+        )
     }
 }
