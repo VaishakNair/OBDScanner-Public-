@@ -44,7 +44,8 @@ fun ConnectionSetupPager(
         val coroutineScope = rememberCoroutineScope()
 
         HorizontalPager(
-            pageCount = pageCount, state = pagerState, modifier = Modifier.fillMaxSize()
+            pageCount = pageCount, state = pagerState, modifier = Modifier.fillMaxSize(),
+            userScrollEnabled = false
         ) { page ->
             // Page content
             when (page) { // TODO Add new connection screens here:
