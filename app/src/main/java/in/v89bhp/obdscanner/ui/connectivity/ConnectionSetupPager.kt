@@ -45,7 +45,8 @@ fun ConnectionSetupPager(
 
         HorizontalPager(
             pageCount = pageCount, state = pagerState, modifier = Modifier.fillMaxSize(),
-            userScrollEnabled = false
+            userScrollEnabled = false,
+            beyondBoundsPageCount = 0
         ) { page ->
             // Page content
             when (page) { // TODO Add new connection screens here:

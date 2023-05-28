@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -39,18 +41,12 @@ fun ConnectionStatus(
         viewModelStoreOwner = LocalContext.current as ComponentActivity
     )
 ) {
-    with(viewModel) {
-        if (isFirstTime) {
-            if (isConnecting.not()) {
-                loadConnectionStatus()
-            }
-            isFirstTime = false
-        }
-    }
+
 
     Box(modifier = modifier) {
         if (viewModel.isConnecting) {
-            CircularProgress(text = stringResource(R.string.connecting))
+            CancellableCircularProgress(text = stringResource(R.string.connecting),
+                onCancel = { viewModel.cancel() })
         } else if (viewModel.isError) {// Error card for bluetooth connection errors:
             ErrorCard(
                 errorMessage = viewModel.errorMessage,
@@ -58,10 +54,12 @@ fun ConnectionStatus(
 
         } else {
             // Contains the three circles and other text showing connection status from 89 bhp to OBD adapter and vehicle ECU
-            ConnectionStatusCard(onTryAgain = { viewModel.loadConnectionStatus() })
+            ConnectionStatusCard(onTryAgain = {
+                viewModel.isFirstTime = false
+                viewModel.loadConnectionStatus()
+            }, isFirstTime = viewModel.isFirstTime)
         }
     }
-
 
 
 }
@@ -90,7 +88,11 @@ fun ErrorCard(errorMessage: String, onClick: () -> Unit, modifier: Modifier = Mo
 }
 
 @Composable
-fun ConnectionStatusCard(onTryAgain: () -> Unit, modifier: Modifier = Modifier) {
+fun ConnectionStatusCard(
+    onTryAgain: () -> Unit,
+    isFirstTime: Boolean,
+    modifier: Modifier = Modifier
+) {
     val isElmInitialized = ElmHelper.elmInitialized.value as Boolean
     val isECUInitialized = ElmHelper.ecuInitialized.value as Boolean
     Card(
@@ -138,27 +140,37 @@ fun ConnectionStatusCard(onTryAgain: () -> Unit, modifier: Modifier = Modifier) 
             obdAdapterStatusHint = stringResource(id = if (isElmInitialized) R.string.connected else R.string.disconnected),
             vehicleECUStatusHint = stringResource(id = if (isECUInitialized) R.string.connected else R.string.disconnected)
         )
-
-        if (isElmInitialized) {
-            if (isECUInitialized) {
-                Text(
-                    text = stringResource(R.string.connection_successful),
-                    modifier = Modifier.padding(8.dp)
-                )
-            } else {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                ) {
-                    Text(text = stringResource(R.string.ign_off_error))
-                    Button(
-                        onClick = onTryAgain,
+        if (isFirstTime) {
+            Button(
+                onClick = onTryAgain,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(8.dp)
+            ) {
+                Text(text = stringResource(R.string.connect))
+            }
+        } else {
+            if (isElmInitialized) {
+                if (isECUInitialized) {
+                    Text(
+                        text = stringResource(R.string.connection_successful),
+                        modifier = Modifier.padding(8.dp)
+                    )
+                } else {
+                    Column(
                         modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
+                            .fillMaxWidth()
                             .padding(8.dp)
                     ) {
-                        Text(text = stringResource(R.string.try_again))
+                        Text(text = stringResource(R.string.ign_off_error))
+                        Button(
+                            onClick = onTryAgain,
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(8.dp)
+                        ) {
+                            Text(text = stringResource(R.string.try_again))
+                        }
                     }
                 }
             }
@@ -242,5 +254,28 @@ fun ConnectionStatusHints(
             },
             color = if (vehicleECUStatusHint == stringResource(id = R.string.connected)) HoloGreenLight else HoloRedLight
         )
+    }
+}
+
+@Composable
+fun CancellableCircularProgress(text: String, onCancel: () -> Unit, modifier: Modifier = Modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = modifier.fillMaxSize()
+    ) {
+        CircularProgressIndicator()
+        Text(
+            text = text,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+        Button(
+            onClick = onCancel,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(8.dp)
+        ) {
+            Text(text = stringResource(R.string.cancel))
+        }
     }
 }

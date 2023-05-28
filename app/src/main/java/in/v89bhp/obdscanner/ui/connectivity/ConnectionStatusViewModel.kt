@@ -37,6 +37,11 @@ class ConnectionStatusViewModel(application: Application) : AndroidViewModel(app
         ElmHelper.send(mHandler, "ATI\r")
     }
 
+    fun cancel() {
+        isConnecting = false
+        ElmHelper.stop()
+    }
+
     /** Handles responses from worker threads */
     private val mHandler = @SuppressLint("HandlerLeak")
     object : Handler(Looper.getMainLooper()) {
