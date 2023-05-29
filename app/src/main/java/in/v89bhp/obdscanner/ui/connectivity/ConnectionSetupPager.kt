@@ -44,7 +44,10 @@ fun ConnectionSetupPager(
         val coroutineScope = rememberCoroutineScope()
 
         HorizontalPager(
-            pageCount = pageCount, state = pagerState, modifier = Modifier.fillMaxSize(),
+            pageCount = pageCount,
+            state = pagerState,
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.Top,
             userScrollEnabled = false,
             beyondBoundsPageCount = 0
         ) { page ->
