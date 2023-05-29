@@ -3,6 +3,7 @@ package `in`.v89bhp.obdscanner
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,11 +35,11 @@ fun OBDScannerApp(
         viewModelStoreOwner = LocalContext.current as ComponentActivity
     )
 ) {
-    Box {
+    Column {
         NavHost(
             navController = appState.navController,
             startDestination = Screen.Home.route,
-            modifier = modifier.fillMaxSize()
+            modifier = modifier.weight(0.97f)
         ) {
             composable(Screen.Home.route) { backStackEntry ->
                 Home(
@@ -67,7 +68,7 @@ fun OBDScannerApp(
         ConnectivityBanner(
             text = "Connected",
             background = HoloRedLight,
-            modifier = Modifier.align(Alignment.BottomCenter))
+            modifier = Modifier.weight(0.03f))
 
     }
 }
