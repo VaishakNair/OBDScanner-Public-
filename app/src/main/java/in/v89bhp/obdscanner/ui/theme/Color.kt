@@ -12,3 +12,4 @@ val Pink40 = Color(0xFF7D5260)
 
 val HoloGreenLight = Color(0xFF99CC00)
 val HoloRedLight = Color(0xFFFF4444)
+val ConnectivityYellow = Color(0xFFFFC107)

@@ -1,5 +1,8 @@
 package `in`.v89bhp.obdscanner
 
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.content.IntentFilter
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -10,12 +13,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import `in`.v89bhp.obdscanner.ui.home.Home
@@ -30,11 +38,17 @@ import `in`.v89bhp.obdscanner.ui.theme.HoloRedLight
 @Composable
 fun OBDScannerApp(
     modifier: Modifier = Modifier,
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     appState: OBDScannerAppState = rememberOBDScannerAppState(),
+    viewModel: OBDScannerAppViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        viewModelStoreOwner = LocalContext.current as ComponentActivity
+    ),
     homeViewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         viewModelStoreOwner = LocalContext.current as ComponentActivity
     )
 ) {
+    // Grab the current context in this part of the UI tree
+    val context = LocalContext.current
     Column {
         NavHost(
             navController = appState.navController,
@@ -71,10 +85,63 @@ fun OBDScannerApp(
             modifier = Modifier.weight(0.03f))
 
     }
+
+    // If `lifecycleOwner` changes, dispose and reset the effect
+    DisposableEffect(lifecycleOwner) {
+        // Create an observer that triggers our remembered callbacks
+        // for sending analytics events
+
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                context.registerReceiver(viewModel.bluetoothStateChangeReceiver, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
+                context.registerReceiver(bluetoothConnectionStateChangeReceiver, IntentFilter(
+                    BluetoothDevice.ACTION_ACL_CONNECTED)
+                )
+                context.registerReceiver(bluetoothConnectionStateChangeReceiver, IntentFilter(
+                    BluetoothDevice.ACTION_ACL_DISCONNECTED)
+                )
+            }
+        }
+
+        // Add the observer to the lifecycle
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        // When the effect leaves the Composition, remove the observer
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+            context.unregisterReceiver(viewModel.bluetoothStateChangeReceiver)
+            context.unregisterReceiver(bluetoothConnectionStateChangeReceiver
+            )
+            context.unregisterReceiver(bluetoothConnectionStateChangeReceiver)
+        }
+    }
+
+    // If `lifecycleOwner` changes, dispose and reset the effect
+    DisposableEffect(lifecycleOwner) {
+        // Create an observer that triggers our remembered callbacks
+        // for sending analytics events
+
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_PAUSE) {
+                context.unregisterReceiver(viewModel.bluetoothStateChangeReceiver)
+                context.unregisterReceiver(bluetoothConnectionStateChangeReceiver
+                )
+                context.unregisterReceiver(bluetoothConnectionStateChangeReceiver)
+            }
+        }
+
+        // Add the observer to the lifecycle
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        // When the effect leaves the Composition, remove the observer
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 }
 
 @Composable
-fun ConnectivityBanner(text: String, background: Color, modifier: Modifier = Modifier) {
+fun ConnectivityBanner(text: String, background: Color, modifier: Modifier = Modifier, timeToShowMillis: Long = 0) {
     Box(
         modifier = modifier
             .fillMaxWidth()

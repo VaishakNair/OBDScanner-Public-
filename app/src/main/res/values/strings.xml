@@ -4,7 +4,11 @@
 <resources>
     <string name="app_name">89 bhp</string>
     <string name="cancel">Cancel</string>
+    <string name="offline">You are offline</string>
     <string name="oxygen">&oxygen;</string>
+    <string name="connected_to" formatted="false">Connected to %s</string>
+    <string name="connecting_to" formatted="false">Connecting to %s…</string>
+    <string name="connection_lost" formatted="false">Connection to %s lost</string>
     <string name="connectivity">Connectivity</string>
     <string name="bluetooth_connection_status" formatted="false">Bluetooth: %s</string>
     <string name="obd_connection_status" formatted="false">OBD Adapter: %s</string>
