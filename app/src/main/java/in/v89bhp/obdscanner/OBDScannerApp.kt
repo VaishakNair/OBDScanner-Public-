@@ -7,9 +7,11 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -94,10 +97,10 @@ fun OBDScannerApp(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 context.registerReceiver(viewModel.bluetoothStateChangeReceiver, IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED))
-                context.registerReceiver(bluetoothConnectionStateChangeReceiver, IntentFilter(
+                context.registerReceiver(viewModel.bluetoothConnectionStateChangeReceiver, IntentFilter(
                     BluetoothDevice.ACTION_ACL_CONNECTED)
                 )
-                context.registerReceiver(bluetoothConnectionStateChangeReceiver, IntentFilter(
+                context.registerReceiver(viewModel.bluetoothConnectionStateChangeReceiver, IntentFilter(
                     BluetoothDevice.ACTION_ACL_DISCONNECTED)
                 )
             }
@@ -110,9 +113,9 @@ fun OBDScannerApp(
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
             context.unregisterReceiver(viewModel.bluetoothStateChangeReceiver)
-            context.unregisterReceiver(bluetoothConnectionStateChangeReceiver
+            context.unregisterReceiver(viewModel.bluetoothConnectionStateChangeReceiver
             )
-            context.unregisterReceiver(bluetoothConnectionStateChangeReceiver)
+            context.unregisterReceiver(viewModel.bluetoothConnectionStateChangeReceiver)
         }
     }
 
@@ -124,9 +127,9 @@ fun OBDScannerApp(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_PAUSE) {
                 context.unregisterReceiver(viewModel.bluetoothStateChangeReceiver)
-                context.unregisterReceiver(bluetoothConnectionStateChangeReceiver
+                context.unregisterReceiver(viewModel.bluetoothConnectionStateChangeReceiver
                 )
-                context.unregisterReceiver(bluetoothConnectionStateChangeReceiver)
+                context.unregisterReceiver(viewModel.bluetoothConnectionStateChangeReceiver)
             }
         }
 
@@ -154,5 +157,16 @@ fun ConnectivityBanner(text: String, background: Color, modifier: Modifier = Mod
             color = colorResource(id = android.R.color.white),
             style = MaterialTheme.typography.labelLarge
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ConnectingSnackbar(modifier: Modifier = Modifier) {
+    Row() {
+        Text("Connecting to OBDII")
+        Button(onClick = { /*TODO*/ }) {
+            Text("Cancel")
+        }
     }
 }
