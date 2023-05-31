@@ -24,6 +24,7 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
     }
 
     var stopTrying = false
+    var isDestroyed = false
 
     var showConnectingSnackbar by mutableStateOf(false)
     var showConnectivityHeader by mutableStateOf(false)
@@ -95,33 +96,34 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
 
         @SuppressLint("MissingPermission")
         override fun handleMessage(msg: Message) {
-//            if(!isDestroyed) { // TODO Check if this is needed or not
-            when (msg?.arg1) {
-                0 -> {// Connection failed. Retry till user cancellation:
-                    if (!stopTrying) {
-                        Log.i(TAG, "Retrying connection...")
-                        BluetoothHelper.connect(this, lastConnectedDevice)
-                    } else {
-                        Log.i(TAG, "Stopping trying...")
-                        stopTrying = false
+            if (!isDestroyed) {
+                when (msg?.arg1) {
+                    0 -> {// Connection failed. Retry till user cancellation:
+                        if (!stopTrying) {
+                            Log.i(TAG, "Retrying connection...")
+                            BluetoothHelper.connect(this, lastConnectedDevice)
+                        } else {
+                            Log.i(TAG, "Stopping trying...")
+                            stopTrying = false
+                        }
+                    }
+
+                    1 -> {// Connection established
+                        // Dismiss the 'Connecting to' snackbar
+                        showConnectingSnackbar = false
+                        // Display green 'Connected to $pairedDeviceName' header
+                        showConnectivityHeader = true
+                        connectivityHeaderMessage = (getApplication() as Context).getString(
+                            R.string.connected_to,
+                            lastConnectedDevice!!.name
+                        ) // TODO Wire logic to
+                        // hide connectivity banner after 5 secs
+                        connectivityHeaderBackground = ConnectivityGreen
+//                        showConnectivityHeader(getString(R.string.connected_to, lastConnectedDevice!!.name), R.color.connectivity_green, 5000)
                     }
                 }
-
-                1 -> {// Connection established
-                    // Dismiss the 'Connecting to' snackbar
-                    showConnectingSnackbar = false
-                    // Display green 'Connected to $pairedDeviceName' header
-                    showConnectivityHeader = true
-                    connectivityHeaderMessage = (getApplication() as Context).getString(
-                        R.string.connected_to,
-                        lastConnectedDevice!!.name
-                    ) // TODO Wire logic to
-                    // hide connectivity banner after 5 secs
-                    connectivityHeaderBackground = ConnectivityGreen
-//                        showConnectivityHeader(getString(R.string.connected_to, lastConnectedDevice!!.name), R.color.connectivity_green, 5000)
-                }
             }
-//            }
+//            isDestroyed = false
         }
     }
 
