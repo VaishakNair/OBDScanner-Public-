@@ -12,6 +12,7 @@ import android.os.Looper
 import android.os.Message
 import android.util.Log
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
 import androidx.preference.PreferenceManager
 import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
@@ -26,10 +27,15 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
     var stopTrying = false
     var isDestroyed = false
 
+    var connectivityBannerState by mutableStateOf(
+        ConnectivityBannerState(
+            show = false,
+            message = application.getString(R.string.offline),
+            background = ConnectivityYellow
+        )
+    )
     var showConnectingSnackbar by mutableStateOf(false)
-    var showConnectivityHeader by mutableStateOf(false)
-    var connectivityHeaderMessage by mutableStateOf(application.getString(R.string.offline))
-    var connectivityHeaderBackground by mutableStateOf(ConnectivityYellow)
+
     lateinit var lastConnectedDevice: BluetoothDevice
 
     val bluetoothStateChangeReceiver = object : BroadcastReceiver() {
@@ -40,9 +46,12 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
             )
             if (bluetoothState == BluetoothAdapter.STATE_OFF) {
                 // Display 'You are offline' header
-                showConnectivityHeader = true
-                connectivityHeaderMessage = application.getString(R.string.offline)
-                connectivityHeaderBackground = ConnectivityYellow
+                connectivityBannerState = ConnectivityBannerState(
+                    show = true, message = application.getString(
+                        R.string.offline
+                    ), background = ConnectivityYellow
+                )
+
 
             } else if (bluetoothState == BluetoothAdapter.STATE_ON) {
                 establishLastConnection()
@@ -57,19 +66,25 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
             if (isLastConnectedDeviceAvailable) {
                 // Try connecting to last connected device. Don't ask for PIN.
                 lastConnectedDevice = device as BluetoothDevice
-                showConnectivityHeader = true
-                connectivityHeaderMessage =
-                    (getApplication() as Context).getString(R.string.connecting_to, device!!.name)
-                connectivityHeaderBackground = ConnectivityYellow
+
+                connectivityBannerState = ConnectivityBannerState(
+                    show = true,
+                    message = (getApplication() as Context).getString(
+                        R.string.connecting_to,
+                        device!!.name
+                    ),
+                    background = ConnectivityYellow
+                )
+
                 showConnectingSnackbar = true
                 BluetoothHelper.connect(bluetoothConnectionHandler, device)
             } else {
                 // Display 'You are offline' header
-                showConnectivityHeader = true
-                connectivityHeaderMessage =
-                    (getApplication() as Context).getString(R.string.offline)
-                connectivityHeaderBackground = ConnectivityYellow
-
+                connectivityBannerState = ConnectivityBannerState(
+                    show = true,
+                    message = (getApplication() as Context).getString(R.string.offline),
+                    background = ConnectivityYellow
+                )
             }
         }
     }
@@ -112,14 +127,16 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
                         // Dismiss the 'Connecting to' snackbar
                         showConnectingSnackbar = false
                         // Display green 'Connected to $pairedDeviceName' header
-                        showConnectivityHeader = true
-                        connectivityHeaderMessage = (getApplication() as Context).getString(
-                            R.string.connected_to,
-                            lastConnectedDevice!!.name
-                        ) // TODO Wire logic to
+                        connectivityBannerState = ConnectivityBannerState(
+                            show = true,
+                            message = (getApplication() as Context).getString(
+                                R.string.connected_to,
+                                lastConnectedDevice!!.name
+                            ),
+                            background = ConnectivityGreen
+                        )  // TODO Wire logic to
                         // hide connectivity banner after 5 secs
-                        connectivityHeaderBackground = ConnectivityGreen
-//                        showConnectivityHeader(getString(R.string.connected_to, lastConnectedDevice!!.name), R.color.connectivity_green, 5000)
+                        //                        showConnectivityHeader(getString(R.string.connected_to, lastConnectedDevice!!.name), R.color.connectivity_green, 5000)
                     }
                 }
             }
@@ -142,13 +159,14 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
 
                 BluetoothDevice.ACTION_ACL_CONNECTED -> {
                     // Display green 'Connected to $pairedDeviceName' header
-
-                    showConnectivityHeader = true
-                    connectivityHeaderMessage = (getApplication() as Context).getString(
-                        R.string.connected_to,
-                        bluetoothDevice!!.name
-                    )
-                    connectivityHeaderBackground = ConnectivityGreen // TODO Wire logic to
+                    connectivityBannerState = ConnectivityBannerState(
+                        show = true,
+                        message = (getApplication() as Context).getString(
+                            R.string.connected_to,
+                            bluetoothDevice!!.name
+                        ),
+                        background = ConnectivityGreen
+                    ) // TODO Wire logic to
                     // hide connectivity banner after 5 secs
 
 
@@ -160,3 +178,5 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
         }
     }
 }
+
+data class ConnectivityBannerState(val show: Boolean, val message: String, val background: Color)

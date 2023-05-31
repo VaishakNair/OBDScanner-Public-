@@ -84,6 +84,7 @@ fun OBDScannerApp(
 //        }
         }
 
+
         ConnectivityBanner(
             text = "Connected",
             background = HoloRedLight,
