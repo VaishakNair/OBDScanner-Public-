@@ -18,6 +18,7 @@ import androidx.preference.PreferenceManager
 import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
 import `in`.v89bhp.obdscanner.ui.theme.ConnectivityGreen
 import `in`.v89bhp.obdscanner.ui.theme.ConnectivityYellow
+import `in`.v89bhp.obdscanner.ui.theme.HoloGreenLight
 
 class OBDScannerAppViewModel(application: Application) : AndroidViewModel(application) {
     companion object {
@@ -133,7 +134,8 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
                                 R.string.connected_to,
                                 lastConnectedDevice!!.name
                             ),
-                            background = ConnectivityGreen
+                            background = ConnectivityGreen,
+                            autoHide = true
                         )  // TODO Wire logic to
                         // hide connectivity banner after 5 secs
                         //                        showConnectivityHeader(getString(R.string.connected_to, lastConnectedDevice!!.name), R.color.connectivity_green, 5000)
@@ -165,7 +167,8 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
                             R.string.connected_to,
                             bluetoothDevice!!.name
                         ),
-                        background = ConnectivityGreen
+                        background = ConnectivityGreen,
+                        autoHide = true
                     ) // TODO Wire logic to
                     // hide connectivity banner after 5 secs
 
@@ -177,6 +180,10 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
             }
         }
     }
+
+    fun hideConnectivityBanner() {
+        connectivityBannerState = ConnectivityBannerState(false, "", HoloGreenLight)
+    }
 }
 
-data class ConnectivityBannerState(val show: Boolean, val message: String, val background: Color)
+data class ConnectivityBannerState(val show: Boolean, val message: String, val background: Color, val autoHide: Boolean = false)

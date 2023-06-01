@@ -22,7 +22,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,10 +37,13 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+
 import `in`.v89bhp.obdscanner.ui.home.Home
 import `in`.v89bhp.obdscanner.ui.home.HomeViewModel
 import `in`.v89bhp.obdscanner.ui.home.NavDrawerItem
 import `in`.v89bhp.obdscanner.ui.settings.GaugeTypePicker
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * Screen containing the Navigation host composable with nav drawer component:
@@ -58,6 +63,7 @@ fun OBDScannerApp(
     // Grab the current context in this part of the UI tree
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     Box() {
         Column {
@@ -95,8 +101,12 @@ fun OBDScannerApp(
                     ConnectivityBanner(
                         text = message,
                         background = background,
+                        autoHide = autoHide,
+                        onHide = { viewModel.hideConnectivityBanner() },
                         modifier = Modifier.weight(0.03f)
+
                     )
+
                 }
             }
 
@@ -186,9 +196,12 @@ fun OBDScannerApp(
 fun ConnectivityBanner(
     text: String,
     background: Color,
+    autoHide: Boolean,
+    onHide: () -> Unit,
     modifier: Modifier = Modifier,
-    timeToShowMillis: Long = 0
 ) {
+
+    val currentOnHide by rememberUpdatedState(onHide)
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -201,5 +214,13 @@ fun ConnectivityBanner(
             color = colorResource(id = android.R.color.white),
             style = MaterialTheme.typography.labelLarge
         )
+    }
+    if (autoHide) {
+        LaunchedEffect(true) {
+            launch {
+                delay(5000)
+                currentOnHide()
+            }
+        }
     }
 }
