@@ -8,39 +8,27 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -51,9 +39,6 @@ import `in`.v89bhp.obdscanner.ui.home.Home
 import `in`.v89bhp.obdscanner.ui.home.HomeViewModel
 import `in`.v89bhp.obdscanner.ui.home.NavDrawerItem
 import `in`.v89bhp.obdscanner.ui.settings.GaugeTypePicker
-import `in`.v89bhp.obdscanner.ui.theme.HoloRedLight
-import `in`.v89bhp.obdscanner.ui.theme.OBDScannerTheme
-import kotlinx.coroutines.launch
 
 /**
  * Screen containing the Navigation host composable with nav drawer component:
@@ -105,12 +90,15 @@ fun OBDScannerApp(
 //        }
             }
 
-
-            ConnectivityBanner(
-                text = "Connected",
-                background = HoloRedLight,
-                modifier = Modifier.weight(0.03f)
-            )
+            with(viewModel.connectivityBannerState) {
+                if (show) {
+                    ConnectivityBanner(
+                        text = message,
+                        background = background,
+                        modifier = Modifier.weight(0.03f)
+                    )
+                }
+            }
 
         }
 
@@ -168,7 +156,6 @@ fun OBDScannerApp(
                     context.unregisterReceiver(
                         viewModel.bluetoothConnectionStateChangeReceiver
                     )
-                    context.unregisterReceiver(viewModel.bluetoothConnectionStateChangeReceiver)
                 }
 
                 Lifecycle.Event.ON_DESTROY -> {
@@ -191,7 +178,6 @@ fun OBDScannerApp(
             context.unregisterReceiver(
                 viewModel.bluetoothConnectionStateChangeReceiver
             )
-            context.unregisterReceiver(viewModel.bluetoothConnectionStateChangeReceiver)
         }
     }
 }
@@ -215,82 +201,5 @@ fun ConnectivityBanner(
             color = colorResource(id = android.R.color.white),
             style = MaterialTheme.typography.labelLarge
         )
-    }
-}
-
-
-@Composable
-fun ConnectingSnackbar(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.height(60.dp)
-    ) {
-        Text(
-            text,
-            modifier = Modifier
-                .weight(0.7f)
-                .padding(start = 8.dp)
-        )
-        Button(
-            onClick = onClick,
-            modifier = Modifier
-                .weight(0.3f)
-                .padding(end = 8.dp)
-        ) {
-            Text("Cancel")
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true, device = Devices.NEXUS_7)
-@Composable
-fun BannerScreen() {
-    OBDScannerTheme() {
-
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(stringResource(id = R.string.app_name))
-                    },
-                    actions = {
-
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = {
-
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.Menu,
-                                contentDescription = "Back"
-                            )
-                        }
-                    })
-            },
-        ) { contentPadding ->
-            Column() {
-                Text(
-                    "Hello, world!",
-                    modifier = Modifier
-                        .padding(contentPadding)
-                        .weight(0.9f, fill = true)
-                )
-                if (true) {
-                    ConnectingSnackbar(
-                        text = "Connecting to OBDII",
-                        onClick = {},
-                        modifier = Modifier.weight(0.07f)
-                    )
-                }
-                ConnectivityBanner(
-                    text = "Connected",
-                    background = HoloRedLight,
-                    modifier = Modifier.weight(0.03f)
-                )
-            }
-
-
-        }
     }
 }

@@ -29,7 +29,7 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
 
     var connectivityBannerState by mutableStateOf(
         ConnectivityBannerState(
-            show = false,
+            show = true,
             message = application.getString(R.string.offline),
             background = ConnectivityYellow
         )
