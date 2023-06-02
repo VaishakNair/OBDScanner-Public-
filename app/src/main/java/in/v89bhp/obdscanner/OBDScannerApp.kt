@@ -8,11 +8,8 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -22,7 +19,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
@@ -37,7 +35,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-
 import `in`.v89bhp.obdscanner.ui.home.Home
 import `in`.v89bhp.obdscanner.ui.home.HomeViewModel
 import `in`.v89bhp.obdscanner.ui.home.NavDrawerItem
@@ -144,6 +141,11 @@ fun OBDScannerApp(
 
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
+
+                Lifecycle.Event.ON_START -> {
+                    viewModel.updateConnectivityBanner()
+                }
+
                 Lifecycle.Event.ON_RESUME -> {
                     context.registerReceiver(
                         viewModel.bluetoothStateChangeReceiver,

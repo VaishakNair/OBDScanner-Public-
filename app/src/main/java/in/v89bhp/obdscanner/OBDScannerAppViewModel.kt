@@ -13,6 +13,7 @@ import android.os.Message
 import android.util.Log
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.AndroidViewModel
 import androidx.preference.PreferenceManager
 import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
@@ -183,6 +184,19 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
 
     fun hideConnectivityBanner() {
         connectivityBannerState = ConnectivityBannerState(false, "", HoloGreenLight)
+    }
+
+    fun updateConnectivityBanner() {
+        BluetoothHelper.bluetoothAdapter?.let {
+            if (!it.isEnabled) {
+                connectivityBannerState = ConnectivityBannerState(true, (getApplication() as Context).getString(R.string.offline), ConnectivityYellow)
+
+            } else {
+                if(BluetoothHelper.socket?.isConnected?.not() != false) {
+                    establishLastConnection()
+                }
+            }
+        }
     }
 }
 
