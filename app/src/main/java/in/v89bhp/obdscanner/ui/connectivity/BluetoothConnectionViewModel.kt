@@ -22,13 +22,13 @@ class BluetoothConnectionViewModel(
         const val TAG = "BluetoothConnectionViewModel"
     }
 
-    var isConnecting by mutableStateOf(false)
+
     var pairedDevices = mutableListOf<BluetoothDevice>().toMutableStateList()
     var isBtEnabled by mutableStateOf(false)
     var showErrorDialog by mutableStateOf(false)
     lateinit var errorMessage: String
 
-    val bluetoothAdapter
+    private val bluetoothAdapter
         get() = BluetoothHelper.bluetoothAdapter
 
 
