@@ -3,7 +3,6 @@ package `in`.v89bhp.obdscanner
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.IntentFilter
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -29,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -110,16 +110,16 @@ fun OBDScannerApp(
         }
 
         if (viewModel.showConnectingSnackbar) {
+            val cancelLabel = stringResource(R.string.cancel)
             LaunchedEffect(snackbarHostState) {
                 if (snackbarHostState.showSnackbar(
-                        message = "Connecting to OBDII...",
+                        message = viewModel.connectivityBannerState.message,
                         duration = SnackbarDuration.Indefinite,
-                        actionLabel = "Cancel"
+                        actionLabel = cancelLabel
                     ) == SnackbarResult.ActionPerformed
                 ) {
-                    Log.i("OBDScannerApp", "Snackbar action button clicked")
+                    viewModel.cancelConnection()
                 }
-
             }
         }
 

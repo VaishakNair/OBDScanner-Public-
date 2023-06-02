@@ -13,7 +13,6 @@ import android.os.Message
 import android.util.Log
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.AndroidViewModel
 import androidx.preference.PreferenceManager
 import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
@@ -189,15 +188,34 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
     fun updateConnectivityBanner() {
         BluetoothHelper.bluetoothAdapter?.let {
             if (!it.isEnabled) {
-                connectivityBannerState = ConnectivityBannerState(true, (getApplication() as Context).getString(R.string.offline), ConnectivityYellow)
+                connectivityBannerState = ConnectivityBannerState(
+                    true,
+                    (getApplication() as Context).getString(R.string.offline),
+                    ConnectivityYellow
+                )
 
             } else {
-                if(BluetoothHelper.socket?.isConnected?.not() != false) {
+                if (BluetoothHelper.socket?.isConnected?.not() != false) {
                     establishLastConnection()
                 }
             }
         }
     }
+
+    fun cancelConnection() {
+        stopTrying = true
+        BluetoothHelper.close() // Sometimes the socket connection might hang. 'close()' will force-quit it.
+        connectivityBannerState = ConnectivityBannerState(
+            true,
+            (getApplication() as Context).getString(R.string.offline),
+            ConnectivityYellow
+        )
+    }
 }
 
-data class ConnectivityBannerState(val show: Boolean, val message: String, val background: Color, val autoHide: Boolean = false)
+data class ConnectivityBannerState(
+    val show: Boolean,
+    val message: String,
+    val background: Color,
+    val autoHide: Boolean = false
+)
