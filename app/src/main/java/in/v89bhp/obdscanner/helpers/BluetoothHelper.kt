@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothSocket
 import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
@@ -20,6 +21,7 @@ import androidx.compose.runtime.*
 
 object BluetoothHelper {
     private const val TAG = "BtHelper"
+    const val ACTION_BT_CONNECTED = "in.v89bhp.obdscanner.helpers.BluetoothHelper.BLUETOOTH_CONNECTED"
     const val UID = "00001101-0000-1000-8000-00805F9B34FB"
     val bluetoothAdapter: BluetoothAdapter? by lazy {
         (getSystemService(
@@ -113,6 +115,7 @@ object BluetoothHelper {
                         Log.i(TAG, "Trying to connect to ${bluetoothDevice.name}")
                         it.connect()
                         connected(bluetoothDevice.name)
+                        applicationContext.sendBroadcast(Intent(ACTION_BT_CONNECTED).apply{putExtra(BluetoothDevice.EXTRA_DEVICE, bluetoothDevice)})
                         _connecting = false
                         Log.i(TAG, "Connected to ${bluetoothDevice.name}")
                     } catch (ex: IOException) {

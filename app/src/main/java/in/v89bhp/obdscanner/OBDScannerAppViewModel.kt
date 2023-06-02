@@ -135,10 +135,8 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
                                 lastConnectedDevice!!.name
                             ),
                             background = ConnectivityGreen,
-                            autoHide = true
-                        )  // TODO Wire logic to
-                        // hide connectivity banner after 5 secs
-                        //                        showConnectivityHeader(getString(R.string.connected_to, lastConnectedDevice!!.name), R.color.connectivity_green, 5000)
+                            autoHide = true // Hides connectivity banner after 5 secs
+                        )
                     }
                 }
             }
@@ -159,7 +157,7 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
                     establishLastConnection()
                 }
 
-                BluetoothDevice.ACTION_ACL_CONNECTED -> {
+                BluetoothDevice.ACTION_ACL_CONNECTED, BluetoothHelper.ACTION_BT_CONNECTED -> {
                     // Display green 'Connected to $pairedDeviceName' header
                     connectivityBannerState = ConnectivityBannerState(
                         show = true,
@@ -168,10 +166,8 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
                             bluetoothDevice!!.name
                         ),
                         background = ConnectivityGreen,
-                        autoHide = true
-                    ) // TODO Wire logic to
-                    // hide connectivity banner after 5 secs
-
+                        autoHide = true  // Hides connectivity banner after 5 secs
+                    )
 
                     // Store name of connected device to default shared preferences file
                     PreferenceManager.getDefaultSharedPreferences(getApplication()).edit()

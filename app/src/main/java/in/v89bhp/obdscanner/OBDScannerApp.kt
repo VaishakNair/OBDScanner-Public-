@@ -35,6 +35,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
 import `in`.v89bhp.obdscanner.ui.home.Home
 import `in`.v89bhp.obdscanner.ui.home.HomeViewModel
 import `in`.v89bhp.obdscanner.ui.home.NavDrawerItem
@@ -154,6 +155,11 @@ fun OBDScannerApp(
                     context.registerReceiver(
                         viewModel.bluetoothConnectionStateChangeReceiver, IntentFilter(
                             BluetoothDevice.ACTION_ACL_CONNECTED
+                        )
+                    )
+                    context.registerReceiver(
+                        viewModel.bluetoothConnectionStateChangeReceiver, IntentFilter(
+                            BluetoothHelper.ACTION_BT_CONNECTED
                         )
                     )
                     context.registerReceiver(
