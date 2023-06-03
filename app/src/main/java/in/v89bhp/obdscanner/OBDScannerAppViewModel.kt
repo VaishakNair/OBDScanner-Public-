@@ -157,7 +157,14 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
                     establishLastConnection()
                 }
 
-                BluetoothDevice.ACTION_ACL_CONNECTED, BluetoothHelper.ACTION_BT_CONNECTED -> {
+                BluetoothDevice.ACTION_ACL_CONNECTED -> { // Broadcast when phone is connected to a device.
+                    // Our bluetooth socket may still be unconnected to the device.
+                    if (BluetoothHelper.socket?.isConnected != true) {
+                        establishLastConnection()
+                    }
+                }
+
+                BluetoothHelper.ACTION_BT_CONNECTED -> {
                     // Display green 'Connected to $pairedDeviceName' header
                     connectivityBannerState = ConnectivityBannerState(
                         show = true,
