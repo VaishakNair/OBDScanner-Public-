@@ -135,6 +135,10 @@ fun OBDScannerApp(
         viewModel.isDestroyed = false
     }
 
+    LaunchedEffect(true) {// Load Database
+        viewModel.loadDatabase()
+    }
+
     // If `lifecycleOwner` changes, dispose and reset the effect
     DisposableEffect(lifecycleOwner) {
         // Create an observer that triggers our remembered callbacks

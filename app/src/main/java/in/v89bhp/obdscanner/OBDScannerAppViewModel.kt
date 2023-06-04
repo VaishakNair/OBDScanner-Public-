@@ -14,11 +14,16 @@ import android.util.Log
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
+import `in`.v89bhp.obdscanner.room.AppRoomDatabase
 import `in`.v89bhp.obdscanner.ui.theme.ConnectivityGreen
 import `in`.v89bhp.obdscanner.ui.theme.ConnectivityYellow
 import `in`.v89bhp.obdscanner.ui.theme.HoloGreenLight
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class OBDScannerAppViewModel(application: Application) : AndroidViewModel(application) {
     companion object {
@@ -213,6 +218,13 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
             (getApplication() as Context).getString(R.string.offline),
             ConnectivityYellow
         )
+    }
+    fun loadDatabase() {
+        viewModelScope.launch{
+            withContext(Dispatchers.IO) {
+                AppRoomDatabase.getDatabase(getApplication())
+            }
+        }
     }
 }
 
