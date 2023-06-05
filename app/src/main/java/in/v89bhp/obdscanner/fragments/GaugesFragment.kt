@@ -42,7 +42,7 @@ import `in`.v89bhp.obdscanner.obdparameters.ParameterHolder
  * Fragment displaying the gauges selected by the user
  * // TODO Implement a multi screen layout just like in Torque app.
  */
-class GaugesFragment : Fragment(), DialogPreference.TargetFragment {
+class GaugesFragment : Fragment(){
 
     private var liveDataService: LiveDataService? = null
     private var mBound = false
@@ -156,36 +156,36 @@ class GaugesFragment : Fragment(), DialogPreference.TargetFragment {
         })
 
         // Show dialog for selecting language (Occurs once in the lifetime of the app):
-        PreferenceManager.getDefaultSharedPreferences(context).also{
-            if(it.getBoolean("language_chooser_shown", false).not()) {
-                it.edit(commit = true) {putBoolean("language_chooser_shown", true)  }
-                Utilities.showLanguageOptions(parentFragmentManager, this)
-            }
-        }
+//        PreferenceManager.getDefaultSharedPreferences(context).also{
+//            if(it.getBoolean("language_chooser_shown", false).not()) {
+//                it.edit(commit = true) {putBoolean("language_chooser_shown", true)  }
+//                Utilities.showLanguageOptions(parentFragmentManager, this)
+//            }
+//        }
 
     }
 
     // Callback for list preference dialog fragment:
-    override fun <T : Preference?> findPreference(keyy: CharSequence): T? {
-        val listPreference= ListPreference(context).apply {
-            dialogTitle = getString(R.string.select_language)
-            key = "language"
-            entries = context.resources.getStringArray(R.array.language_pref_entries)
-            entryValues = context.resources.getStringArray(R.array.language_pref_values)
-            setDefaultValue("en")
-            setValueIndex(0)
-        }
-        listPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
-            Log.i(TAG, "New value: $newValue")
-            if((preference as ListPreference).value != newValue) {
-                PreferenceManager.getDefaultSharedPreferences(context as Context)
-                    .edit(commit = true) { putString("language", newValue as String) }
-                Utilities.restartApplication(requireActivity())
-            }
-            true
-        }
-        return listPreference as T
-    }
+//    override fun <T : Preference?> findPreference(keyy: CharSequence): T? {
+//        val listPreference= ListPreference(context).apply {
+//            dialogTitle = getString(R.string.select_language)
+//            key = "language"
+//            entries = context.resources.getStringArray(R.array.language_pref_entries)
+//            entryValues = context.resources.getStringArray(R.array.language_pref_values)
+//            setDefaultValue("en")
+//            setValueIndex(0)
+//        }
+//        listPreference.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+//            Log.i(TAG, "New value: $newValue")
+//            if((preference as ListPreference).value != newValue) {
+//                PreferenceManager.getDefaultSharedPreferences(context as Context)
+//                    .edit(commit = true) { putString("language", newValue as String) }
+//                Utilities.restartApplication(requireActivity())
+//            }
+//            true
+//        }
+//        return listPreference as T
+//    }
 
     override fun onPause() {
         super.onPause()
