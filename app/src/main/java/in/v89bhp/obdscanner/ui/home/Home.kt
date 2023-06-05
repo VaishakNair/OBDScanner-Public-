@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.ui.connectivity.Connectivity
+import `in`.v89bhp.obdscanner.ui.gauges.Gauges
 import `in`.v89bhp.obdscanner.ui.settings.Settings
 import kotlinx.coroutines.launch
 
@@ -96,6 +97,11 @@ fun Home(
                     })
             }) { contentPadding ->
                 when (homeViewModel.selectedItem) {
+                    NavDrawerItem.GAUGES -> Gauges(
+                        modifier = Modifier.padding(
+                            contentPadding
+                        )
+                    )
                     NavDrawerItem.CONNECTIVITY -> Connectivity(
                         modifier = Modifier.padding(
                             contentPadding
@@ -127,6 +133,7 @@ fun Home(
 }
 
 enum class NavDrawerItem(@DrawableRes val icon: Int, val label: String) {
+    GAUGES(R.drawable.ic_gauges, "Gauges"),
     CONNECTIVITY(R.drawable.baseline_bluetooth_connected_24, "Connectivity"),
     SETTINGS(R.drawable.baseline_settings_24, "Settings")
 }

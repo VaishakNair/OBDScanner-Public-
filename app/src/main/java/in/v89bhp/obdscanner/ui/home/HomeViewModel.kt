@@ -12,7 +12,7 @@ class HomeViewModel(
 ) : AndroidViewModel(application) {
     companion object {
         private const val TAG = "HomeViewModel"
-        val HOME_ITEM = NavDrawerItem.CONNECTIVITY // TODO Set appropriate home item.
+        val HOME_ITEM = NavDrawerItem.GAUGES // TODO Set appropriate home item.
     }
 
 

@@ -3,6 +3,7 @@
     ]>
 <resources>
     <string name="app_name">89 bhp</string>
+    <string name="live_data_service_description">Fetches vehicle data from connected OBD adapter.</string>
     <string name="cancel">Cancel</string>
     <string name="offline">You are offline</string>
     <string name="oxygen">&oxygen;</string>
@@ -254,4 +255,7 @@
     <string name="error">Error</string>
     <string name="dismiss">Dismiss</string>
     <string name="try_again">Try Again</string>
-</resources>
+    <string name="fullscreen">Fullscreen</string>
+    <string name="fullscreenHint">Swipe down from top to exit fullscreen</string>
+    <string name="bus_busy">The OBD bus is busy. Please try again.</string>
+   </resources>
