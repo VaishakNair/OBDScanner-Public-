@@ -101,19 +101,20 @@ class GaugesFragment : Fragment(){
         activity?.window?.decorView?.setOnSystemUiVisibilityChangeListener { flags ->
             val isFullScreen = (flags and View.SYSTEM_UI_FLAG_FULLSCREEN) != 0
 
-            requireActivity().findViewById<DrawerLayout>(R.id.drawer_layout).also {
+//            requireActivity().findViewById<DrawerLayout>(R.id.drawer_layout).also {
                 if (!isFullScreen) {// System is not in full screen (immersive) mode. Hide 'exit full screen hint'
                     // snackbar (if any):
                     exitFullscreenSnackbar?.dismiss()
                     // Unlock a previously locked nav drawer:
-                    it.setDrawerLockMode(LOCK_MODE_UNLOCKED)
+//                    it.setDrawerLockMode(LOCK_MODE_UNLOCKED) TODO Lock and unlock nav drawer based on fullscreen mode.
                 } else {// System is in full screen (immersive) mode.
                     // Prevent nav drawer from getting displayed:
-                    it.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+//                    it.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
                 }
-            }
+//            }
 
-            requireActivity().findViewById<View>(R.id.toolbar).visibility = if (!isFullScreen) View.VISIBLE else View.GONE
+//            requireActivity().findViewById<View>(R.id.toolbar).visibility = if (!isFullScreen) View.VISIBLE else View.GONE
+            // TODO Lock and unlock nav drawer based on fullscreen mode.
         }
     }
 
@@ -143,8 +144,8 @@ class GaugesFragment : Fragment(){
         viewModel.loadGauges(requireActivity() as FragmentActivity)
         addGaugesFromViewModel()
 
-        BluetoothHelper.connecting.observe(viewLifecycleOwner, Observer<Boolean> { connecting ->
-            Log.i(TAG, "Gauges Fragment Connecting status: ${BluetoothHelper.connecting.value}")
+        BluetoothHelper.connectingLiveData.observe(viewLifecycleOwner, Observer<Boolean> { connecting ->
+            Log.i(TAG, "Gauges Fragment Connecting status: ${BluetoothHelper.connectingLiveData.value}")
             if(isVisible) {// Gauges are visible
                 if (!connecting) {
                     liveDataService?.let {

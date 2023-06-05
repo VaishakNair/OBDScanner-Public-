@@ -38,6 +38,8 @@ object BluetoothHelper {
 
     lateinit var applicationContext: Context
 
+    val connectingLiveData = MutableLiveData<Boolean>(false) // Needed for GaugesFragment to work.
+
     private var _connecting by mutableStateOf(false)
 
     /**
@@ -59,6 +61,7 @@ object BluetoothHelper {
 //            Log.e(TAG, "Bluetooth permission(s) not granted", ex)
 //        }
         _connecting = false
+        connectingLiveData.value = false
     }
 
     fun queryPairedDevices(): List<BluetoothDevice>? =
@@ -91,6 +94,7 @@ object BluetoothHelper {
     private class ConnectThread(val bluetoothDevice: BluetoothDevice) : Thread() {
         override fun run() {
             _connecting = true
+            connectingLiveData.postValue(true)
             // Close any existing connection:
             socket?.let {
                 it.close()
@@ -117,6 +121,7 @@ object BluetoothHelper {
                         connected(bluetoothDevice.name)
                         applicationContext.sendBroadcast(Intent(ACTION_BT_CONNECTED).apply{putExtra(BluetoothDevice.EXTRA_DEVICE, bluetoothDevice)})
                         _connecting = false
+                        connectingLiveData.postValue(false)
                         Log.i(TAG, "Connected to ${bluetoothDevice.name}")
                     } catch (ex: IOException) {
                         Log.i(TAG, "it.connect() threw IOException.")
@@ -126,6 +131,7 @@ object BluetoothHelper {
                             Log.e(TAG, "Unable to close() socket during connection failure", ex)
                         }
                         _connecting = false
+                        connectingLiveData.postValue(false)
                         connectionFailed(applicationContext.getString(
                             R.string.bluetooth_connect_failed,
                             bluetoothDevice.name, "BluetoothSocket.connect() threw IOException. Make sure that the device is powered on and ready to accept connections."
@@ -139,6 +145,7 @@ object BluetoothHelper {
                     bluetoothDevice.name, "Unable to create bluetooth socket."
                 ))
                 _connecting = false
+                connectingLiveData.postValue(false)
             } catch (ex: SecurityException) {
                 Log.e(TAG, "Bluetooth permission(s) not granted", ex)
                 connectionFailed(applicationContext.getString(
@@ -146,12 +153,14 @@ object BluetoothHelper {
                     bluetoothDevice.name, "Bluetooth permission(s) not granted."
                 ))
                 _connecting = false
+                connectingLiveData.postValue(false)
             }
         }
 
         fun close() {
             socket?.close()
             _connecting = false
+            connectingLiveData.value = false
         }
 
         private fun connected(deviceName: String) {
