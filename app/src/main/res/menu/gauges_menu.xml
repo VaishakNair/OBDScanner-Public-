@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+            android:id="@+id/info"
+            android:icon="@drawable/ic_info"
+            android:title="@string/gauge_operations"
+            app:showAsAction="always"/>
+    <item
+            android:id="@+id/fullscreen"
+            android:icon="@drawable/ic_fullscreen"
+            android:title="@string/fullscreen"
+            app:showAsAction="always"/>
+    <item
+            android:id="@+id/gauge_picker_dest"
+            android:icon="@drawable/ic_add"
+            android:title="@string/add_gauge"
+            app:showAsAction="always"/>
+
+    <item
+            android:id="@+id/toggle_hud"
+            android:icon="@drawable/ic_compare_arrows_white_24dp"
+            android:title="@string/toggle_hud"
+            app:showAsAction="always"/>
+
+</menu>
