@@ -9,47 +9,48 @@ import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.github.anastr.speedviewlib.*
 import `in`.v89bhp.obdscanner.databinding.GaugeTypePickerFragmentBinding
-import kotlinx.android.synthetic.main.gauge_type_picker_fragment.*
+
 import `in`.v89bhp.obdscanner.R
 
 class GaugeTypePickerFragment : Fragment() {
 
+    private lateinit var viewBinding: GaugeTypePickerFragmentBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        val dataBinding =
+       viewBinding =
            GaugeTypePickerFragmentBinding.inflate(
                 inflater,
                 container, false
             )
-        dataBinding.clickHandler = this
-        return dataBinding.root
+        viewBinding.clickHandler = this
+        return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        awesomeSpeedometer.speedTo(2f)
-        tubeSpeedometer.speedTo(3f)
-        speedView.speedTo(5f)
+        viewBinding.awesomeSpeedometer.speedTo(2f)
+        viewBinding.tubeSpeedometer.speedTo(3f)
+        viewBinding.speedView.speedTo(5f)
 //        deluxeSpeedView.speedTo(4f)
-        raySpeedometer.speedTo(3.5f)
+        viewBinding.raySpeedometer.speedTo(3.5f)
 
 
 
         PreferenceManager.getDefaultSharedPreferences(requireActivity().applicationContext).getString("gaugeType", null)?.let {
             selectRadioButton(it)
-        } ?: awesomeSpeedometerRadioButton.setChecked(true)
+        } ?: viewBinding.awesomeSpeedometerRadioButton.setChecked(true)
     }
 
     private fun selectRadioButton(gaugeType: String) {
         when (gaugeType) {
-            AwesomeSpeedometer::class.java.name -> awesomeSpeedometerRadioButton.isChecked = true
-            TubeSpeedometer::class.java.name -> tubeSpeedometerRadioButton.isChecked = true
-            SpeedView::class.java.name -> speedViewRadioButton.isChecked = true
-//            DeluxeSpeedView::class.java.name -> deluxeSpeedViewRadioButton.isChecked = true
-            RaySpeedometer::class.java.name -> raySpeedometerRadioButton.isChecked = true
+            AwesomeSpeedometer::class.java.name -> viewBinding.awesomeSpeedometerRadioButton.isChecked = true
+            TubeSpeedometer::class.java.name -> viewBinding.tubeSpeedometerRadioButton.isChecked = true
+            SpeedView::class.java.name -> viewBinding.speedViewRadioButton.isChecked = true
+//            DeluxeSpeedView::class.java.name -> viewBinding.deluxeSpeedViewRadioButton.isChecked = true
+            RaySpeedometer::class.java.name -> viewBinding.raySpeedometerRadioButton.isChecked = true
         }
     }
 
@@ -83,13 +84,13 @@ class GaugeTypePickerFragment : Fragment() {
 
     private fun uncheckOtherRadioButtons(clickedButton: View) {
 
-        if ((clickedButton === awesomeSpeedometerRadioButton).not()) awesomeSpeedometerRadioButton.isChecked =
+        if ((clickedButton === viewBinding.awesomeSpeedometerRadioButton).not()) viewBinding.awesomeSpeedometerRadioButton.isChecked =
             false
-        if ((clickedButton === tubeSpeedometerRadioButton).not()) tubeSpeedometerRadioButton.isChecked =
+        if ((clickedButton === viewBinding.tubeSpeedometerRadioButton).not()) viewBinding.tubeSpeedometerRadioButton.isChecked =
             false
-        if ((clickedButton === speedViewRadioButton).not()) speedViewRadioButton.isChecked = false
-//        if((clickedButton === deluxeSpeedViewRadioButton).not()) deluxeSpeedViewRadioButton.isChecked = false
-        if ((clickedButton === raySpeedometerRadioButton).not()) raySpeedometerRadioButton.isChecked =
+        if ((clickedButton === viewBinding.speedViewRadioButton).not()) viewBinding.speedViewRadioButton.isChecked = false
+//        if((clickedButton === viewBinding.deluxeSpeedViewRadioButton).not()) viewBinding.deluxeSpeedViewRadioButton.isChecked = false
+        if ((clickedButton === viewBinding.raySpeedometerRadioButton).not()) viewBinding.raySpeedometerRadioButton.isChecked =
             false
 
     }
