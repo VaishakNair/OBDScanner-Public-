@@ -77,7 +77,7 @@ fun Home(
             Scaffold(topBar = {
                 TopAppBar(
                     title = {
-                        Text(stringResource(id = R.string.app_name))
+                        Text(homeViewModel.selectedItem.label)
                     },
                     actions = {
                         if(homeViewModel.selectedItem == NavDrawerItem.GAUGES) {
