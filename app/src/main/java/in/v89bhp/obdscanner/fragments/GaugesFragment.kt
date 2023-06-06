@@ -59,7 +59,7 @@ class GaugesFragment : Fragment(){
      * Receives message from bound <code>LiveDataService</code>
      */
     private val incomingHandler = @SuppressLint("HandlerLeak")
-    object : Handler() {
+    object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             when(msg.what) {
                 HandlerMessageCodes.MESSAGE_ERROR_BUS_BUSY.ordinal -> {
