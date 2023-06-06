@@ -9,40 +9,31 @@ import android.os.*
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
-import androidx.core.content.edit
 import androidx.core.view.children
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
-import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.onNavDestinationSelected
-import androidx.preference.DialogPreference
-import androidx.preference.ListPreference
-import androidx.preference.Preference
-import androidx.preference.PreferenceManager
 import com.github.anastr.speedviewlib.SpeedView
 import com.github.anastr.speedviewlib.Speedometer
 import com.github.anastr.speedviewlib.TubeSpeedometer
 import com.google.android.material.snackbar.Snackbar
-import `in`.v89bhp.obdscanner.services.LiveDataService
-import `in`.v89bhp.obdscanner.ui.gauges.GaugesViewModel
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.databinding.GaugesFragmentBinding
 import `in`.v89bhp.obdscanner.enums.HandlerMessageCodes
 import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
 import `in`.v89bhp.obdscanner.helpers.ElmHelper
-import `in`.v89bhp.obdscanner.helpers.Utilities
 import `in`.v89bhp.obdscanner.obdparameters.ParameterHolder
+import `in`.v89bhp.obdscanner.services.LiveDataService
+import `in`.v89bhp.obdscanner.ui.gauges.GaugesAppBarState
+import `in`.v89bhp.obdscanner.ui.gauges.GaugesViewModel
+import java.lang.AssertionError
 
 /**
  * Fragment displaying the gauges selected by the user
  * // TODO Implement a multi screen layout just like in Torque app.
  */
-class GaugesFragment : Fragment(){
+class GaugesFragment : Fragment() {
 
     private var liveDataService: LiveDataService? = null
     private var mBound = false
@@ -52,7 +43,7 @@ class GaugesFragment : Fragment(){
     private lateinit var viewBinding: GaugesFragmentBinding
 
     private val exitFullscreenSnackbar: Snackbar? by lazy {
-        view?.let {Snackbar.make(it, R.string.fullscreenHint, Snackbar.LENGTH_LONG)}
+        view?.let { Snackbar.make(it, R.string.fullscreenHint, Snackbar.LENGTH_LONG) }
     }
 
     /**
@@ -61,12 +52,14 @@ class GaugesFragment : Fragment(){
     private val incomingHandler = @SuppressLint("HandlerLeak")
     object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
-            when(msg.what) {
+            when (msg.what) {
                 HandlerMessageCodes.MESSAGE_ERROR_BUS_BUSY.ordinal -> {
+                    GaugesAppBarState.showExitFullScreenSnackbar = false
                     exitFullscreenSnackbar?.dismiss()
-                    Snackbar.make(view as View, R.string.bus_busy, Snackbar.LENGTH_LONG).setAction(R.string.try_again){
-                        liveDataService?.sendPid()
-                    }.show()
+                    Snackbar.make(view as View, R.string.bus_busy, Snackbar.LENGTH_LONG) // TODO Replace this with Jetpack compose snack bar.
+                        .setAction(R.string.try_again) {
+                            liveDataService?.sendPid()
+                        }.show()
                 }
             }
         }
@@ -95,6 +88,11 @@ class GaugesFragment : Fragment(){
     }
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        GaugesAppBarState.gaugesFragment = this
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -102,21 +100,23 @@ class GaugesFragment : Fragment(){
             val isFullScreen = (flags and View.SYSTEM_UI_FLAG_FULLSCREEN) != 0
 
 //            requireActivity().findViewById<DrawerLayout>(R.id.drawer_layout).also {
-                if (!isFullScreen) {// System is not in full screen (immersive) mode. Hide 'exit full screen hint'
-                    // snackbar (if any):
-                    exitFullscreenSnackbar?.dismiss()
-                    // Unlock a previously locked nav drawer:
+            if (!isFullScreen) {// System is not in full screen (immersive) mode. Hide 'exit full screen hint'
+                // snackbar (if any):
+                GaugesAppBarState.showExitFullScreenSnackbar = false
+                // Unlock a previously locked nav drawer:
 //                    it.setDrawerLockMode(LOCK_MODE_UNLOCKED) TODO Lock and unlock nav drawer based on fullscreen mode.
-                } else {// System is in full screen (immersive) mode.
-                    // Prevent nav drawer from getting displayed:
+            } else {// System is in full screen (immersive) mode.
+                // Prevent nav drawer from getting displayed:
 //                    it.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
-                }
+            }
 //            }
 
 //            requireActivity().findViewById<View>(R.id.toolbar).visibility = if (!isFullScreen) View.VISIBLE else View.GONE
-            // TODO Lock and unlock nav drawer based on fullscreen mode.
+            // TODO Show/ hide top app bar based on fullscreen mode
         }
     }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -130,7 +130,8 @@ class GaugesFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (view as ViewGroup).setOnHierarchyChangeListener(object : ViewGroup.OnHierarchyChangeListener {
+        (view as ViewGroup).setOnHierarchyChangeListener(object :
+            ViewGroup.OnHierarchyChangeListener {
             override fun onChildViewRemoved(parent: View?, child: View?) {
                 if ((parent as ViewGroup).childCount == 0) {
                     activity?.invalidateOptionsMenu()
@@ -144,17 +145,22 @@ class GaugesFragment : Fragment(){
         viewModel.loadGauges(requireActivity() as FragmentActivity)
         addGaugesFromViewModel()
 
-        BluetoothHelper.connectingLiveData.observe(viewLifecycleOwner, Observer<Boolean> { connecting ->
-            Log.i(TAG, "Gauges Fragment Connecting status: ${BluetoothHelper.connectingLiveData.value}")
-            if(isVisible) {// Gauges are visible
-                if (!connecting) {
-                    liveDataService?.let {
-                        if(it.isError!!.value as Boolean) it.sendPid()// Bluetooth may be connected and an earlier attempt resulted in an error. Retry.
-                    }
+        BluetoothHelper.connectingLiveData.observe(
+            viewLifecycleOwner,
+            Observer<Boolean> { connecting ->
+                Log.i(
+                    TAG,
+                    "Gauges Fragment Connecting status: ${BluetoothHelper.connectingLiveData.value}"
+                )
+                if (isVisible) {// Gauges are visible
+                    if (!connecting) {
+                        liveDataService?.let {
+                            if (it.isError!!.value as Boolean) it.sendPid()// Bluetooth may be connected and an earlier attempt resulted in an error. Retry.
+                        }
 //                    if (liveDataService?.isError!!.value as Boolean) liveDataService?.sendPid()
+                    }
                 }
-            }
-        })
+            })
 
         // Show dialog for selecting language (Occurs once in the lifetime of the app):
 //        PreferenceManager.getDefaultSharedPreferences(context).also{
@@ -203,7 +209,11 @@ class GaugesFragment : Fragment(){
     override fun onResume() {
         super.onResume()
 
-        requireActivity().bindService(Intent(activity, LiveDataService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
+        requireActivity().bindService(
+            Intent(activity, LiveDataService::class.java),
+            serviceConnection,
+            Context.BIND_AUTO_CREATE
+        )
 
         activity?.invalidateOptionsMenu()
 
@@ -214,7 +224,7 @@ class GaugesFragment : Fragment(){
     }
 
     private fun hideSystemUi() {
-        exitFullscreenSnackbar?.show()
+        GaugesAppBarState.showExitFullScreenSnackbar = true
 
         activity?.window?.decorView?.systemUiVisibility =
             View.SYSTEM_UI_FLAG_FULLSCREEN or
@@ -230,7 +240,8 @@ class GaugesFragment : Fragment(){
 
     private fun addGaugesFromViewModel() {
         for (parameter in ParameterHolder.parameterList) {
-            parameter.context = requireActivity() // Update context to be the newly created activity as this is used to show gauge settings dialog fragment.
+            parameter.context =
+                requireActivity() // Update context to be the newly created activity as this is used to show gauge settings dialog fragment.
             (view as FrameLayout).addView(parameter.gaugeFrame)// TODO Replace framelayout with some other layout
         }
 
@@ -246,22 +257,25 @@ class GaugesFragment : Fragment(){
         menu.findItem(R.id.info).setVisible((view as ViewGroup).childCount != 0)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        when (item.itemId) {
-            R.id.fullscreen -> {
+    fun onAppBarActionClick(item: Int) =
+        when (item) {
+            R.drawable.ic_add -> {
+               // TODO Open gauge picker fragment.
+                //            R.id.gauge_picker_dest -> item.onNavDestinationSelected(findNavController())
+
+            }
+            R.drawable.ic_fullscreen -> {
                 hideSystemUi()
-                true
             }
-            R.id.gauge_picker_dest -> item.onNavDestinationSelected(findNavController())
-            R.id.info -> {
+
+            R.drawable.ic_info -> {
                 GaugeOperationsDialogFragment().show(childFragmentManager, "gauge operations")
-                true
             }
-            R.id.toggle_hud -> {
+
+            R.drawable.ic_toggle_hud -> {
                 toggleHud()
-                true
             }
-            else -> super.onOptionsItemSelected(item)
+            else -> throw AssertionError("Invalid app bar action clicked.")
         }
 
 
@@ -280,9 +294,10 @@ class GaugesFragment : Fragment(){
 
     private fun toggleHud() {
         viewBinding.gaugesFrameLayout.apply {
-            scaleX = if(scaleX != -1.0f) -1.0f else 1.0f
+            scaleX = if (scaleX != -1.0f) -1.0f else 1.0f
 
-            background = context.resources.getDrawable(if(scaleX == -1.0f) android.R.color.background_dark else android.R.color.white)
+            background =
+                context.resources.getDrawable(if (scaleX == -1.0f) android.R.color.background_dark else android.R.color.white)
 
             setGaugeTickTextColors()
         }

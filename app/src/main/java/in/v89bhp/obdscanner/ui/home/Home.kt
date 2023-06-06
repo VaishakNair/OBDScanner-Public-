@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.ui.connectivity.Connectivity
 import `in`.v89bhp.obdscanner.ui.gauges.Gauges
+import `in`.v89bhp.obdscanner.ui.gauges.GaugesAppBarState
 import `in`.v89bhp.obdscanner.ui.settings.Settings
 import kotlinx.coroutines.launch
 
@@ -79,7 +80,32 @@ fun Home(
                         Text(stringResource(id = R.string.app_name))
                     },
                     actions = {
-
+                        if(homeViewModel.selectedItem == NavDrawerItem.GAUGES) {
+                            IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_add)}) {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_add),
+                                    contentDescription = "Add Gauge"
+                                )
+                            }
+                            IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_fullscreen) }) {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_fullscreen),
+                                    contentDescription = "Fullscreen"
+                                )
+                            }
+                            IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_info) }) {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_info),
+                                    contentDescription = "Info"
+                                )
+                            }
+                            IconButton(onClick = {GaugesAppBarState.onAppBarActionClick(R.drawable.ic_toggle_hud)}) {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_toggle_hud),
+                                    contentDescription = "Toggle HUD"
+                                )
+                            }
+                        }
                     },
                     navigationIcon = {
                         IconButton(onClick = {

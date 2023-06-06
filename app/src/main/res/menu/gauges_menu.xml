@@ -18,7 +18,7 @@
 
     <item
             android:id="@+id/toggle_hud"
-            android:icon="@drawable/ic_compare_arrows_white_24dp"
+            android:icon="@drawable/ic_toggle_hud"
             android:title="@string/toggle_hud"
             app:showAsAction="always"/>
 
