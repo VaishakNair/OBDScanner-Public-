@@ -256,7 +256,7 @@
     <string name="dismiss">Dismiss</string>
     <string name="try_again">Try Again</string>
     <string name="fullscreen">Fullscreen</string>
-    <string name="fullscreenHint">Swipe down from top to exit fullscreen</string>
+    <string name="fullscreenHint">Swipe down from top or up from bottom to exit fullscreen</string>
     <string name="bus_busy">The OBD bus is busy. Please try again.</string>
     <string name="add_gauge">Add gauge</string>
    </resources>

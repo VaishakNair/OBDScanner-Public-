@@ -18,6 +18,9 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
@@ -32,6 +35,7 @@ import `in`.v89bhp.obdscanner.ui.connectivity.Connectivity
 import `in`.v89bhp.obdscanner.ui.gauges.Gauges
 import `in`.v89bhp.obdscanner.ui.gauges.GaugesAppBarState
 import `in`.v89bhp.obdscanner.ui.settings.Settings
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,61 +77,65 @@ fun Home(
             }
         },
         content = {
-
-            Scaffold(topBar = {
-                TopAppBar(
-                    title = {
-                        Text(homeViewModel.selectedItem.label)
-                    },
-                    actions = {
-                        if(homeViewModel.selectedItem == NavDrawerItem.GAUGES) {
-                            IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_add)}) {
+            val snackbarHostState = remember { SnackbarHostState() }
+            val scope = rememberCoroutineScope()
+            Scaffold(
+                snackbarHost = { SnackbarHost(snackbarHostState) },
+                topBar = {
+                    TopAppBar(
+                        title = {
+                            Text(homeViewModel.selectedItem.label)
+                        },
+                        actions = {
+                            if (homeViewModel.selectedItem == NavDrawerItem.GAUGES) {
+                                IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_add) }) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_add),
+                                        contentDescription = "Add Gauge"
+                                    )
+                                }
+                                IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_fullscreen) }) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_fullscreen),
+                                        contentDescription = "Fullscreen"
+                                    )
+                                }
+                                IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_info) }) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_info),
+                                        contentDescription = "Info"
+                                    )
+                                }
+                                IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_toggle_hud) }) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_toggle_hud),
+                                        contentDescription = "Toggle HUD"
+                                    )
+                                }
+                            }
+                        },
+                        navigationIcon = {
+                            IconButton(onClick = {
+                                // TODO
+                                with(drawerState) {
+                                    if (isOpen) scope.launch { close() }
+                                    else scope.launch { open() }
+                                }
+                            }) {
                                 Icon(
-                                    painter = painterResource(R.drawable.ic_add),
-                                    contentDescription = "Add Gauge"
+                                    imageVector = Icons.Default.Menu,
+                                    contentDescription = "Back"
                                 )
                             }
-                            IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_fullscreen) }) {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_fullscreen),
-                                    contentDescription = "Fullscreen"
-                                )
-                            }
-                            IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_info) }) {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_info),
-                                    contentDescription = "Info"
-                                )
-                            }
-                            IconButton(onClick = {GaugesAppBarState.onAppBarActionClick(R.drawable.ic_toggle_hud)}) {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_toggle_hud),
-                                    contentDescription = "Toggle HUD"
-                                )
-                            }
-                        }
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = {
-                            // TODO
-                            with(drawerState) {
-                                if (isOpen) scope.launch { close() }
-                                else scope.launch { open() }
-                            }
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.Menu,
-                                contentDescription = "Back"
-                            )
-                        }
-                    })
-            }) { contentPadding ->
+                        })
+                }) { contentPadding ->
                 when (homeViewModel.selectedItem) {
                     NavDrawerItem.GAUGES -> Gauges(
                         modifier = Modifier.padding(
                             contentPadding
                         )
                     )
+
                     NavDrawerItem.CONNECTIVITY -> Connectivity(
                         modifier = Modifier.padding(
                             contentPadding
@@ -141,7 +149,22 @@ fun Home(
 //                NavDrawerItem.ABOUT -> About() // TODO
                 }
             }
+            if (GaugesAppBarState.showExitFullScreenSnackbar) {
+               val fullScreenHint = stringResource(R.string.fullscreenHint)
+                LaunchedEffect(snackbarHostState) {
+                    snackbarHostState.showSnackbar(
+                        message = fullScreenHint
+                    )
+                }
+                LaunchedEffect(true) {
+                    launch {
+                        delay(5000)
+                        GaugesAppBarState.showExitFullScreenSnackbar = false
+                    }
+                }
+            }
         }
+
     )
 
     if (drawerState.isOpen || homeViewModel.selectedItem != HomeViewModel.HOME_ITEM) {
