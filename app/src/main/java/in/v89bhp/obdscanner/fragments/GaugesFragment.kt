@@ -42,9 +42,6 @@ class GaugesFragment : Fragment() {
 
     private lateinit var viewBinding: GaugesFragmentBinding
 
-    private val exitFullscreenSnackbar: Snackbar? by lazy {
-        view?.let { Snackbar.make(it, R.string.fullscreenHint, Snackbar.LENGTH_LONG) }
-    }
 
     /**
      * Receives message from bound <code>LiveDataService</code>
@@ -55,16 +52,15 @@ class GaugesFragment : Fragment() {
             when (msg.what) {
                 HandlerMessageCodes.MESSAGE_ERROR_BUS_BUSY.ordinal -> {
                     GaugesAppBarState.showExitFullScreenSnackbar = false
-                    exitFullscreenSnackbar?.dismiss()
-                    Snackbar.make(view as View, R.string.bus_busy, Snackbar.LENGTH_LONG) // TODO Replace this with Jetpack compose snack bar.
-                        .setAction(R.string.try_again) {
-                            liveDataService?.sendPid()
-                        }.show()
+                    GaugesAppBarState.showTryAgainSnackbar = true
                 }
             }
         }
     }
 
+    fun tryAgain() {
+        liveDataService?.sendPid()
+    }
 
     private val messenger = Messenger(incomingHandler)
 

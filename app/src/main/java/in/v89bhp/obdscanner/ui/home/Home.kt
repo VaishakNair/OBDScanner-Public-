@@ -18,8 +18,10 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
@@ -158,12 +160,23 @@ fun Home(
                     snackbarHostState.showSnackbar(
                         message = fullScreenHint
                     )
+                    GaugesAppBarState.showExitFullScreenSnackbar = false
                 }
-                LaunchedEffect(true) {
-                    launch {
-                        delay(5000)
-                        GaugesAppBarState.showExitFullScreenSnackbar = false
+
+            }
+            if (GaugesAppBarState.showTryAgainSnackbar) {
+                val tryAgainLabel = stringResource(R.string.try_again)
+                val message = stringResource(R.string.bus_busy)
+                LaunchedEffect(snackbarHostState) {
+                    if (snackbarHostState.showSnackbar(
+                            message = message,
+                            duration = SnackbarDuration.Long,
+                            actionLabel = tryAgainLabel
+                        ) == SnackbarResult.ActionPerformed
+                    ) {
+                        GaugesAppBarState.tryAgain()
                     }
+                    GaugesAppBarState.showTryAgainSnackbar = false
                 }
             }
         }
