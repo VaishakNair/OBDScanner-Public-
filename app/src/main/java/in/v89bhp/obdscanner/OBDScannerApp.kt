@@ -36,6 +36,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
+import `in`.v89bhp.obdscanner.ui.gauges.GaugePicker
 import `in`.v89bhp.obdscanner.ui.home.Home
 import `in`.v89bhp.obdscanner.ui.home.HomeViewModel
 import `in`.v89bhp.obdscanner.ui.home.NavDrawerItem
@@ -81,6 +82,13 @@ fun OBDScannerApp(
                     GaugeTypePicker(navigateBack = {
                         homeViewModel.selectedItem =
                             NavDrawerItem.SETTINGS // Returning from Gauge type picker option of settings. Show settings screen
+                        appState.navigateBack()
+                    })
+                }
+                composable(Screen.GaugePicker.route) { backStackEntry ->
+                    GaugePicker(navigateBack = {
+                        homeViewModel.selectedItem =
+                            NavDrawerItem.GAUGES // Returning from Gauge type picker option of settings. Show settings screen
                         appState.navigateBack()
                     })
                 }

@@ -32,11 +32,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import `in`.v89bhp.obdscanner.R
+import `in`.v89bhp.obdscanner.Screen
 import `in`.v89bhp.obdscanner.ui.connectivity.Connectivity
 import `in`.v89bhp.obdscanner.ui.gauges.Gauges
 import `in`.v89bhp.obdscanner.ui.gauges.GaugesAppBarState
 import `in`.v89bhp.obdscanner.ui.settings.Settings
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -91,7 +91,7 @@ fun Home(
                             },
                             actions = {
                                 if (homeViewModel.selectedItem == NavDrawerItem.GAUGES) {
-                                    IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_add) }) {
+                                    IconButton(onClick = { onNavigateTo(Screen.GaugePicker.route) }) {
                                         Icon(
                                             painter = painterResource(R.drawable.ic_add),
                                             contentDescription = "Add Gauge"

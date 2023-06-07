@@ -18,6 +18,8 @@ sealed class Screen(val route: String) {
 
     object GaugeTypePicker : Screen("gaugetypepicker")
 
+    object GaugePicker : Screen("gaugepicker")
+
     object Note : Screen("note/{fileName}") {
         fun createRoute(fileName: String) = "note/$fileName"
     }
