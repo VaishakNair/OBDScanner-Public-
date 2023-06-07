@@ -7,10 +7,8 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,12 +16,9 @@ import com.google.android.material.snackbar.Snackbar
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.obdparameters.BaseParameter
 import `in`.v89bhp.obdscanner.obdparameters.ParameterHolder
-import `in`.v89bhp.obdscanner.recyclerviewadapters.PidsRecyclerViewAdapter
-import `in`.v89bhp.obdscanner.ui.dialogs.AlertDialogFragment
-import `in`.v89bhp.obdscanner.ui.dialogs.GaugeOperationsDialogFragment
 import `in`.v89bhp.obdscanner.ui.gauges.GaugePickerViewModel
 import `in`.v89bhp.obdscanner.ui.gauges.GaugesViewModel
-
+import `in`.v89bhp.obdscanner.ui.gauges.PidsRecyclerViewAdapter
 
 
 /**
