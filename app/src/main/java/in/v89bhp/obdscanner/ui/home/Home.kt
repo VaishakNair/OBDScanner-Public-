@@ -18,7 +18,6 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -82,52 +81,55 @@ fun Home(
             Scaffold(
                 snackbarHost = { SnackbarHost(snackbarHostState) },
                 topBar = {
-                    TopAppBar(
-                        title = {
-                            Text(homeViewModel.selectedItem.label)
-                        },
-                        actions = {
-                            if (homeViewModel.selectedItem == NavDrawerItem.GAUGES) {
-                                IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_add) }) {
+                    if (GaugesAppBarState.isFullScreen.not()) {
+                        TopAppBar(
+                            title = {
+                                Text(homeViewModel.selectedItem.label)
+                            },
+                            actions = {
+                                if (homeViewModel.selectedItem == NavDrawerItem.GAUGES) {
+                                    IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_add) }) {
+                                        Icon(
+                                            painter = painterResource(R.drawable.ic_add),
+                                            contentDescription = "Add Gauge"
+                                        )
+                                    }
+                                    IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_fullscreen) }) {
+                                        Icon(
+                                            painter = painterResource(R.drawable.ic_fullscreen),
+                                            contentDescription = "Fullscreen"
+                                        )
+                                    }
+                                    IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_info) }) {
+                                        Icon(
+                                            painter = painterResource(R.drawable.ic_info),
+                                            contentDescription = "Info"
+                                        )
+                                    }
+                                    IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_toggle_hud) }) {
+                                        Icon(
+                                            painter = painterResource(R.drawable.ic_toggle_hud),
+                                            contentDescription = "Toggle HUD"
+                                        )
+                                    }
+                                }
+                            },
+                            navigationIcon = {
+                                IconButton(onClick = {
+                                    // TODO
+                                    with(drawerState) {
+                                        if (isOpen) scope.launch { close() }
+                                        else scope.launch { open() }
+                                    }
+                                }) {
                                     Icon(
-                                        painter = painterResource(R.drawable.ic_add),
-                                        contentDescription = "Add Gauge"
+                                        imageVector = Icons.Default.Menu,
+                                        contentDescription = "Back"
                                     )
                                 }
-                                IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_fullscreen) }) {
-                                    Icon(
-                                        painter = painterResource(R.drawable.ic_fullscreen),
-                                        contentDescription = "Fullscreen"
-                                    )
-                                }
-                                IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_info) }) {
-                                    Icon(
-                                        painter = painterResource(R.drawable.ic_info),
-                                        contentDescription = "Info"
-                                    )
-                                }
-                                IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_toggle_hud) }) {
-                                    Icon(
-                                        painter = painterResource(R.drawable.ic_toggle_hud),
-                                        contentDescription = "Toggle HUD"
-                                    )
-                                }
-                            }
-                        },
-                        navigationIcon = {
-                            IconButton(onClick = {
-                                // TODO
-                                with(drawerState) {
-                                    if (isOpen) scope.launch { close() }
-                                    else scope.launch { open() }
-                                }
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Menu,
-                                    contentDescription = "Back"
-                                )
-                            }
-                        })
+                            })
+                    } else {
+                    }
                 }) { contentPadding ->
                 when (homeViewModel.selectedItem) {
                     NavDrawerItem.GAUGES -> Gauges(
@@ -150,7 +152,7 @@ fun Home(
                 }
             }
             if (GaugesAppBarState.showExitFullScreenSnackbar) {
-               val fullScreenHint = stringResource(R.string.fullscreenHint)
+                val fullScreenHint = stringResource(R.string.fullscreenHint)
                 LaunchedEffect(snackbarHostState) {
                     snackbarHostState.showSnackbar(
                         message = fullScreenHint

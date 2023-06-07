@@ -9,6 +9,8 @@ object GaugesAppBarState {
 
     var showExitFullScreenSnackbar by mutableStateOf(false)
 
+    var isFullScreen by mutableStateOf(false)
+
     fun onAppBarActionClick(@DrawableRes clickedIconId: Int) {
         gaugesFragment.onAppBarActionClick(clickedIconId)
     }

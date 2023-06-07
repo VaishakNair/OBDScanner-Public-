@@ -98,7 +98,7 @@ class GaugesFragment : Fragment() {
 
         activity?.window?.decorView?.setOnSystemUiVisibilityChangeListener { flags ->
             val isFullScreen = (flags and View.SYSTEM_UI_FLAG_FULLSCREEN) != 0
-
+            GaugesAppBarState.isFullScreen = isFullScreen
 //            requireActivity().findViewById<DrawerLayout>(R.id.drawer_layout).also {
             if (!isFullScreen) {// System is not in full screen (immersive) mode. Hide 'exit full screen hint'
                 // snackbar (if any):
