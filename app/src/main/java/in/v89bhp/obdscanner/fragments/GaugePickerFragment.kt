@@ -3,13 +3,16 @@ package `in`.v89bhp.obdscanner.fragments
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -35,6 +38,8 @@ class GaugePickerFragment : Fragment(), PidsRecyclerViewAdapter.ViewHolder.PidCl
      */
     private val gaugesViewModel: GaugesViewModel by activityViewModels()
 
+    lateinit var navigateBack: () -> Unit
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,7 +48,11 @@ class GaugePickerFragment : Fragment(), PidsRecyclerViewAdapter.ViewHolder.PidCl
         setHasOptionsMenu(true)
 
         val dataBinding =
-            `in`.v89bhp.obdscanner.databinding.GaugePickerFragmentBinding.inflate(inflater, container, false)
+            `in`.v89bhp.obdscanner.databinding.GaugePickerFragmentBinding.inflate(
+                inflater,
+                container,
+                false
+            )
         dataBinding.lifecycleOwner = this
         dataBinding.viewModel = viewModel
         return dataBinding.root
@@ -68,7 +77,7 @@ class GaugePickerFragment : Fragment(), PidsRecyclerViewAdapter.ViewHolder.PidCl
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.gauge_picker_menu, menu)
         (menu.findItem(R.id.search).actionView as SearchView).apply {
-            setOnQueryTextListener( object : SearchView.OnQueryTextListener {
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(newText: String?): Boolean {
                     viewModel.filterPids(newText ?: "")
                     return true
@@ -86,29 +95,31 @@ class GaugePickerFragment : Fragment(), PidsRecyclerViewAdapter.ViewHolder.PidCl
     override fun onPidClicked(adapterPosition: Int, disabled: Boolean) {
         Log.i(TAG, "Click received. Adapter position: $adapterPosition")
 
-        if(disabled) {
+        if (disabled) {
             Snackbar.make(view as View, R.string.unsupported_parameter, Snackbar.LENGTH_LONG).show()
         } else {
 
             ParameterHolder.addParameter(
                 Class.forName(
-                    "`in`.v89bhp.obdscanner.obdparameters.Parameter${viewModel.pids.value!!.get(
-                        adapterPosition
-                    ).classNameSuffix
+                    "`in`.v89bhp.obdscanner.obdparameters.Parameter${
+                        viewModel.pids.value!!.get(
+                            adapterPosition
+                        ).classNameSuffix
                     }"
                 ).constructors[0].newInstance(
                     requireActivity(), gaugesViewModel, null
                 ) as BaseParameter
             )
 
-            findNavController().popBackStack()
+            navigateBack()
         }
     }
 
     override fun onDestroyView() {
         // Hide keyboard
-        val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
-        imm?.let{it.hideSoftInputFromWindow(requireView().windowToken, 0)}
+        val imm =
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.let { it.hideSoftInputFromWindow(requireView().windowToken, 0) }
 
         super.onDestroyView()
     }

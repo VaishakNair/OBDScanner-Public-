@@ -13,9 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidViewBinding
+import androidx.fragment.app.findFragment
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.databinding.GaugePickerFragmentLayoutBinding
 import `in`.v89bhp.obdscanner.databinding.GaugeTypePickerFragmentLayoutBinding
+import `in`.v89bhp.obdscanner.fragments.GaugePickerFragment
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,7 +46,7 @@ fun GaugePicker(
     }) { contentPadding ->
         AndroidViewBinding(modifier = Modifier.padding(contentPadding),
             factory = GaugePickerFragmentLayoutBinding::inflate) {
-//        val myFragment = fragmentContainerView. // TODO Find instance to the fragment.
+            fragmentContainerView.findFragment<GaugePickerFragment>() .navigateBack = navigateBack // TODO Find instance to the fragment.
 
         }
     }
