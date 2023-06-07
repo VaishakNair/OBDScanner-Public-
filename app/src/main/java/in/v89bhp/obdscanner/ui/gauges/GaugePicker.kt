@@ -1,5 +1,6 @@
 package `in`.v89bhp.obdscanner.ui.gauges
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -46,7 +47,13 @@ fun GaugePicker(
     }) { contentPadding ->
         AndroidViewBinding(modifier = Modifier.padding(contentPadding),
             factory = GaugePickerFragmentLayoutBinding::inflate) {
-            fragmentContainerView.findFragment<GaugePickerFragment>() .navigateBack = navigateBack // TODO Find instance to the fragment.
+
+           try {
+               gaugePickerFragmentContainerView.findFragment<GaugePickerFragment>().navigateBack =
+                   navigateBack // TODO Find instance to the fragment.
+           } catch (ex: IllegalStateException) {
+               Log.i("GaugePicker", "Fragment not found for gaugePickerFragmentContainerView")
+           }
 
         }
     }

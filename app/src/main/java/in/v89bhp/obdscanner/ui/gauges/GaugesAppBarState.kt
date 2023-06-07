@@ -9,7 +9,7 @@ object GaugesAppBarState {
 
     var showExitFullScreenSnackbar by mutableStateOf(false)
 
-    var showTryAgainSnackbar by mutableStateOf(true)
+    var showTryAgainSnackbar by mutableStateOf(false)
 
     var isFullScreen by mutableStateOf(false)
 

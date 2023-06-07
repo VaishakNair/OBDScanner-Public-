@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TwoLineListItem xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+
+    android:orientation="vertical"
+   >
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="?attr/listPreferredItemHeight"
-        android:mode="twoLine"
-        android:paddingStart="?attr/listPreferredItemPaddingStart"
-        android:paddingEnd="?attr/listPreferredItemPaddingEnd"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true">
+        android:layout_marginTop="8dp"
 
-        <TextView android:id="@+id/name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textAppearance="?attr/textAppearanceListItem" tools:text="Absolute Load Value"/>
+        tools:text="Absolute Load Value" />
 
-        <TextView android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/name"
-                android:layout_alignStart="@id/name"
-                android:textAppearance="?attr/textAppearanceListItemSecondary"
-                tools:text="Percentage"/>
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+     
+        tools:text="Percentage" />
 
-    </TwoLineListItem>
+</LinearLayout>
 

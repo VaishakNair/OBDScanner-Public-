@@ -101,7 +101,7 @@ class GaugePickerFragment : Fragment(), PidsRecyclerViewAdapter.ViewHolder.PidCl
 
             ParameterHolder.addParameter(
                 Class.forName(
-                    "`in`.v89bhp.obdscanner.obdparameters.Parameter${
+                    "in.v89bhp.obdscanner.obdparameters.Parameter${
                         viewModel.pids.value!!.get(
                             adapterPosition
                         ).classNameSuffix
