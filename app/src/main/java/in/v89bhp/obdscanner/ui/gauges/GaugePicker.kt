@@ -11,6 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidViewBinding
@@ -47,14 +48,10 @@ fun GaugePicker(
     }) { contentPadding ->
         AndroidViewBinding(modifier = Modifier.padding(contentPadding),
             factory = GaugePickerFragmentLayoutBinding::inflate) {
-
-           try {
-               gaugePickerFragmentContainerView.findFragment<GaugePickerFragment>().navigateBack =
-                   navigateBack // TODO Find instance to the fragment.
-           } catch (ex: IllegalStateException) {
-               Log.i("GaugePicker", "Fragment not found for gaugePickerFragmentContainerView")
-           }
-
         }
+    }
+
+    LaunchedEffect(navigateBack) {
+        GaugesAppBarState.navigateBack = navigateBack
     }
 }

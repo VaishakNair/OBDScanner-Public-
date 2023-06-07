@@ -20,4 +20,6 @@ object GaugesAppBarState {
     fun tryAgain() {
         gaugesFragment.tryAgain()
     }
+
+    lateinit var navigateBack:() -> Unit
 }

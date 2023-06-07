@@ -20,6 +20,7 @@ import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.obdparameters.BaseParameter
 import `in`.v89bhp.obdscanner.obdparameters.ParameterHolder
 import `in`.v89bhp.obdscanner.ui.gauges.GaugePickerViewModel
+import `in`.v89bhp.obdscanner.ui.gauges.GaugesAppBarState
 import `in`.v89bhp.obdscanner.ui.gauges.GaugesViewModel
 import `in`.v89bhp.obdscanner.ui.gauges.PidsRecyclerViewAdapter
 
@@ -38,7 +39,6 @@ class GaugePickerFragment : Fragment(), PidsRecyclerViewAdapter.ViewHolder.PidCl
      */
     private val gaugesViewModel: GaugesViewModel by activityViewModels()
 
-    lateinit var navigateBack: () -> Unit
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -111,7 +111,7 @@ class GaugePickerFragment : Fragment(), PidsRecyclerViewAdapter.ViewHolder.PidCl
                 ) as BaseParameter
             )
 
-            navigateBack()
+            GaugesAppBarState.navigateBack()
         }
     }
 
