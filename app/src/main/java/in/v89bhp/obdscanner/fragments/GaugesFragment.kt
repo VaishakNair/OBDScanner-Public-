@@ -99,20 +99,11 @@ class GaugesFragment : Fragment() {
         activity?.window?.decorView?.setOnSystemUiVisibilityChangeListener { flags ->
             val isFullScreen = (flags and View.SYSTEM_UI_FLAG_FULLSCREEN) != 0
             GaugesAppBarState.isFullScreen = isFullScreen
-//            requireActivity().findViewById<DrawerLayout>(R.id.drawer_layout).also {
             if (!isFullScreen) {// System is not in full screen (immersive) mode. Hide 'exit full screen hint'
                 // snackbar (if any):
                 GaugesAppBarState.showExitFullScreenSnackbar = false
-                // Unlock a previously locked nav drawer:
-//                    it.setDrawerLockMode(LOCK_MODE_UNLOCKED) TODO Lock and unlock nav drawer based on fullscreen mode.
-            } else {// System is in full screen (immersive) mode.
-                // Prevent nav drawer from getting displayed:
-//                    it.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
             }
-//            }
 
-//            requireActivity().findViewById<View>(R.id.toolbar).visibility = if (!isFullScreen) View.VISIBLE else View.GONE
-            // TODO Show/ hide top app bar based on fullscreen mode
         }
     }
 

@@ -51,6 +51,7 @@ fun Home(
     val scope = rememberCoroutineScope()
 
     ModalNavigationDrawer(
+        gesturesEnabled = GaugesAppBarState.isFullScreen.not(),
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
