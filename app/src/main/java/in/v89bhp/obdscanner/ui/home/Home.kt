@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.Screen
+import `in`.v89bhp.obdscanner.obdparameters.ParameterHolder
 import `in`.v89bhp.obdscanner.ui.connectivity.Connectivity
 import `in`.v89bhp.obdscanner.ui.gauges.Gauges
 import `in`.v89bhp.obdscanner.ui.gauges.GaugesAppBarState
@@ -97,23 +98,38 @@ fun Home(
                                             contentDescription = "Add Gauge"
                                         )
                                     }
-                                    IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_fullscreen) }) {
-                                        Icon(
-                                            painter = painterResource(R.drawable.ic_fullscreen),
-                                            contentDescription = "Fullscreen"
-                                        )
-                                    }
-                                    IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_info) }) {
-                                        Icon(
-                                            painter = painterResource(R.drawable.ic_info),
-                                            contentDescription = "Info"
-                                        )
-                                    }
-                                    IconButton(onClick = { GaugesAppBarState.onAppBarActionClick(R.drawable.ic_toggle_hud) }) {
-                                        Icon(
-                                            painter = painterResource(R.drawable.ic_toggle_hud),
-                                            contentDescription = "Toggle HUD"
-                                        )
+                                    if (ParameterHolder.parameterList.isNotEmpty()) {
+                                        IconButton(onClick = {
+                                            GaugesAppBarState.onAppBarActionClick(
+                                                R.drawable.ic_fullscreen
+                                            )
+                                        }) {
+                                            Icon(
+                                                painter = painterResource(R.drawable.ic_fullscreen),
+                                                contentDescription = "Fullscreen"
+                                            )
+                                        }
+
+                                        IconButton(onClick = {
+                                            GaugesAppBarState.onAppBarActionClick(
+                                                R.drawable.ic_info
+                                            )
+                                        }) {
+                                            Icon(
+                                                painter = painterResource(R.drawable.ic_info),
+                                                contentDescription = "Info"
+                                            )
+                                        }
+                                        IconButton(onClick = {
+                                            GaugesAppBarState.onAppBarActionClick(
+                                                R.drawable.ic_toggle_hud
+                                            )
+                                        }) {
+                                            Icon(
+                                                painter = painterResource(R.drawable.ic_toggle_hud),
+                                                contentDescription = "Toggle HUD"
+                                            )
+                                        }
                                     }
                                 }
                             },

@@ -1,7 +1,9 @@
 package `in`.v89bhp.obdscanner.obdparameters
 
+import androidx.compose.runtime.toMutableStateList
+
 object ParameterHolder {
-    private val _parameterList = mutableListOf<BaseParameter>()
+    private val _parameterList = mutableListOf<BaseParameter>().toMutableStateList()
 
     val parameterList: List<BaseParameter>
     get() = _parameterList

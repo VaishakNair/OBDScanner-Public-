@@ -17,7 +17,6 @@ import androidx.lifecycle.Observer
 import com.github.anastr.speedviewlib.SpeedView
 import com.github.anastr.speedviewlib.Speedometer
 import com.github.anastr.speedviewlib.TubeSpeedometer
-import com.google.android.material.snackbar.Snackbar
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.databinding.GaugesFragmentBinding
 import `in`.v89bhp.obdscanner.enums.HandlerMessageCodes
@@ -27,7 +26,6 @@ import `in`.v89bhp.obdscanner.obdparameters.ParameterHolder
 import `in`.v89bhp.obdscanner.services.LiveDataService
 import `in`.v89bhp.obdscanner.ui.gauges.GaugesAppBarState
 import `in`.v89bhp.obdscanner.ui.gauges.GaugesViewModel
-import java.lang.AssertionError
 
 /**
  * Fragment displaying the gauges selected by the user
@@ -103,14 +101,11 @@ class GaugesFragment : Fragment() {
         }
     }
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setHasOptionsMenu(true)
         viewBinding = GaugesFragmentBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
@@ -235,22 +230,14 @@ class GaugesFragment : Fragment() {
         setGaugeTickTextColors()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.gauges_menu, menu)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.fullscreen).setVisible((view as ViewGroup).childCount != 0)
-        menu.findItem(R.id.info).setVisible((view as ViewGroup).childCount != 0)
-    }
-
     fun onAppBarActionClick(item: Int) =
         when (item) {
             R.drawable.ic_add -> {
-               // TODO Open gauge picker fragment.
+                // TODO Open gauge picker fragment.
                 //            R.id.gauge_picker_dest -> item.onNavDestinationSelected(findNavController())
 
             }
+
             R.drawable.ic_fullscreen -> {
                 hideSystemUi()
             }
@@ -262,6 +249,7 @@ class GaugesFragment : Fragment() {
             R.drawable.ic_toggle_hud -> {
                 toggleHud()
             }
+
             else -> throw AssertionError("Invalid app bar action clicked.")
         }
 
