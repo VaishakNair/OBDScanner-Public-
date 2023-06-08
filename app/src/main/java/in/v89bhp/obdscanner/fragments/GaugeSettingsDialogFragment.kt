@@ -4,11 +4,10 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
 import android.widget.Switch
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.obdparameters.BaseParameter
 import `in`.v89bhp.obdscanner.obdparameters.ParameterHolder
@@ -17,7 +16,7 @@ import `in`.v89bhp.obdscanner.obdparameters.ParameterHolder
 class GaugeSettingsDialogFragment : DialogFragment() {
 
     private lateinit var parameter: BaseParameter
-    private lateinit var maxValueEditText: TextInputEditText
+    private lateinit var maxValueEditText: EditText
     private lateinit var audioAlertSwitch: Switch
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +50,7 @@ class GaugeSettingsDialogFragment : DialogFragment() {
         val inflater = requireActivity().layoutInflater
         val view = inflater.inflate(R.layout.gauge_settings_dialog, null)
         view.findViewById<TextView>(R.id.titleTextView).text = requireArguments().getString(KEY_TITLE)
-        view.findViewById<TextInputLayout>(R.id.textInputLayout).hint = requireArguments().getString(KEY_MAX_INPUT_EDIT_TEXT_HINT)
+//        view.findViewById<TextInputLayout>(R.id.textInputLayout).hint = requireArguments().getString(KEY_MAX_INPUT_EDIT_TEXT_HINT)
         maxValueEditText = view.findViewById(R.id.maxValueEditText)
         maxValueEditText.setText(requireArguments().getString(KEY_MAX_VALUE))
         audioAlertSwitch = view.findViewById(R.id.audioAlertSwitch)
