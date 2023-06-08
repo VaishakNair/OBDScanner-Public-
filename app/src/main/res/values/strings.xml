@@ -259,4 +259,5 @@
     <string name="fullscreenHint">Swipe down from top or up from bottom to exit fullscreen</string>
     <string name="bus_busy">The OBD bus is busy. Please try again.</string>
     <string name="add_gauge">Add gauge</string>
+    <string name="search">Search</string>
    </resources>
