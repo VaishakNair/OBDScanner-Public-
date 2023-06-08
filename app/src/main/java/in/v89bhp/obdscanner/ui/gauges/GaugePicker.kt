@@ -35,7 +35,7 @@ fun GaugePicker(
     Scaffold(topBar = {
         TopAppBar(
             title = {
-                Text(stringResource(id = R.string.app_name))
+                Text(stringResource(id = R.string.gauge_picker))
             },
             actions = {
 
@@ -65,12 +65,20 @@ fun GaugePicker(
                     modifier = Modifier.padding(start = 16.dp),
                 )
                 TextField(
-                    text = "Search",
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(16.dp),
-                    style = MaterialTheme.typography.bodyMedium,
+                    value = GaugesAppBarState.searchTextFieldValue,
+                    onValueChange = {
+                        GaugesAppBarState.searchTextFieldValue = it
+                        GaugesAppBarState.filterPids()
+                    },
+                    label = { Text("Label") }
                 )
+//                Text(
+//                    text = "Search",
+//                    modifier = Modifier
+//                        .weight(1f)
+//                        .padding(16.dp),
+//                    style = MaterialTheme.typography.bodyMedium,
+//                )
 
             }
             AndroidViewBinding(

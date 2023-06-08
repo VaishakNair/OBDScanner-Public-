@@ -40,6 +40,11 @@ class GaugePickerFragment : Fragment(), PidsRecyclerViewAdapter.ViewHolder.PidCl
     private val gaugesViewModel: GaugesViewModel by activityViewModels()
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        GaugesAppBarState.gaugePickerFragment = this
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -73,6 +78,8 @@ class GaugePickerFragment : Fragment(), PidsRecyclerViewAdapter.ViewHolder.PidCl
 
         viewModel.loadPids()
     }
+
+    fun filterPids(query: String) = viewModel.filterPids(query)
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.gauge_picker_menu, menu)
