@@ -4,12 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -50,8 +47,6 @@ class GaugePickerFragment : Fragment(), PidsRecyclerViewAdapter.ViewHolder.PidCl
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setHasOptionsMenu(true)
-
         val dataBinding =
             `in`.v89bhp.obdscanner.databinding.GaugePickerFragmentBinding.inflate(
                 inflater,
@@ -81,23 +76,6 @@ class GaugePickerFragment : Fragment(), PidsRecyclerViewAdapter.ViewHolder.PidCl
 
     fun filterPids(query: String) = viewModel.filterPids(query)
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.gauge_picker_menu, menu)
-        (menu.findItem(R.id.search).actionView as SearchView).apply {
-            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    viewModel.filterPids(newText ?: "")
-                    return true
-                }
-
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    return true
-                }
-            })
-        }
-
-
-    }
 
     override fun onPidClicked(adapterPosition: Int, disabled: Boolean) {
         Log.i(TAG, "Click received. Adapter position: $adapterPosition")
