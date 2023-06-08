@@ -13,6 +13,8 @@ object GaugesAppBarState {
 
     var isFullScreen by mutableStateOf(false)
 
+    var navDrawerGesturesEnabled by mutableStateOf(true)
+
     fun onAppBarActionClick(@DrawableRes clickedIconId: Int) {
         gaugesFragment.onAppBarActionClick(clickedIconId)
     }

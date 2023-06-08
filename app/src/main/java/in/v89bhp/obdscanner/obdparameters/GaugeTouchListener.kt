@@ -12,6 +12,7 @@ import androidx.core.view.isVisible
 import com.google.android.material.snackbar.Snackbar
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.BuildConfig
+import `in`.v89bhp.obdscanner.ui.gauges.GaugesAppBarState
 import `in`.v89bhp.obdscanner.ui.gauges.GaugesViewModel
 
 
@@ -64,6 +65,7 @@ class GaugeTouchListener(
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                     longPressed = false
+                    GaugesAppBarState.navDrawerGesturesEnabled = true
                 }
             }
             return true
@@ -99,6 +101,7 @@ class GaugeTouchListener(
                 vibrator.vibrate(VibrationEffect.createOneShot(125, VibrationEffect.DEFAULT_AMPLITUDE))
             }
             Log.i(BuildConfig.APP_NAME, "Long press detected")
+            GaugesAppBarState.navDrawerGesturesEnabled = false
         }
 
 
