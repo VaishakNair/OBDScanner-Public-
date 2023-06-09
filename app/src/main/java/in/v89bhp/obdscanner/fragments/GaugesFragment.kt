@@ -260,12 +260,12 @@ class GaugesFragment : Fragment() {
         super.onDestroyView()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onStop() {
+        super.onStop()
 
         viewModel.storeGauges()
-
     }
+
 
     private fun toggleHud() {
         viewBinding.gaugesFrameLayout.apply {

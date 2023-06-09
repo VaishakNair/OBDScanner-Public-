@@ -1,25 +1,19 @@
 package `in`.v89bhp.obdscanner.ui.gauges
 
+
 import android.app.Application
 import android.content.Context
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import `in`.v89bhp.obdscanner.BuildConfig.APP_NAME
 import `in`.v89bhp.obdscanner.obdparameters.BaseParameter
 import `in`.v89bhp.obdscanner.obdparameters.ParameterHolder.addParameter
 import `in`.v89bhp.obdscanner.obdparameters.ParameterHolder.parameterList
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
-
-
 import java.io.FileNotFoundException
 import java.nio.charset.Charset
 
@@ -40,18 +34,30 @@ class GaugesViewModel(application: Application) : AndroidViewModel(application) 
 
             fip?.use {
                 val paramsJsonArray =
-                    JSONObject(String(it.readBytes(), Charset.forName("utf-8"))).getJSONArray("params")
+                    JSONObject(
+                        String(
+                            it.readBytes(),
+                            Charset.forName("utf-8")
+                        )
+                    ).getJSONArray("params")
                 if (paramsJsonArray.length() > 0) {
                     var i = 0
                     do {
                         val paramJSONObject = paramsJsonArray.getJSONObject(i)
                         addParameter(
                             (Class.forName(paramJSONObject.getString("className")).constructors[0].newInstance(
-                                context, this@GaugesViewModel, paramJSONObject.getString("gaugeType")
+                                context,
+                                this@GaugesViewModel,
+                                paramJSONObject.getString("gaugeType")
                             ) as BaseParameter).apply {
 
                                 maxAlertValue = paramJSONObject.getDouble("maxAlertValue").toFloat()
                                 audioAlert = paramJSONObject.getBoolean("audioAlert")
+                                // Remove the CENTER layout gravity used for adding new gauges:
+                                gaugeFrame.layoutParams = FrameLayout.LayoutParams(
+                                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT
+                                )
                                 gaugeFrame.x = paramJSONObject.getDouble("x").toFloat()
                                 gaugeFrame.y = paramJSONObject.getDouble("y").toFloat()
 
