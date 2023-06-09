@@ -77,7 +77,7 @@ abstract class BaseParameter(
     val gaugeFrame: FrameLayout by lazy {
         val gauge = this.gauge
         FrameLayout(context).apply {
-            layoutParams = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+            layoutParams = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT, Gravity.CENTER)
             gauge.layoutParams = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             addView(gauge)
             addView(settingsIcon)
