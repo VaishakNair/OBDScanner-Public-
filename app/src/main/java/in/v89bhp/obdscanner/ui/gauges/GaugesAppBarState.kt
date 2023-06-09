@@ -20,6 +20,7 @@ object GaugesAppBarState {
 
     var searchTextFieldValue by mutableStateOf(TextFieldValue(""))
 
+
     fun filterPids() = gaugePickerFragment.filterPids(searchTextFieldValue.text)
 
     fun onAppBarActionClick(@DrawableRes clickedIconId: Int) {
@@ -30,5 +31,19 @@ object GaugesAppBarState {
         gaugesFragment.tryAgain()
     }
 
-    lateinit var navigateBack:() -> Unit
+    lateinit var navigateBack: () -> Unit
+
+    var gaugeSettingsDialogState by mutableStateOf(GaugeSettingsDialogState(false))
+}
+
+class GaugeSettingsDialogState(
+    val show: Boolean,
+    val parameterIndex: Int = 0,
+    val title: String = "",
+    val label: String = "",
+    maxValue: String = "",
+    audioAlert: Boolean = false
+) {
+    var audioAlertThresholdTextFieldValue by mutableStateOf(TextFieldValue(maxValue))
+    var audioAlert by mutableStateOf(audioAlert)
 }

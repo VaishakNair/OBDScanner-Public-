@@ -261,4 +261,6 @@
     <string name="add_gauge">Add gauge</string>
     <string name="search">Search</string>
     <string name="gauge_picker">Gauge Picker</string>
+    <string name="ok">OK</string>
+    <string name="invalid_input">Invalid input!</string>
    </resources>

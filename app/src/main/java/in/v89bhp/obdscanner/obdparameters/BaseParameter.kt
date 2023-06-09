@@ -3,35 +3,40 @@ package `in`.v89bhp.obdscanner.obdparameters
 import android.content.Context
 import android.media.AudioManager
 import android.media.ToneGenerator
-import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import android.widget.ImageView
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.preference.PreferenceManager
 import com.github.anastr.speedviewlib.Speedometer
+import `in`.v89bhp.obdscanner.BuildConfig
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.helpers.Utilities
-import `in`.v89bhp.obdscanner.BuildConfig
-import `in`.v89bhp.obdscanner.fragments.GaugeSettingsDialogFragment
+import `in`.v89bhp.obdscanner.ui.gauges.GaugeSettingsDialogState
+import `in`.v89bhp.obdscanner.ui.gauges.GaugesAppBarState
 import `in`.v89bhp.obdscanner.ui.gauges.GaugesViewModel
 
 
 /**
  * Convert dp to pixel. Logic copied from *Gauge* class of *speedview* library.
  */
-private fun dpToPx(context: Context, dp: Float) =   dp * context.resources.displayMetrics.density;
+private fun dpToPx(context: Context, dp: Float) = dp * context.resources.displayMetrics.density;
 
 abstract class BaseParameter(
-    var context: Context, private val viewModel: ViewModel?, val pid: String, private val gaugeUnit: String,
-    private val ticks: List<Float>, private val min: Float,
-    private val max: Float, val parameterName: String,
-    unitTextSize: Float =  dpToPx(context, 15f),
-    private val gaugeType: String? = null) {
+    var context: Context,
+    private val viewModel: ViewModel?,
+    val pid: String,
+    private val gaugeUnit: String,
+    private val ticks: List<Float>,
+    private val min: Float,
+    private val max: Float,
+    val parameterName: String,
+    unitTextSize: Float = dpToPx(context, 15f),
+    private val gaugeType: String? = null
+) {
 
     private val red: Int = context.resources.getColor(android.R.color.holo_red_light)
 
@@ -59,6 +64,7 @@ abstract class BaseParameter(
      * Upper bound for making needle red with optional audio alert.
      */
     var maxAlertValue: Float = Float.MAX_VALUE
+
     /**
      * Play beep sound when **value** exceeds **maxAlertValue**
      */
@@ -78,7 +84,7 @@ abstract class BaseParameter(
         }
     }
 
-    private val settingsIcon: ImageView by lazy {
+    val settingsIcon: ImageView by lazy {
         ImageView(context).apply {
             layoutParams = FrameLayout.LayoutParams(100, 100, Gravity.TOP or Gravity.END)
             background = context.resources.getDrawable(R.drawable.circle_accent)
@@ -92,7 +98,7 @@ abstract class BaseParameter(
     }
 
     val gauge: Speedometer by lazy {
-        val gauge =  instantiateGauge()
+        val gauge = instantiateGauge()
 
 
         gauge.unit = gaugeUnit
@@ -108,7 +114,13 @@ abstract class BaseParameter(
 
         // Touch listener is needed only while displaying gauges.  Can be ignored while using this class for processing freeze frame data (with freeze frame view model)
         viewModel?.let {
-            if(it is GaugesViewModel) gauge.setOnTouchListener(GaugeTouchListener(context, this, it))
+            if (it is GaugesViewModel) gauge.setOnTouchListener(
+                GaugeTouchListener(
+                    context,
+                    this,
+                    it
+                )
+            )
         }
 
         defaultIndicatorColor = gauge.indicatorColor
@@ -122,10 +134,11 @@ abstract class BaseParameter(
     private fun instantiateGauge(): Speedometer {
         // 'this.gaugeType' will have a non-null value when parameter is restored
         // from a JSON file. This helps in restoring correct gauges across sessions.
-        val gaugeType = this.gaugeType ?: PreferenceManager.getDefaultSharedPreferences(context).getString(
-            "gaugeType",
-            "com.github.anastr.speedviewlib.AwesomeSpeedometer"
-        ) as String
+        val gaugeType =
+            this.gaugeType ?: PreferenceManager.getDefaultSharedPreferences(context).getString(
+                "gaugeType",
+                "com.github.anastr.speedviewlib.AwesomeSpeedometer"
+            ) as String
 
         return Class.forName(
             gaugeType
@@ -134,21 +147,37 @@ abstract class BaseParameter(
         ) as Speedometer
     }
 
+//    private fun showSettingsDialog() {
+//        val mDialogFragment = GaugeSettingsDialogFragment()
+//        val arguments = Bundle()
+//        arguments.putInt(GaugeSettingsDialogFragment.KEY_PARAMETER_INDEX, ParameterHolder.getParameterIndex(this))
+//        arguments.putString(GaugeSettingsDialogFragment.KEY_TITLE, "$parameterName ($unit)")
+//        arguments.putString(GaugeSettingsDialogFragment.KEY_MAX_INPUT_EDIT_TEXT_HINT, "For values above ($unit)")
+//        if(maxAlertValue == Float.MAX_VALUE) {// Max alert value has not been set yet
+//            maxAlertValue = gauge.maxSpeed
+//        }
+//        arguments.putString(GaugeSettingsDialogFragment.KEY_MAX_VALUE, maxAlertValue.toString())
+//        arguments.putBoolean(GaugeSettingsDialogFragment.KEY_AUDIO_ALERT, audioAlert)
+//
+//        mDialogFragment.arguments = arguments
+//        mDialogFragment.show((context as FragmentActivity).supportFragmentManager,
+//            GaugeSettingsDialogFragment.TAG
+//        )
+//    }
+
     private fun showSettingsDialog() {
-        val mDialogFragment = GaugeSettingsDialogFragment()
-        val arguments = Bundle()
-        arguments.putInt(GaugeSettingsDialogFragment.KEY_PARAMETER_INDEX, ParameterHolder.getParameterIndex(this))
-        arguments.putString(GaugeSettingsDialogFragment.KEY_TITLE, "$parameterName ($unit)")
-        arguments.putString(GaugeSettingsDialogFragment.KEY_MAX_INPUT_EDIT_TEXT_HINT, "For values above ($unit)")
-        if(maxAlertValue == Float.MAX_VALUE) {// Max alert value has not been set yet
+        if (maxAlertValue == Float.MAX_VALUE) {// Max alert value has not been set yet
             maxAlertValue = gauge.maxSpeed
         }
-        arguments.putString(GaugeSettingsDialogFragment.KEY_MAX_VALUE, maxAlertValue.toString())
-        arguments.putBoolean(GaugeSettingsDialogFragment.KEY_AUDIO_ALERT, audioAlert)
 
-        mDialogFragment.arguments = arguments
-        mDialogFragment.show((context as FragmentActivity).supportFragmentManager,
-            GaugeSettingsDialogFragment.TAG
+        GaugesAppBarState.gaugeSettingsDialogState = GaugeSettingsDialogState(
+            show = true,
+            parameterIndex = ParameterHolder.getParameterIndex(this),
+            title = "$parameterName ($unit)",
+            label = "For values above ($unit)",
+            maxValue = maxAlertValue.toString(),
+            audioAlert = audioAlert
+
         )
     }
 
@@ -178,9 +207,18 @@ abstract class BaseParameter(
         }
 
         try {
-            calculateValue(Integer.parseInt(if(processResponseEndIndex == 0) responseFiltered.substring(processResponseStartIndex)
-            else responseFiltered.substring(processResponseStartIndex, processResponseEndIndex), 16).toFloat())
-        } catch(ex: NumberFormatException) {
+            calculateValue(
+                Integer.parseInt(
+                    if (processResponseEndIndex == 0) responseFiltered.substring(
+                        processResponseStartIndex
+                    )
+                    else responseFiltered.substring(
+                        processResponseStartIndex,
+                        processResponseEndIndex
+                    ), 16
+                ).toFloat()
+            )
+        } catch (ex: NumberFormatException) {
             Log.e(BuildConfig.APP_NAME, ex.message ?: ex.toString())
             value = 0f
         } catch (ex: StringIndexOutOfBoundsException) {
@@ -192,14 +230,14 @@ abstract class BaseParameter(
 
         if (gaugeInitialized) {
 
-            if(value > maxAlertValue) {
+            if (value > maxAlertValue) {
                 // Set indicator needle to red color:
                 gauge.indicatorColor = red
                 gauge.lowSpeedColor = red
 
-                if(audioAlert) {
+                if (audioAlert) {
                     // Turn on audio alert if it's not already on
-                    if(toneGenerator == null) {
+                    if (toneGenerator == null) {
                         toneGenerator = ToneGenerator(AudioManager.STREAM_ALARM, 100)
                         toneGenerator!!.startTone(ToneGenerator.TONE_SUP_ERROR)
                     }
@@ -243,9 +281,18 @@ abstract class BaseParameter(
         }
 
         try {
-            calculateValue(Integer.parseInt(if(processFFResponseEndIndex == 0) responseFiltered.substring(processFFResponseStartIndex)
-            else responseFiltered.substring(processFFResponseStartIndex, processFFResponseEndIndex), 16).toFloat())
-        } catch(ex: NumberFormatException) {
+            calculateValue(
+                Integer.parseInt(
+                    if (processFFResponseEndIndex == 0) responseFiltered.substring(
+                        processFFResponseStartIndex
+                    )
+                    else responseFiltered.substring(
+                        processFFResponseStartIndex,
+                        processFFResponseEndIndex
+                    ), 16
+                ).toFloat()
+            )
+        } catch (ex: NumberFormatException) {
             Log.e(BuildConfig.APP_NAME, ex.message ?: ex.toString())
             value = 0f
             return
