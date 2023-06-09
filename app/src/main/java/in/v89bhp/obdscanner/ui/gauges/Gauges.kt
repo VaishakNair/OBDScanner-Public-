@@ -35,19 +35,20 @@ fun Gauges(modifier: Modifier = Modifier) {
     // Gauge settings dialog:
     if (GaugesAppBarState.gaugeSettingsDialogState.show) {
         var isInvalidInput by rememberSaveable { mutableStateOf(false) }
+        val parameter =
+            ParameterHolder.parameterList[GaugesAppBarState.gaugeSettingsDialogState.parameterIndex]
         AlertDialog(onDismissRequest = { },
             confirmButton = {
                 TextButton(onClick = {
                     try {
                         // Save values to corresponding parameter making input textfield red
                         // and showing error message as supporting text in case of a number format exception:
-                        val parameter =
-                            ParameterHolder.parameterList[GaugesAppBarState.gaugeSettingsDialogState.parameterIndex]
+
                         parameter.maxAlertValue =
                             GaugesAppBarState.gaugeSettingsDialogState.audioAlertThresholdTextFieldValue.text.toFloat()
                         parameter.audioAlert = GaugesAppBarState.gaugeSettingsDialogState.audioAlert
 
-                        parameter.settingsIcon.visibility = View.GONE
+                        parameter.settingsIcon.visibility = View.GONE // Hide settings icon.
 
                         // Hide the settings dialog
                         GaugesAppBarState.gaugeSettingsDialogState =
@@ -58,6 +59,14 @@ fun Gauges(modifier: Modifier = Modifier) {
                 }) {
                     Text(stringResource(R.string.ok))
                 }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    parameter.settingsIcon.visibility = View.GONE // Hide settings icon.
+                    // Hide the settings dialog
+                    GaugesAppBarState.gaugeSettingsDialogState =
+                        GaugeSettingsDialogState(false)
+                }) { Text(stringResource(R.string.cancel)) }
             },
             title = { Text(GaugesAppBarState.gaugeSettingsDialogState.title) },
             text = {
