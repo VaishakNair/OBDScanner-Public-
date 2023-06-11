@@ -8,7 +8,7 @@
         <import type="android.view.View" />
         <variable
             name="viewModel"
-            type="in.v89bhp.ui.scan.FreezeFrameViewModel" />
+            type="in.v89bhp.obdscanner.ui.scan.FreezeFrameViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

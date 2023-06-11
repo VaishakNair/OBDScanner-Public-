@@ -265,5 +265,6 @@
     <string name="invalid_input">Invalid input!</string>
     <string name="trouble_codes">Trouble Codes</string>
     <string name="other">Other</string>
+    <string name="fetching_freeze_frame">Fetching freeze frame data…This might take a while.</string>
 
 </resources>

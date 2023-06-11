@@ -46,11 +46,11 @@ class ScanOtherFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.fetching.observe(viewLifecycleOwner, Observer<Boolean> {
-            if (it == false) {
+            if (!it) {
                 populateViewsFromOtherMap()
                 viewModel.errorMessage?.let {
 
-                    viewBinding.ff_error_text_view.text = it
+                    ff_error_text_view.text = it
                     viewModel.errorMessage = null
                 }
             }
