@@ -1,7 +1,7 @@
 package `in`.v89bhp.obdscanner.room
 
 import `in`.v89bhp.obdscanner.room.daos.ParameterIdDao
-import pw.softwareengineer.v89bhp.room.entities.OtherParameterId
+import `in`.v89bhp.obdscanner.room.entities.OtherParameterId
 import pw.softwareengineer.v89bhp.room.entities.ParameterId
 
 class ParameterIdRepository(private val parameterIdDao: ParameterIdDao) {

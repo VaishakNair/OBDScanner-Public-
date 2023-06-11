@@ -263,4 +263,7 @@
     <string name="gauge_picker">Gauge Picker</string>
     <string name="ok">OK</string>
     <string name="invalid_input">Invalid input!</string>
-   </resources>
+    <string name="trouble_codes">Trouble Codes</string>
+    <string name="other">Other</string>
+
+</resources>

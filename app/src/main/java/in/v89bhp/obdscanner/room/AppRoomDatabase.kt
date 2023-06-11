@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import `in`.v89bhp.obdscanner.room.daos.ParameterIdDao
-import pw.softwareengineer.v89bhp.room.entities.OtherParameterId
+import `in`.v89bhp.obdscanner.room.entities.OtherParameterId
 import pw.softwareengineer.v89bhp.room.entities.ParameterId
 
 // TODO Update database version here and in the packaged database.

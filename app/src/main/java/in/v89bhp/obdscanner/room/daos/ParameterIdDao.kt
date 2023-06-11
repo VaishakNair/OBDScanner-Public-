@@ -2,7 +2,7 @@ package `in`.v89bhp.obdscanner.room.daos
 
 import androidx.room.Dao
 import androidx.room.Query
-import pw.softwareengineer.v89bhp.room.entities.OtherParameterId
+import `in`.v89bhp.obdscanner.room.entities.OtherParameterId
 import pw.softwareengineer.v89bhp.room.entities.ParameterId
 
 

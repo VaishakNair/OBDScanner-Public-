@@ -37,6 +37,7 @@ import `in`.v89bhp.obdscanner.obdparameters.ParameterHolder
 import `in`.v89bhp.obdscanner.ui.connectivity.Connectivity
 import `in`.v89bhp.obdscanner.ui.gauges.Gauges
 import `in`.v89bhp.obdscanner.ui.gauges.GaugesAppBarState
+import `in`.v89bhp.obdscanner.ui.scan.Scan
 import `in`.v89bhp.obdscanner.ui.settings.Settings
 import kotlinx.coroutines.launch
 
@@ -157,6 +158,12 @@ fun Home(
                         )
                     )
 
+                    NavDrawerItem.SCAN -> Scan(
+                        modifier = Modifier.padding(
+                            contentPadding
+                        )
+                    )
+
                     NavDrawerItem.CONNECTIVITY -> Connectivity(
                         modifier = Modifier.padding(
                             contentPadding
@@ -215,6 +222,7 @@ fun Home(
 
 enum class NavDrawerItem(@DrawableRes val icon: Int, val label: String) {
     GAUGES(R.drawable.ic_gauges, "Gauges"),
+    SCAN(R.drawable.ic_scan, "Scan"),
     CONNECTIVITY(R.drawable.baseline_bluetooth_connected_24, "Connectivity"),
     SETTINGS(R.drawable.baseline_settings_24, "Settings")
 }
