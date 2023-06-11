@@ -2,35 +2,28 @@ package `in`.v89bhp.obdscanner.fragments
 
 import android.app.SearchManager
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.PopupWindow
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-
-import `in`.v89bhp.obdscanner.BuildConfig
-import `in`.v89bhp.obdscanner.BuildConfig.APP_NAME
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.databinding.ScanTroubleCodesFragmentBinding
 import `in`.v89bhp.obdscanner.helpers.Utilities
-import `in`.v89bhp.obdscanner.ui.dialogs.ConfirmationDialogFragment
 import `in`.v89bhp.obdscanner.ui.scan.ObdCodesRecyclerViewAdapter
 import `in`.v89bhp.obdscanner.ui.scan.ScanTroubleCodesViewModel
+import `in`.v89bhp.obdscanner.ui.scan.ScanUiState
 
 
 /**
  * Fragment used to scan and display diagnostic trouble codes (DTCs) if any.
  */
-class ScanTroubleCodesFragment : Fragment(), ObdCodesRecyclerViewAdapter.ViewHolder.ObdCodeClickedListener, ConfirmationDialogFragment.OnConfirmationListener {
+class ScanTroubleCodesFragment : Fragment(), ObdCodesRecyclerViewAdapter.ViewHolder.ObdCodeClickedListener  {
 
 
     private lateinit var obdCodesRecyclerView: RecyclerView
@@ -43,6 +36,10 @@ class ScanTroubleCodesFragment : Fragment(), ObdCodesRecyclerViewAdapter.ViewHol
 
     private lateinit var viewBinding: ScanTroubleCodesFragmentBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        ScanUiState.scanTroubleCodesFragment = this
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,7 +86,7 @@ class ScanTroubleCodesFragment : Fragment(), ObdCodesRecyclerViewAdapter.ViewHol
         })
 
         viewBinding.clearCodesButton.setOnClickListener {
-            showConfirmationDialogFragment()
+            ScanUiState.showClearTroubleCodesDialog = true
         }
 
         viewBinding.confirmedInfoView.setOnClickListener {
@@ -113,22 +110,10 @@ class ScanTroubleCodesFragment : Fragment(), ObdCodesRecyclerViewAdapter.ViewHol
 
 
 
-    private fun showConfirmationDialogFragment() {
-        val clearDtcConfirmationDialogFragment = ConfirmationDialogFragment()
-
-        val args = Bundle()
-        args.putString(ConfirmationDialogFragment.KEY_MESSAGE, getString(R.string.clear_dtc_confirmation_message))
-        clearDtcConfirmationDialogFragment.arguments = args
-        clearDtcConfirmationDialogFragment.setTargetFragment(this, 0)
-
-        clearDtcConfirmationDialogFragment.show(fragmentManager as FragmentManager, ConfirmationDialogFragment.TAG)
+    fun clearTroubleCodes() {
+        viewModel.clearCodes()
     }
 
-    override fun onConfirmation(affirmative: Boolean, confirmationContextString: String?) {
-        if(affirmative) {
-            viewModel.clearCodes()
-        }
-    }
 
     override fun onObdCodeClicked(adapterPosition: Int, ff: Boolean) {
         if (!ff) {

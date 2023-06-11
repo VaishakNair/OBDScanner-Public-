@@ -292,5 +292,8 @@
     <string name="permanent_hint">Previously cleared code still waiting for its monitors to complete. It may or may not come back depending on whether the issue that caused the
         code was fixed or not. No intervention needed.</string>
     <string name="web_browser_absent">Web browser not found</string>
+    <string name="clear_dtc_confirmation_message">Are you sure you want to clear the diagnostic trouble code(s)?\n\nClearing will:\n\n&#8226; Erase all diagnostic trouble codes.
+        \n&#8226; Reset the number of trouble codes.\n&#8226; Erase any stored freeze frame data.\n&#8226; Erase all &oxygen; sensor test data.
+        \n&#8226; Erase on-board monitoring test results.\n&#8226; <b>NOT</b> erase trouble codes of <i>permanent</i> type.</string>
 
 </resources>
