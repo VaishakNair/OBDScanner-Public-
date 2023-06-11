@@ -172,7 +172,7 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
                                 _otherDataMap[application.applicationContext.getString(R.string.obd_protocol)] = Utilities.getOBDProtocol(responseFiltered.toInt())
                             }
                             catch(ex: NumberFormatException) {
-                                Log.i(APP_NAME, ex.message)
+                                Log.i(APP_NAME, ex.toString())
                             }
 
                             protocolFetched = true
@@ -264,10 +264,10 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
                 }
 
             } catch(ex: NumberFormatException) {
-                Log.i(APP_NAME, ex.message)
+                Log.i(APP_NAME, ex.toString())
                 return null
             } catch(ex: IndexOutOfBoundsException) {
-                Log.i(APP_NAME, ex.message)
+                Log.i(APP_NAME, ex.toString())
                 return null
             }
             return sb.toString()
@@ -299,10 +299,10 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
                     }
                 }
             } catch(ex: NumberFormatException) {
-                Log.i(APP_NAME, ex.message)
+                Log.i(APP_NAME, ex.toString())
                 return null
             } catch(ex: IndexOutOfBoundsException) {
-                Log.i(APP_NAME, ex.message)
+                Log.i(APP_NAME, ex.toString())
                 return null
             }
             return sb.toString()

@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.obdparameters.SupportedPidsHolder
-import pw.softwareengineer.v89bhp.room.entities.ParameterId
+import `in`.v89bhp.obdscanner.room.entities.ParameterId
 
 class PidsRecyclerViewAdapter(
     private val applicationContext: Context,

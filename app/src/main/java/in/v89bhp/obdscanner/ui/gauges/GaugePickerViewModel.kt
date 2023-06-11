@@ -10,7 +10,7 @@ import `in`.v89bhp.obdscanner.room.ParameterIdRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import pw.softwareengineer.v89bhp.room.entities.ParameterId
+import `in`.v89bhp.obdscanner.room.entities.ParameterId
 
 class GaugePickerViewModel(application: Application) : AndroidViewModel(application) {
 

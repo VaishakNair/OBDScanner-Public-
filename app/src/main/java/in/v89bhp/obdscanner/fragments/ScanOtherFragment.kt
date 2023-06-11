@@ -8,13 +8,12 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import kotlinx.android.synthetic.main.freeze_frame_error.*
-import kotlinx.android.synthetic.main.scan_other_completed.*
-import pw.softwareengineer.v89bhp.R
-import pw.softwareengineer.v89bhp.databinding.ScanOtherFragmentBinding
-import pw.softwareengineer.v89bhp.helpers.Utilities
+
+import `in`.v89bhp.obdscanner.R
+import `in`.v89bhp.obdscanner.databinding.ScanOtherFragmentBinding
+import `in`.v89bhp.obdscanner.helpers.Utilities
 import `in`.v89bhp.obdscanner.ui.scan.ScanOtherViewModel
 
 /**
@@ -24,9 +23,9 @@ import `in`.v89bhp.obdscanner.ui.scan.ScanOtherViewModel
  */
 class ScanOtherFragment : Fragment() {
 
-    private val viewModel: ScanOtherViewModel by lazy {
-        ViewModelProviders.of(this).get(ScanOtherViewModel::class.java)
-    }
+    private lateinit var viewBinding: ScanOtherFragmentBinding
+
+    private val viewModel: ScanOtherViewModel by activityViewModels()
 
     private var popupWindow: PopupWindow? = null
 
@@ -36,10 +35,11 @@ class ScanOtherFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val dataBinding = ScanOtherFragmentBinding.inflate(inflater, container, false)
-        dataBinding.lifecycleOwner = this
-        dataBinding.viewModel = viewModel
-        return dataBinding.root
+        viewBinding = ScanOtherFragmentBinding.inflate(inflater, container, false)
+        viewBinding.lifecycleOwner = this
+        viewBinding.viewModel = viewModel
+
+        return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,7 +50,7 @@ class ScanOtherFragment : Fragment() {
                 populateViewsFromOtherMap()
                 viewModel.errorMessage?.let {
 
-                    ff_error_text_view.text = it
+                    viewBinding.ff_error_text_view.text = it
                     viewModel.errorMessage = null
                 }
             }

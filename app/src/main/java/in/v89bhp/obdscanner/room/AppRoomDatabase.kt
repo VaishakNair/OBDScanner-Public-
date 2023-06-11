@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import `in`.v89bhp.obdscanner.room.daos.ParameterIdDao
 import `in`.v89bhp.obdscanner.room.entities.OtherParameterId
-import pw.softwareengineer.v89bhp.room.entities.ParameterId
+import `in`.v89bhp.obdscanner.room.entities.ParameterId
 
 // TODO Update database version here and in the packaged database.
 @Database(entities = [ParameterId::class, OtherParameterId::class], version = 2)

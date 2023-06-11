@@ -1,4 +1,4 @@
-package pw.softwareengineer.v89bhp.room.entities
+package `in`.v89bhp.obdscanner.room.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
