@@ -272,6 +272,25 @@
     <string name="oxygen_sensor_types_title">O2 Sensor Types</string>
     <string name="oxygen_sensor_types">Narrowband: Reports only rich or lean condition. Less accurate.\n\nWideband: Reports how rich or how lean. Voltage/ Current range is more than narrowband and is more accurate.</string>
     <string name="key_colon_value" formatted="false" translatable="false">%s: %s</string>
-
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="dtc_title">Diagnostic trouble code: </string>
+    <string name="type">Type:</string>
+    <string name="can_be_ignored">Can be ignored?</string>
+    <string name="confirmed">Confirmed</string>
+    <string name="pending">Pending</string>
+    <string name="permanent">Permanent</string>
+    <string name="freeze_frame">Freeze Frame</string>
+    <string name="details">Details</string>
+    <string name="clearing">Clearing trouble codes…</string>
+    <string name="start_scan">Start Scan</string>
+    <string name="start_scan_hint">Make sure  that the:\n1. Ignition is ON\n2. Engine is NOT running</string>
+    <string name="scan_result">Scan Result</string>
+    <string name="clear_codes">Clear Codes</string>
+    <string name="confirmed_hint">Set by ECU when it has confirmed that a trouble exists. Needs intervention to correct it.</string>
+    <string name="pending_hint">Detected during current or last completed driving cycle. No intervention needed.</string>
+    <string name="permanent_hint">Previously cleared code still waiting for its monitors to complete. It may or may not come back depending on whether the issue that caused the
+        code was fixed or not. No intervention needed.</string>
+    <string name="web_browser_absent">Web browser not found</string>
 
 </resources>

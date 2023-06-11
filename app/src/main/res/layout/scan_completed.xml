@@ -10,7 +10,7 @@
 
         <variable
                 name="viewModel"
-                type="pw.softwareengineer.v89bhp.viewmodels.ScanTroubleCodesViewModel"/>
+                type="in.v89bhp.obdscanner.ui.scan.ScanTroubleCodesViewModel"/>
     </data>
     <androidx.cardview.widget.CardView
             android:layout_width="match_parent"

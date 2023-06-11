@@ -1,20 +1,20 @@
-package pw.softwareengineer.v89bhp.viewmodels
+package `in`.v89bhp.obdscanner.ui.scan
 
 import android.annotation.SuppressLint
 import android.app.Application
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.google.firebase.analytics.FirebaseAnalytics
-import pw.softwareengineer.v89bhp.BuildConfig.APP_NAME
-import pw.softwareengineer.v89bhp.enums.HandlerMessageCodes
-import pw.softwareengineer.v89bhp.helpers.ElmHelper
-import pw.softwareengineer.v89bhp.helpers.Utilities
-import pw.softwareengineer.v89bhp.helpers.Utilities.splitMultilineResponse
+
+import `in`.v89bhp.obdscanner.BuildConfig.APP_NAME
+import `in`.v89bhp.obdscanner.enums.HandlerMessageCodes
+import `in`.v89bhp.obdscanner.helpers.ElmHelper
+import `in`.v89bhp.obdscanner.helpers.Utilities
+import `in`.v89bhp.obdscanner.helpers.Utilities.splitMultilineResponse
 
 class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(application) {
     private val _scanning: MutableLiveData<Boolean> = MutableLiveData()
@@ -77,10 +77,10 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
 
     /** Handles responses from worker threads */
     private val mHandler = @SuppressLint("HandlerLeak")
-    object : Handler() {
+    object : Handler(Looper.getMainLooper()) {
         val obdCodes: MutableList<Pair<String, String>> = mutableListOf()
         var protocolNumber: Int = 0
-        override fun handleMessage(msg: Message?) {
+        override fun handleMessage(msg: Message) {
             var response: String = msg?.obj as String
             when (msg?.what) {
                 HandlerMessageCodes.MESSAGE_ERROR.ordinal -> {
@@ -186,9 +186,9 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
 
         fun showResult() {
             if(errorMessage == null) {
-                FirebaseAnalytics.getInstance(application).let {
-                    it.logEvent(Utilities.FirebaseAnalyticsCustomTags.SCAN_COMPLETE, null)
-                }
+//                FirebaseAnalytics.getInstance(application).let {
+//                    it.logEvent(Utilities.FirebaseAnalyticsCustomTags.SCAN_COMPLETE, null)
+//                }
             }
 
             _obdCodes.value = obdCodes

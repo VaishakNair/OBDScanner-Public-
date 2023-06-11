@@ -10,5 +10,7 @@
     <color name="colorAccent">#D81B60</color>
     <color name="light_grey">#B8BEBE</color>
     <color name="info_yellow">#FFC107</color>
+    <color name="green">#4CAF50</color>
+    <color name="freeze_frame_blue">#25C3F3</color>
 
 </resources>
