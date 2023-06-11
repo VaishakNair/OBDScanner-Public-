@@ -8,6 +8,7 @@ import android.view.*
 import android.widget.PopupWindow
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +16,7 @@ import com.google.android.material.snackbar.Snackbar
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.databinding.ScanTroubleCodesFragmentBinding
 import `in`.v89bhp.obdscanner.helpers.Utilities
+import `in`.v89bhp.obdscanner.ui.scan.FreezeFrameRecyclerViewAdapter
 import `in`.v89bhp.obdscanner.ui.scan.ObdCodesRecyclerViewAdapter
 import `in`.v89bhp.obdscanner.ui.scan.ScanTroubleCodesViewModel
 import `in`.v89bhp.obdscanner.ui.scan.ScanUiState
@@ -128,7 +130,13 @@ class ScanTroubleCodesFragment : Fragment(), ObdCodesRecyclerViewAdapter.ViewHol
                 ).show()
             }
         } else {// Freeze frame icon clicked
-            requireParentFragment().findNavController().navigate(ScanContainerFragmentDirections.actionScanContainerFragmentDestToFreezeFrameDest(viewModel.obdCodes.value!![adapterPosition].first))
+            requireParentFragment().childFragmentManager.commit {
+                val ffFragment = FreezeFrameFragment()
+                ffFragment.arguments = Bundle().apply { putString(FreezeFrameFragment.KEY_ARG, viewModel.obdCodes.value!![adapterPosition].first) }
+                replace(R.id.scan_container_pager, ffFragment)
+                addToBackStack("fffragment")
+            }
+//            requireParentFragment().findNavController().navigate(ScanContainerFragmentDirections.actionScanContainerFragmentDestToFreezeFrameDest(viewModel.obdCodes.value!![adapterPosition].first))
         }
     }
 
