@@ -266,5 +266,9 @@
     <string name="trouble_codes">Trouble Codes</string>
     <string name="other">Other</string>
     <string name="fetching_freeze_frame">Fetching freeze frame data…This might take a while.</string>
+    <string name="fetching">Fetching…</string>
+    <string name="general">General</string>
+    <string name="oxygen_sensors">&oxygen; Sensors</string>
+
 
 </resources>
