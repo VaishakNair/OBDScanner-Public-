@@ -269,6 +269,9 @@
     <string name="fetching">Fetching…</string>
     <string name="general">General</string>
     <string name="oxygen_sensors">&oxygen; Sensors</string>
+    <string name="oxygen_sensor_types_title">O2 Sensor Types</string>
+    <string name="oxygen_sensor_types">Narrowband: Reports only rich or lean condition. Less accurate.\n\nWideband: Reports how rich or how lean. Voltage/ Current range is more than narrowband and is more accurate.</string>
+    <string name="key_colon_value" formatted="false" translatable="false">%s: %s</string>
 
 
 </resources>

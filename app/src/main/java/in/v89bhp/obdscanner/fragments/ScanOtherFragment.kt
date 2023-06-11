@@ -50,13 +50,13 @@ class ScanOtherFragment : Fragment() {
                 populateViewsFromOtherMap()
                 viewModel.errorMessage?.let {
 
-                    ff_error_text_view.text = it
+                    viewBinding.ffErrorTextView.text = it
                     viewModel.errorMessage = null
                 }
             }
         })
 
-        oxygenSensorTypeInfoView.setOnClickListener {
+        viewBinding.oxygenSensorTypeInfoView.setOnClickListener {
             // Dismiss any existing popup window:
             popupWindow?.dismiss()
             popupWindow = Utilities.showPopupWindow(layoutInflater, it, getString(R.string.oxygen_sensor_types_title),
@@ -68,7 +68,7 @@ class ScanOtherFragment : Fragment() {
     }
 
     private fun populateViewsFromOtherMap() {
-        generalLayout.apply {
+        viewBinding.generalLayout.apply {
             for((key, value) in viewModel.otherDataMap.entries) {
                 if(key.contains(getString(R.string.oxygen), true).not()) {// Not related to oxygen sensors.
                     // O2 sensor data is displayed separately.
@@ -77,7 +77,7 @@ class ScanOtherFragment : Fragment() {
             }
         }
 
-        oxygenSensorsLayout.apply {
+        viewBinding.oxygenSensorsLayout.apply {
             for(sensor in viewModel.oxygenSensorList) {
                 addView(getChildTextView(sensor.substringBefore(':').trim(),
                     sensor.substringAfter(':').trim()))
@@ -89,7 +89,7 @@ class ScanOtherFragment : Fragment() {
             }
         }
 
-        oxygenSensorTypeTextView.text = viewModel.oxygenSensorType
+        viewBinding.oxygenSensorTypeTextView.text = viewModel.oxygenSensorType
     }
 
     private fun getChildTextView(key: String, value: String): TextView =

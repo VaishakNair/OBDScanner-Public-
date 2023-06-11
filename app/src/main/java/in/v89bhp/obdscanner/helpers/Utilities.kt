@@ -4,8 +4,15 @@ package `in`.v89bhp.obdscanner.helpers
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.PopupWindow
+import android.widget.TextView
 import `in`.v89bhp.obdscanner.BuildConfig
 import `in`.v89bhp.obdscanner.MainActivity
+import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.Screen
 import kotlin.system.exitProcess
 
@@ -131,5 +138,21 @@ object Utilities {
         activity.finishAffinity() // Finishes all activities.
         activity.startActivity(intent)    // Start the launch activity
         exitProcess(0)
+    }
+
+    fun showPopupWindow(layoutInflater: LayoutInflater, anchor: View, title: String, message: String): PopupWindow {
+        val view = layoutInflater.inflate(R.layout.popup_window, null)
+
+        val popupWindow =  PopupWindow(view, 450, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        with(view) {
+            findViewById<TextView>(R.id.popupTitleTextView).text = title
+            findViewById<TextView>(R.id.popupMessageTextView).text = message
+            findViewById<ImageView>(R.id.popupCloseImageView).setOnClickListener {
+                popupWindow.dismiss()
+            }
+        }
+
+        return popupWindow.also{it.showAsDropDown(anchor)}
     }
 }
