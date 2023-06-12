@@ -1,6 +1,7 @@
 package `in`.v89bhp.obdscanner.ui.scan
 
 
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
@@ -21,7 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidViewBinding
 import `in`.v89bhp.obdscanner.R
+import `in`.v89bhp.obdscanner.databinding.ObdCodeListItemBinding
+import `in`.v89bhp.obdscanner.databinding.ScanCompletedBinding
 import `in`.v89bhp.obdscanner.ui.connectivity.CircularProgress
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -89,16 +93,32 @@ fun StartScan(onClick: () -> Unit, modifier: Modifier = Modifier) {
 @Composable
 fun ScanCompleted(viewModel: ScanTroubleCodesViewModel, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
-        ScanResultCard()
-        LazyColumn() {
-            items(viewModel.obdCodes, key= {it}) {
+        ScanResultCard(viewModel)
 
+        LazyColumn() {
+            items(viewModel.obdCodes, key = { it }) {
+                Card(modifier = modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)) {
+                    AndroidViewBinding(factory = ObdCodeListItemBinding::inflate) {
+
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-fun ScanResultCard(modifier: Modifier = Modifier) {
-// TODO
+fun ScanResultCard(viewModel: ScanTroubleCodesViewModel, modifier: Modifier = Modifier) {
+    AndroidViewBinding(factory = ScanCompletedBinding::inflate) {
+        confirmedTextView.text = viewModel.confirmedCount.toString()
+        pendingTextView.text = viewModel.pendingCount.toString()
+        permanentTextView.text = viewModel.permanentCount.toString()
+        clearCodesButton.apply {
+            visibility = if (viewModel.obdCodes.isEmpty()) View.GONE else View.VISIBLE
+            setOnClickListener { ScanUiState.showClearTroubleCodesDialog = true }
+        }
+        // TODO Wire info circle click actions.
+    }
 }
