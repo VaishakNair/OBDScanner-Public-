@@ -23,7 +23,15 @@ viewModel: ScanTroubleCodesViewModel = androidx.lifecycle.viewmodel.compose.view
 )) {
 
     // TODO
+    if(viewModel.scanning) {
 
+    } else if(viewModel.clearing) {
+
+    } else if(viewModel.scanCompleted) {
+
+    } else {
+
+    }
 
     // Clear trouble codes dialog:
     if (ScanUiState.showClearTroubleCodesDialog) {
