@@ -139,6 +139,8 @@ fun ScanCompleted(viewModel: ScanTroubleCodesViewModel, modifier: Modifier = Mod
                             }
                         }
                         freezeFrameButton.visibility = if(category.contains("FF")) View.VISIBLE else View.GONE
+                        detailsButton.setOnClickListener { viewModel.onObdCodeClicked(obdCode, false) }
+                        freezeFrameButton.setOnClickListener { viewModel.onObdCodeClicked(obdCode, true) }
 
                     }
                 }
