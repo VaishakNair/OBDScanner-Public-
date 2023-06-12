@@ -15,9 +15,15 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -37,7 +43,9 @@ fun ScanTroubleCodes(
     )
 ) {
 
-    // TODO
+    val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
+
     Box(modifier = modifier) {
         if (viewModel.scanning) {
             CircularProgress(text = stringResource(R.string.scanning))
@@ -69,6 +77,20 @@ fun ScanTroubleCodes(
                     Text(stringResource(R.string.clear_dtc_confirmation_message))
                 })
         }
+
+        if (viewModel.snackbarState.show) {
+            LaunchedEffect(snackbarHostState) {
+                snackbarHostState.showSnackbar(
+                    message = viewModel.snackbarState.message,
+                    duration = SnackbarDuration.Long
+                )
+            }
+        }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 }
 
@@ -97,9 +119,11 @@ fun ScanCompleted(viewModel: ScanTroubleCodesViewModel, modifier: Modifier = Mod
 
         LazyColumn() {
             items(viewModel.obdCodes, key = { it }) {
-                Card(modifier = modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)) {
+                Card(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
                     AndroidViewBinding(factory = ObdCodeListItemBinding::inflate) {
 
                     }

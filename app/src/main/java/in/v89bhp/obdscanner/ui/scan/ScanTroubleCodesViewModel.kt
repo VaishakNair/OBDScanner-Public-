@@ -29,6 +29,8 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
 
     private var _permanentCount by mutableStateOf(0)
 
+    var snackbarState by mutableStateOf(SnackbarState(show = false, message = ""))
+
 
     val confirmedCount: Int
         get() = _confirmedCount
@@ -230,3 +232,4 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
         }
     }
 }
+data class SnackbarState(val show: Boolean, val message: String)
