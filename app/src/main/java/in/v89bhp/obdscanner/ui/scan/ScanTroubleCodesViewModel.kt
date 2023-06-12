@@ -80,6 +80,7 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
             when (msg?.what) {
                 HandlerMessageCodes.MESSAGE_ERROR.ordinal -> {
                     errorMessage = response
+                    showErrorSnackbar(errorMessage!!)
                     _scanning = false
                 }
 
@@ -165,18 +166,24 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
                             "020200" ->  showResult()
                             "04" -> {// Could not clear DTCs
                                 errorMessage = "Could not clear diagnostic trouble code(s)."
+                                showErrorSnackbar(errorMessage!!)
                                 _clearing = false
                                 showResult()
                             }
                             else  -> {
                                 errorMessage =
                                     "For command '${ElmHelper.lastCommand}', ECU responded with 'NO DATA'. Please contact developer."
+                                showErrorSnackbar(errorMessage!!)
                                 showResult()
                             }
                         }
                     }
                 }
             }
+        }
+
+        fun showErrorSnackbar(message: String) {
+            snackbarState = SnackbarState(true, message)
         }
 
         fun showResult() {
