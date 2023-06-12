@@ -35,6 +35,7 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
         _confirmedCount.value = 0
         _pendingCount.value = 0
         _permanentCount.value = 0
+        _scanCompleted.value = false
     }
 
     val confirmedCount: LiveData<Int>

@@ -133,7 +133,7 @@ class ScanTroubleCodesFragment : Fragment(), ObdCodesRecyclerViewAdapter.ViewHol
             requireParentFragment().childFragmentManager.commit {
                 val ffFragment = FreezeFrameFragment()
                 ffFragment.arguments = Bundle().apply { putString(FreezeFrameFragment.KEY_ARG, viewModel.obdCodes.value!![adapterPosition].first) }
-                replace(R.id.scan_container_pager, ffFragment)
+//                replace(R.id.scan_container_pager, ffFragment) // TODO
                 addToBackStack("fffragment")
             }
 //            requireParentFragment().findNavController().navigate(ScanContainerFragmentDirections.actionScanContainerFragmentDestToFreezeFrameDest(viewModel.obdCodes.value!![adapterPosition].first))
