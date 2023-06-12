@@ -6,72 +6,64 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.util.Log
+import androidx.compose.runtime.*
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-
 import `in`.v89bhp.obdscanner.BuildConfig.APP_NAME
 import `in`.v89bhp.obdscanner.enums.HandlerMessageCodes
 import `in`.v89bhp.obdscanner.helpers.ElmHelper
-import `in`.v89bhp.obdscanner.helpers.Utilities
 import `in`.v89bhp.obdscanner.helpers.Utilities.splitMultilineResponse
 
 class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(application) {
-    private val _scanning: MutableLiveData<Boolean> = MutableLiveData()
+    private var _scanning by mutableStateOf(false)
 
-    private val _clearing: MutableLiveData<Boolean> = MutableLiveData(false)
+    private var _clearing by mutableStateOf(false)
 
-    private val _obdCodes: MutableLiveData<List<Pair<String, String>>> = MutableLiveData()
+    private var _obdCodes = mutableListOf<Pair<String, String>>().toMutableStateList()
 
-    private val _scanCompleted: MutableLiveData<Boolean> = MutableLiveData()
+    private var _scanCompleted by mutableStateOf(false)
 
-    private val _confirmedCount: MutableLiveData<Int> = MutableLiveData()
+    private var _confirmedCount by mutableStateOf(0)
 
-    private val _pendingCount: MutableLiveData<Int> = MutableLiveData()
+    private var _pendingCount by mutableStateOf(0)
 
-    private val _permanentCount: MutableLiveData<Int> = MutableLiveData()
+    private var _permanentCount by mutableStateOf(0)
 
-    init {
-        _confirmedCount.value = 0
-        _pendingCount.value = 0
-        _permanentCount.value = 0
-        _scanCompleted.value = false
-    }
 
-    val confirmedCount: LiveData<Int>
+    val confirmedCount: Int
         get() = _confirmedCount
 
-    val pendingCount: LiveData<Int>
+    val pendingCount:Int
         get() = _pendingCount
 
-    val permanentCount: LiveData<Int>
+    val permanentCount: Int
         get() = _permanentCount
 
-    val obdCodes: LiveData<List<Pair<String, String>>>
+    val obdCodes: List<Pair<String, String>>
         get() = _obdCodes
 
 
-    val scanCompleted: LiveData<Boolean>
+    val scanCompleted: Boolean
         get() = _scanCompleted
 
     var errorMessage: String? = null
 
 
-    val scanning: LiveData<Boolean>
+    val scanning: Boolean
         get() = _scanning
 
-    val clearing: LiveData<Boolean>
+    val clearing: Boolean
     get() = _clearing
 
 
     fun startScan() {
-        _scanning.value = true
-        _scanCompleted.value = false
+        _scanning = true
+        _scanCompleted = false
         ElmHelper.send(mHandler, "0101\r")
     }
 
     fun clearCodes() {
-        _clearing.value = true
+        _clearing = true
         ElmHelper.send(mHandler, "04\r")
 
     }
@@ -86,7 +78,7 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
             when (msg?.what) {
                 HandlerMessageCodes.MESSAGE_ERROR.ordinal -> {
                     errorMessage = response
-                    _scanning.value = false
+                    _scanning = false
                 }
 
                 HandlerMessageCodes.MESSAGE_RESPONSE.ordinal -> {
@@ -98,9 +90,9 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
 
                     if (response.startsWith("41")) {
                         obdCodes.clear()// Clear any existing codes in the list and reset counters
-                        _pendingCount.value = 0
-                        _confirmedCount.value = 0
-                        _permanentCount.value = 0
+                        _pendingCount = 0
+                        _confirmedCount = 0
+                        _permanentCount = 0
 
                         val lines = splitMultilineResponse(response)
                         Log.i(APP_NAME, "Lines: $lines")
@@ -125,14 +117,14 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
                         for (line in lines) {
                             populateObdCodeList(line, "Confirmed")
                         }
-                        _confirmedCount.value = obdCodes.size
+                        _confirmedCount = obdCodes.size
                         ElmHelper.send(this, "07\r")
                     } else if (response.startsWith("47")) {// Pending DTCs
                         val lines = splitMultilineResponse(response)
                         for (line in lines) {
                             populateObdCodeList(line, "Pending")
                         }
-                        _pendingCount.value = obdCodes.size - _confirmedCount.value as Int
+                        _pendingCount = obdCodes.size - _confirmedCount as Int
                         ElmHelper.send(this, "0A\r")
 
 
@@ -141,8 +133,8 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
                         for (line in lines) {
                             populateObdCodeList(line, "Permanent")
                         }
-                        _permanentCount.value =
-                            obdCodes.size - (_confirmedCount.value as Int + _pendingCount.value as Int)
+                        _permanentCount =
+                            obdCodes.size - (_confirmedCount as Int + _pendingCount as Int)
 
                         ElmHelper.send(this, "020200\r")
 
@@ -159,7 +151,7 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
 
                         showResult()
                     } else if(response.startsWith("44")) {// DTCs have been cleared. Start scan again to update UI.
-                        _clearing.value = false
+                        _clearing = false
                         startScan()
 
                     } else if (response.contains("NODATA") || response.startsWith("7F")) {
@@ -171,7 +163,7 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
                             "020200" ->  showResult()
                             "04" -> {// Could not clear DTCs
                                 errorMessage = "Could not clear diagnostic trouble code(s)."
-                                _clearing.value = false
+                                _clearing = false
                                 showResult()
                             }
                             else  -> {
@@ -192,9 +184,10 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
 //                }
             }
 
-            _obdCodes.value = obdCodes
-            _scanCompleted.value = true
-            _scanning.value = false
+            _obdCodes.clear()
+            _obdCodes.addAll(obdCodes)
+            _scanCompleted = true
+            _scanning = false
         }
 
 
