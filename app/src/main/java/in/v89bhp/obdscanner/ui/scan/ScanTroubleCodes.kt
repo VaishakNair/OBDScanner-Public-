@@ -131,17 +131,27 @@ fun ScanCompleted(viewModel: ScanTroubleCodesViewModel, modifier: Modifier = Mod
                         obdCodeTextView.text = obdCode
                         typeTextView.text = categoryToDisplay
                         with(ignoredTextView) {
-                            if(categoryToDisplay == "Confirmed") {
-                                text = context.getString(`in`.v89bhp.obdscanner.R.string.no)
+                            if (categoryToDisplay == "Confirmed") {
+                                text = context.getString(R.string.no)
                             } else {
-                                text = context.getString(`in`.v89bhp.obdscanner.R.string.yes)
-                                setTextColor(androidx.core.content.ContextCompat.getColor(context, `in`.v89bhp.obdscanner.R.color.green))
+                                text = context.getString(R.string.yes)
+                                setTextColor(ContextCompat.getColor(context, R.color.green))
                             }
                         }
-                        freezeFrameButton.visibility = if(category.contains("FF")) View.VISIBLE else View.GONE
-                        detailsButton.setOnClickListener { viewModel.onObdCodeClicked(obdCode, false) }
-                        freezeFrameButton.setOnClickListener { viewModel.onObdCodeClicked(obdCode, true) }
-
+                        freezeFrameButton.visibility =
+                            if (category.contains("FF")) View.VISIBLE else View.GONE
+                        detailsButton.setOnClickListener {
+                            viewModel.onObdCodeClicked(
+                                obdCode,
+                                false
+                            )
+                        }
+                        freezeFrameButton.setOnClickListener {
+                            viewModel.onObdCodeClicked(
+                                obdCode,
+                                true
+                            )
+                        }
                     }
                 }
             }
