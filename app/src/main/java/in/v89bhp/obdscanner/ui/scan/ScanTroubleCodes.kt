@@ -118,6 +118,7 @@ fun ScanCompleted(viewModel: ScanTroubleCodesViewModel, modifier: Modifier = Mod
     Column(modifier = modifier) {
         ScanResultCard(viewModel)
 
+        // OBD Codes list:
         LazyColumn() {
             items(viewModel.obdCodes, key = { it }) {
                 val (obdCode, category) = it
