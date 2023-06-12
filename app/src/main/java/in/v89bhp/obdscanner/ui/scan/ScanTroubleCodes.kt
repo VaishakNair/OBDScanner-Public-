@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidViewBinding
+import androidx.core.content.ContextCompat
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.databinding.ObdCodeListItemBinding
 import `in`.v89bhp.obdscanner.databinding.ScanCompletedBinding
@@ -119,12 +120,25 @@ fun ScanCompleted(viewModel: ScanTroubleCodesViewModel, modifier: Modifier = Mod
 
         LazyColumn() {
             items(viewModel.obdCodes, key = { it }) {
+                val (obdCode, category) = it
+                val categoryToDisplay = category.removeSuffix(" (FF)")
                 Card(
                     modifier = modifier
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
                     AndroidViewBinding(factory = ObdCodeListItemBinding::inflate) {
+                        obdCodeTextView.text = obdCode
+                        typeTextView.text = categoryToDisplay
+                        with(ignoredTextView) {
+                            if(categoryToDisplay == "Confirmed") {
+                                text = context.getString(`in`.v89bhp.obdscanner.R.string.no)
+                            } else {
+                                text = context.getString(`in`.v89bhp.obdscanner.R.string.yes)
+                                setTextColor(androidx.core.content.ContextCompat.getColor(context, `in`.v89bhp.obdscanner.R.color.green))
+                            }
+                        }
+                        freezeFrameButton.visibility = if(category.contains("FF")) View.VISIBLE else View.GONE
 
                     }
                 }
