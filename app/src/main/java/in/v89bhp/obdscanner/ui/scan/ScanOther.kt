@@ -3,6 +3,7 @@ package `in`.v89bhp.obdscanner.ui.scan
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -38,7 +39,17 @@ fun ScanOtherCompleted(
     viewModel: ScanOtherViewModel,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier) {
+    LazyColumn(modifier = modifier) {
+        item {
+            GeneralCard(viewModel)
+        }
+
 
     }
+}
+
+@Composable
+fun GeneralCard(viewModel: ScanOtherViewModel,
+                modifier: Modifier = Modifier) {
+
 }
