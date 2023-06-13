@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.util.Log
+import androidx.compose.runtime.*
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -27,9 +28,9 @@ import `in`.v89bhp.obdscanner.obdparameters.SupportedPidsHolder
 import `in`.v89bhp.obdscanner.room.entities.OtherParameterId
 
 class ScanOtherViewModel(application: Application) : AndroidViewModel(application) {
-    private val _fetching: MutableLiveData<Boolean> = MutableLiveData(false)
+    private var _fetching by mutableStateOf(false)
 
-    private val _otherData: MutableLiveData<List<String>> = MutableLiveData()
+    private val _otherData = mutableListOf<String>().toMutableStateList()
 
 
     val otherDataList: MutableList<String> = mutableListOf()
@@ -45,7 +46,7 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
 
     private var stopSending: Boolean = false
 
-    val fetching: LiveData<Boolean>
+    val fetching: Boolean
         get() = _fetching
 
     private var protocolFetched = false
@@ -58,9 +59,9 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
 
     private var currentIndex: Int = 0
 
-    private val _isError: MutableLiveData<Boolean> = MutableLiveData(false)
+    private var _isError by mutableStateOf(false)
 
-    val isError: LiveData<Boolean>
+    val isError: Boolean
         get() = _isError
 
 
@@ -78,8 +79,8 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
      */
     fun loadOtherData() {
         viewModelScope.launch {
-            _isError.value = false
-            _fetching.value = true
+            _isError = false
+            _fetching = true
 
             ScalingFactors.initialized = false
             protocolFetched = false
@@ -130,11 +131,11 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
 
             else -> {// End of parameter list reached. Show result
                 currentIndex = 0
-                _otherData.value = otherDataList
+                _otherData.addAll(otherDataList)
                 otherDataList.associateByTo(_otherDataMap,
                     {it.substringBefore(':').trim()},
                     {it.substringAfter(':').trim()})
-                _fetching.value = false
+                _fetching = false
             }
         }
     }
@@ -148,8 +149,8 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
             when (msg?.what) {
                 HandlerMessageCodes.MESSAGE_ERROR.ordinal -> {
                     errorMessage = response
-                    _fetching.value = false
-                    _isError.value = true
+                    _fetching = false
+                    _isError = true
                 }
 
 
