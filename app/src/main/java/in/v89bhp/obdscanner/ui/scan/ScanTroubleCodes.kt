@@ -22,15 +22,20 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.databinding.ObdCodeListItemBinding
 import `in`.v89bhp.obdscanner.databinding.ScanCompletedBinding
@@ -43,7 +48,8 @@ fun ScanTroubleCodes(
     modifier: Modifier = Modifier,
     viewModel: ScanTroubleCodesViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         viewModelStoreOwner = LocalContext.current as ComponentActivity
-    )
+    ),
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 ) {
 
     val context = LocalContext.current
@@ -95,6 +101,26 @@ fun ScanTroubleCodes(
             modifier = Modifier.align(Alignment.BottomCenter)
         )
     }
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_PAUSE -> {
+                    viewModel.dismissPopupWindow()
+                }
+
+                else -> {}
+            }
+        }
+        // Add the observer to the lifecycle
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        // When the effect leaves the Composition, remove the observer
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
 }
 
 @Composable
