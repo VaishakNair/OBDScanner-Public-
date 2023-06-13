@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.util.Log
+import android.widget.PopupWindow
 import androidx.compose.runtime.*
 import androidx.lifecycle.AndroidViewModel
 import `in`.v89bhp.obdscanner.BuildConfig.APP_NAME
@@ -32,6 +33,8 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
     private var _pendingCount by mutableStateOf(0)
 
     private var _permanentCount by mutableStateOf(0)
+
+    var popupWindow: PopupWindow? = null
 
     var snackbarState by mutableStateOf(SnackbarState(show = false, message = ""))
 
@@ -264,6 +267,10 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
 //                    ffFragment.arguments = Bundle().apply { putString(FreezeFrameFragment.KEY_ARG, obdCode) }
 ////                replace(R.id.scan_container_pager, ffFragment) // TODO
         }
+    }
+
+    fun dismissPopupWindow() {
+        popupWindow?.dismiss()
     }
 }
 

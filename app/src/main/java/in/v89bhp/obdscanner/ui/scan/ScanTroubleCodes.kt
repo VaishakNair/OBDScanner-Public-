@@ -1,6 +1,7 @@
 package `in`.v89bhp.obdscanner.ui.scan
 
 
+import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -33,6 +34,7 @@ import androidx.core.content.ContextCompat
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.databinding.ObdCodeListItemBinding
 import `in`.v89bhp.obdscanner.databinding.ScanCompletedBinding
+import `in`.v89bhp.obdscanner.helpers.Utilities
 import `in`.v89bhp.obdscanner.ui.connectivity.CircularProgress
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -162,6 +164,7 @@ fun ScanCompleted(viewModel: ScanTroubleCodesViewModel, modifier: Modifier = Mod
 
 @Composable
 fun ScanResultCard(viewModel: ScanTroubleCodesViewModel, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
     AndroidViewBinding(factory = ScanCompletedBinding::inflate) {
         confirmedTextView.text = viewModel.confirmedCount.toString()
         pendingTextView.text = viewModel.pendingCount.toString()
@@ -170,6 +173,39 @@ fun ScanResultCard(viewModel: ScanTroubleCodesViewModel, modifier: Modifier = Mo
             visibility = if (viewModel.obdCodes.isEmpty()) View.GONE else View.VISIBLE
             setOnClickListener { ScanUiState.showClearTroubleCodesDialog = true }
         }
-        // TODO Wire info circle click actions.
+
+        // Info circle click actions:
+        confirmedInfoView.setOnClickListener {
+            // Dismiss any existing popup window:
+            viewModel.dismissPopupWindow()
+            viewModel.popupWindow = Utilities.showPopupWindow(
+                LayoutInflater.from(context),
+                it,
+                context.getString(R.string.confirmed),
+                context.getString(R.string.confirmed_hint)
+            )
+        }
+
+        pendingInfoView.setOnClickListener {
+            // Dismiss any existing popup window:
+            viewModel.dismissPopupWindow()
+            viewModel.popupWindow = Utilities.showPopupWindow(
+                LayoutInflater.from(context),
+                it,
+                context.getString(R.string.pending),
+                context.getString(R.string.pending_hint)
+            )
+        }
+
+        permanentInfoView.setOnClickListener {
+            // Dismiss any existing popup window:
+            viewModel.dismissPopupWindow()
+            viewModel.popupWindow = Utilities.showPopupWindow(
+                LayoutInflater.from(context),
+                it,
+                context.getString(R.string.permanent),
+                context.getString(R.string.permanent_hint)
+            )
+        }
     }
 }
