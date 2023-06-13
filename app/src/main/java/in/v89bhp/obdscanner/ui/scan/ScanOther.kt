@@ -1,15 +1,23 @@
 package `in`.v89bhp.obdscanner.ui.scan
 
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.lifecycle.LifecycleOwner
 import `in`.v89bhp.obdscanner.R
+import `in`.v89bhp.obdscanner.databinding.ScanOtherGeneralCardBinding
 import `in`.v89bhp.obdscanner.ui.connectivity.CircularProgress
 import `in`.v89bhp.obdscanner.ui.connectivity.ErrorCard
 
@@ -44,12 +52,60 @@ fun ScanOtherCompleted(
             GeneralCard(viewModel)
         }
 
+        item {
+            OxygenSensorCard(viewModel)
+        }
+
 
     }
 }
 
 @Composable
-fun GeneralCard(viewModel: ScanOtherViewModel,
-                modifier: Modifier = Modifier) {
+fun OxygenSensorCard(viewModel: ScanOtherViewModel,
+modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        AndroidViewBinding(factory = ScanOtherGeneralCardBinding::inflate) {
+
+        }
+    }
+}
+
+@Composable
+fun GeneralCard(
+    viewModel: ScanOtherViewModel,
+    modifier: Modifier = Modifier
+) {
+    val context = LocalContext.current
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        AndroidViewBinding(factory = ScanOtherGeneralCardBinding::inflate) {
+            generalLayout.apply {
+                for ((key, value) in viewModel.otherDataMap.entries) {
+                    if (key.contains(context.getString(R.string.oxygen), true)
+                            .not()
+                    ) {// Not related to oxygen sensors.
+                        // O2 sensor data is displayed separately.
+                        addView(     TextView(context).apply {
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT).apply {
+                                leftMargin = resources.getDimension(R.dimen.margin).toInt()
+                                bottomMargin = leftMargin
+                            }
+
+                            text = context.getString(R.string.key_colon_value, key, value)
+                        })
+                    }
+                }
+            }
+        }
+    }
 
 }
