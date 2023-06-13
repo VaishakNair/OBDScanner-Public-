@@ -52,7 +52,6 @@ fun ScanTroubleCodes(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 ) {
 
-    val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
     Box(modifier = modifier) {
@@ -67,18 +66,18 @@ fun ScanTroubleCodes(
         }
 
         // Clear trouble codes dialog:
-        if (ScanUiState.showClearTroubleCodesDialog) {
+        if (viewModel.showClearTroubleCodesDialog) {
             AlertDialog(onDismissRequest = { },
                 confirmButton = {
                     TextButton(onClick = {
-                        ScanUiState.clearTroubleCodes()
+                        viewModel.clearCodes()
                     }) {
                         Text(stringResource(R.string.ok))
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = {
-                        ScanUiState.showClearTroubleCodesDialog = false
+                        viewModel.showClearTroubleCodesDialog = false
                     }) { Text(stringResource(R.string.cancel)) }
                 },
                 title = {},
@@ -197,7 +196,7 @@ fun ScanResultCard(viewModel: ScanTroubleCodesViewModel, modifier: Modifier = Mo
         permanentTextView.text = viewModel.permanentCount.toString()
         clearCodesButton.apply {
             visibility = if (viewModel.obdCodes.isEmpty()) View.GONE else View.VISIBLE
-            setOnClickListener { ScanUiState.showClearTroubleCodesDialog = true }
+            setOnClickListener { viewModel.showClearTroubleCodesDialog = true }
         }
 
         // Info circle click actions:

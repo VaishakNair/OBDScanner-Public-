@@ -34,6 +34,8 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
 
     private var _permanentCount by mutableStateOf(0)
 
+    var showClearTroubleCodesDialog by mutableStateOf(false)
+
     var popupWindow: PopupWindow? = null
 
     var snackbarState by mutableStateOf(SnackbarState(show = false, message = ""))
@@ -72,6 +74,7 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
     }
 
     fun clearCodes() {
+        showClearTroubleCodesDialog = false
         _clearing = true
         ElmHelper.send(mHandler, "04\r")
 
