@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,6 +27,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -54,7 +56,7 @@ fun ScanTroubleCodes(
 
     val snackbarHostState = remember { SnackbarHostState() }
 
-    Box(modifier = modifier) {
+    Box(modifier = modifier.fillMaxSize()) {
         if (viewModel.scanning) {
             CircularProgress(text = stringResource(R.string.scanning))
         } else if (viewModel.clearing) {
@@ -134,7 +136,8 @@ fun StartScan(onClick: () -> Unit, modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.bodyLarge,
             modifier = modifier.padding(8.dp)
         )
-        Button(onClick = onClick) {
+        Button(onClick = onClick,
+        modifier = Modifier.align(CenterHorizontally)) {
             Text(text = stringResource(R.string.start_scan))
         }
     }
