@@ -82,6 +82,7 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
     fun loadOtherData() {
         viewModelScope.launch {
             _isError = false
+            scanCompleted = false
             _fetching = true
 
             ScalingFactors.initialized = false
@@ -138,6 +139,7 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
                     {it.substringBefore(':').trim()},
                     {it.substringAfter(':').trim()})
                 _fetching = false
+                scanCompleted = true
             }
         }
     }
@@ -353,7 +355,7 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
 
     override fun onCleared() {
         stopSending = true
-        viewModelScope.cancel() // Cancel any coroutines running in this scope
+        viewModelScope.cancel() // Cancel any coroutines running in this scope TODO Check if this works as expected or not. Add a simple Log.i here
         super.onCleared()
     }
 }
