@@ -37,6 +37,8 @@ import `in`.v89bhp.obdscanner.obdparameters.ParameterHolder
 import `in`.v89bhp.obdscanner.ui.connectivity.Connectivity
 import `in`.v89bhp.obdscanner.ui.gauges.Gauges
 import `in`.v89bhp.obdscanner.ui.gauges.GaugesAppBarState
+import `in`.v89bhp.obdscanner.ui.scan.ScanContainer
+import `in`.v89bhp.obdscanner.ui.scan.ScanOther
 import `in`.v89bhp.obdscanner.ui.scan.ScanTroubleCodes
 import `in`.v89bhp.obdscanner.ui.settings.Settings
 import kotlinx.coroutines.launch
@@ -158,7 +160,7 @@ fun Home(
                         )
                     )
 
-                    NavDrawerItem.SCAN -> ScanTroubleCodes(
+                    NavDrawerItem.SCAN -> ScanContainer(
                         modifier = Modifier.padding(
                             contentPadding
                         )
