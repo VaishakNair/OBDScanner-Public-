@@ -48,9 +48,7 @@ import `in`.v89bhp.obdscanner.ui.connectivity.CircularProgress
 @Composable
 fun ScanTroubleCodes(
     modifier: Modifier = Modifier,
-    viewModel: ScanTroubleCodesViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
-        viewModelStoreOwner = LocalContext.current as ComponentActivity
-    ),
+    viewModel: ScanTroubleCodesViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 ) {
 
@@ -94,6 +92,7 @@ fun ScanTroubleCodes(
                     message = viewModel.snackbarState.message,
                     duration = SnackbarDuration.Long
                 )
+                viewModel.snackbarState = SnackbarState(false)
             }
         }
 

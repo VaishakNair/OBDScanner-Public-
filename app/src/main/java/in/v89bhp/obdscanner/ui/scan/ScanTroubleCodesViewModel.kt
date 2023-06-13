@@ -38,7 +38,7 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
 
     var popupWindow: PopupWindow? = null
 
-    var snackbarState by mutableStateOf(SnackbarState(show = false, message = ""))
+    var snackbarState by mutableStateOf(SnackbarState(show = false))
 
 
     val confirmedCount: Int
@@ -279,4 +279,4 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
 
 
 
-data class SnackbarState(val show: Boolean, val message: String)
+data class SnackbarState(val show: Boolean, val message: String = "")
