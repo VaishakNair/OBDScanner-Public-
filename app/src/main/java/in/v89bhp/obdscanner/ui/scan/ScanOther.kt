@@ -1,5 +1,6 @@
 package `in`.v89bhp.obdscanner.ui.scan
 
+import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.compose.foundation.layout.Box
@@ -9,16 +10,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidViewBinding
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.databinding.ScanOtherGeneralCardBinding
 import `in`.v89bhp.obdscanner.databinding.ScanOtherOxygenSensorCardBinding
+import `in`.v89bhp.obdscanner.helpers.Utilities
 import `in`.v89bhp.obdscanner.ui.connectivity.CircularProgress
 import `in`.v89bhp.obdscanner.ui.connectivity.ErrorCard
 
@@ -39,6 +44,25 @@ fun ScanOther(
             ScanOtherCompleted(viewModel)
         } else {
             StartScan(onClick = { viewModel.loadOtherData() })
+        }
+    }
+
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_PAUSE -> {
+                    viewModel.dismissPopupWindow()
+                }
+
+                else -> {}
+            }
+        }
+        // Add the observer to the lifecycle
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        // When the effect leaves the Composition, remove the observer
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 }
@@ -62,8 +86,10 @@ fun ScanOtherCompleted(
 }
 
 @Composable
-fun OxygenSensorCard(viewModel: ScanOtherViewModel,
-modifier: Modifier = Modifier) {
+fun OxygenSensorCard(
+    viewModel: ScanOtherViewModel,
+    modifier: Modifier = Modifier
+) {
     val context = LocalContext.current
     Card(
         modifier = modifier
@@ -74,8 +100,10 @@ modifier: Modifier = Modifier) {
 
             fun getChildTextView(key: String, value: String): TextView =
                 TextView(context).apply {
-                    layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT).apply {
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    ).apply {
                         leftMargin = resources.getDimension(R.dimen.margin).toInt()
                         bottomMargin = leftMargin
                     }
@@ -84,18 +112,34 @@ modifier: Modifier = Modifier) {
                 }
 
             oxygenSensorsLayout.apply {
-                for(sensor in viewModel.oxygenSensorList) {
-                    addView(getChildTextView(sensor.substringBefore(':').trim(),
-                        sensor.substringAfter(':').trim()))
+                for (sensor in viewModel.oxygenSensorList) {
+                    addView(
+                        getChildTextView(
+                            sensor.substringBefore(':').trim(),
+                            sensor.substringAfter(':').trim()
+                        )
+                    )
                 }
-                for((key, value) in viewModel.otherDataMap.entries) {
-                    if(key.contains(context.getString(R.string.oxygen), true)) {// Oxygen sensor-related data
+                for ((key, value) in viewModel.otherDataMap.entries) {
+                    if (key.contains(
+                            context.getString(R.string.oxygen),
+                            true
+                        )
+                    ) {// Oxygen sensor-related data
                         addView(getChildTextView(key, value))
                     }
                 }
             }
 
-           oxygenSensorTypeTextView.text = viewModel.oxygenSensorType
+            oxygenSensorTypeTextView.text = viewModel.oxygenSensorType
+            oxygenSensorTypeInfoView.setOnClickListener {
+                // Dismiss any existing popup window:
+                viewModel.dismissPopupWindow()
+                viewModel.popupWindow = Utilities.showPopupWindow(
+                    LayoutInflater.from(context), it, context.getString(R.string.oxygen_sensor_types_title),
+                    context.getString(R.string.oxygen_sensor_types)
+                )
+            }
         }
     }
 }
@@ -118,10 +162,11 @@ fun GeneralCard(
                             .not()
                     ) {// Not related to oxygen sensors.
                         // O2 sensor data is displayed separately.
-                        addView(     TextView(context).apply {
+                        addView(TextView(context).apply {
                             layoutParams = LinearLayout.LayoutParams(
                                 LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT).apply {
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                            ).apply {
                                 leftMargin = resources.getDimension(R.dimen.margin).toInt()
                                 bottomMargin = leftMargin
                             }

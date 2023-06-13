@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.util.Log
+import android.widget.PopupWindow
 import androidx.compose.runtime.*
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +29,9 @@ import `in`.v89bhp.obdscanner.obdparameters.SupportedPidsHolder
 import `in`.v89bhp.obdscanner.room.entities.OtherParameterId
 
 class ScanOtherViewModel(application: Application) : AndroidViewModel(application) {
+
+    var popupWindow: PopupWindow? = null
+
     private var _fetching by mutableStateOf(false)
 
     var scanCompleted by mutableStateOf(false)
@@ -357,5 +361,9 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
         stopSending = true
         viewModelScope.cancel() // Cancel any coroutines running in this scope TODO Check if this works as expected or not. Add a simple Log.i here
         super.onCleared()
+    }
+
+    fun dismissPopupWindow() {
+        popupWindow?.dismiss()
     }
 }
