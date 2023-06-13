@@ -25,8 +25,10 @@ fun ScanOther(
             ErrorCard(
                 errorMessage = viewModel.errorMessage!!,
                 onClick = { viewModel.loadOtherData() })
-        } else {
+        } else if (viewModel.scanCompleted) {
             ScanOtherCompleted(viewModel)
+        } else {
+            StartScan(onClick = { viewModel.loadOtherData() })
         }
     }
 }
@@ -37,6 +39,6 @@ fun ScanOtherCompleted(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
-        
+
     }
 }

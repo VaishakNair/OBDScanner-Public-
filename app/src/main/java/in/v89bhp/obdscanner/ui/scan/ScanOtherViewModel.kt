@@ -30,6 +30,8 @@ import `in`.v89bhp.obdscanner.room.entities.OtherParameterId
 class ScanOtherViewModel(application: Application) : AndroidViewModel(application) {
     private var _fetching by mutableStateOf(false)
 
+    var scanCompleted by mutableStateOf(false)
+
     private val _otherData = mutableListOf<String>().toMutableStateList()
 
 
