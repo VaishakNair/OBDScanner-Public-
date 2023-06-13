@@ -18,6 +18,7 @@ import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.lifecycle.LifecycleOwner
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.databinding.ScanOtherGeneralCardBinding
+import `in`.v89bhp.obdscanner.databinding.ScanOtherOxygenSensorCardBinding
 import `in`.v89bhp.obdscanner.ui.connectivity.CircularProgress
 import `in`.v89bhp.obdscanner.ui.connectivity.ErrorCard
 
@@ -63,13 +64,38 @@ fun ScanOtherCompleted(
 @Composable
 fun OxygenSensorCard(viewModel: ScanOtherViewModel,
 modifier: Modifier = Modifier) {
+    val context = LocalContext.current
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        AndroidViewBinding(factory = ScanOtherGeneralCardBinding::inflate) {
+        AndroidViewBinding(factory = ScanOtherOxygenSensorCardBinding::inflate) {
 
+            fun getChildTextView(key: String, value: String): TextView =
+                TextView(context).apply {
+                    layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT).apply {
+                        leftMargin = resources.getDimension(R.dimen.margin).toInt()
+                        bottomMargin = leftMargin
+                    }
+
+                    text = context.getString(R.string.key_colon_value, key, value)
+                }
+
+            oxygenSensorsLayout.apply {
+                for(sensor in viewModel.oxygenSensorList) {
+                    addView(getChildTextView(sensor.substringBefore(':').trim(),
+                        sensor.substringAfter(':').trim()))
+                }
+                for((key, value) in viewModel.otherDataMap.entries) {
+                    if(key.contains(context.getString(R.string.oxygen), true)) {// Oxygen sensor-related data
+                        addView(getChildTextView(key, value))
+                    }
+                }
+            }
+
+           oxygenSensorTypeTextView.text = viewModel.oxygenSensorType
         }
     }
 }
