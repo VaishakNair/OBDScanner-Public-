@@ -30,6 +30,10 @@ import `in`.v89bhp.obdscanner.room.entities.OtherParameterId
 
 class ScanOtherViewModel(application: Application) : AndroidViewModel(application) {
 
+    companion object {
+        private const val TAG = "ScanOtherViewModel"
+    }
+
     var popupWindow: PopupWindow? = null
 
     private var _fetching by mutableStateOf(false)
@@ -360,6 +364,7 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
     override fun onCleared() {
         stopSending = true
         viewModelScope.cancel() // Cancel any coroutines running in this scope TODO Check if this works as expected or not. Add a simple Log.i here
+        Log.i(TAG, "onCleared")
         super.onCleared()
     }
 
