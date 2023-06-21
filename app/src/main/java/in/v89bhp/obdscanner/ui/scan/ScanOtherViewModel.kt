@@ -54,7 +54,7 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
 
     var errorMessage: String? = null
 
-    private var stopSending: Boolean = false
+    var stopSending: Boolean = false
 
     val fetching: Boolean
         get() = _fetching
@@ -361,9 +361,9 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    override fun onCleared() {
+    public override fun onCleared() {
         stopSending = true
-        viewModelScope.cancel() // Cancel any coroutines running in this scope TODO Check if this works as expected or not. Add a simple Log.i here
+        viewModelScope.cancel() // Cancel any coroutines running in this scope
         Log.i(TAG, "onCleared")
         super.onCleared()
     }

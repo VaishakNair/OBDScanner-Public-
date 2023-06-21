@@ -39,6 +39,7 @@ import `in`.v89bhp.obdscanner.ui.gauges.Gauges
 import `in`.v89bhp.obdscanner.ui.gauges.GaugesAppBarState
 import `in`.v89bhp.obdscanner.ui.scan.ScanContainer
 import `in`.v89bhp.obdscanner.ui.scan.ScanOther
+import `in`.v89bhp.obdscanner.ui.scan.ScanOtherViewModel
 import `in`.v89bhp.obdscanner.ui.scan.ScanTroubleCodes
 import `in`.v89bhp.obdscanner.ui.settings.Settings
 import kotlinx.coroutines.launch
@@ -50,7 +51,8 @@ fun Home(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         viewModelStoreOwner = LocalContext.current as ComponentActivity
-    )
+    ),
+    scanOtherViewModel: ScanOtherViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -74,7 +76,9 @@ fun Home(
                         selected = navDrawerItem == homeViewModel.selectedItem,
                         onClick = {
                             scope.launch { drawerState.close() }
+                            performInitializationCleanup(navDrawerItem, scanOtherViewModel)
                             homeViewModel.selectedItem = navDrawerItem
+
                         },
                         modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
                     )
@@ -227,4 +231,12 @@ enum class NavDrawerItem(@DrawableRes val icon: Int, val label: String) {
     SCAN(R.drawable.ic_scan, "Scan"),
     CONNECTIVITY(R.drawable.baseline_bluetooth_connected_24, "Connectivity"),
     SETTINGS(R.drawable.baseline_settings_24, "Settings")
+}
+
+fun performInitializationCleanup(navDrawerItem: NavDrawerItem, scanOtherViewModel: ScanOtherViewModel) {
+    if(navDrawerItem == NavDrawerItem.SCAN) {
+        scanOtherViewModel.stopSending = false
+    } else {
+        scanOtherViewModel.onCleared()
+    }
 }
