@@ -299,6 +299,8 @@
     <string name="scanning">Scanning…</string>
     <string name="connect_with_me_message">Built by a petrolhead for other petrolheads. Connect with me on Twitter: @vaishaknair</string>
     <string name="version_name" formatted="false" translatable="false">Ver.%s</string>
-    <string name="contact_message">Need a feature? Have a query? Shoot a mail to 89bhpapp@gmail.com. The app is under constant development and your feedback counts!</string>
+    <string name="contact_message_above">Need a feature? Have a query? Shoot a mail to</string>
+    <string name="contact_message_below">The app is under constant development and your feedback counts!</string>
     <string name="gauge_credit">Gauges by SpeedView</string>
+    <string name="email">89bhpapp@gmail.com</string>
 </resources>

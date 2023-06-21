@@ -2,28 +2,36 @@ package `in`.v89bhp.obdscanner.ui.about
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
 import `in`.v89bhp.obdscanner.BuildConfig
 import `in`.v89bhp.obdscanner.R
 
+@Preview
 @Composable
 fun About(modifier: Modifier = Modifier) {
 
@@ -69,18 +77,57 @@ fun About(modifier: Modifier = Modifier) {
             textAlign = TextAlign.Center
         )
 
+        Text(
+            text = stringResource(R.string.contact_message_above),
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center
+        )
 
+        val annotatedEmail = buildAnnotatedString {
+            val email = stringResource(R.string.email)
+            val startIndex = email.indexOf("89")
+            val endIndex = startIndex + 18
+            append(email)
+            addStyle(
+                style = SpanStyle(
+                    color = Color(0xff64B5F6),
+//                        fontSize = 18.sp,
+                    textDecoration = TextDecoration.Underline
+                ), start = startIndex, end = endIndex
+            )
+
+            // Attach a string annotation that stores a email id to
+            // hyperlinked email id shown:
+            addStringAnnotation(
+                tag = "email",
+                annotation = email,
+                start = startIndex,
+                end = endIndex
+            )
+
+        }
+        ClickableText(
+            modifier = Modifier.wrapContentWidth(),
+            text = annotatedEmail,
+            style = MaterialTheme.typography.bodyLarge,
+            onClick = { offset ->
+                annotatedEmail.getStringAnnotations(
+                    tag = "email", start = offset, end = offset
+                ).firstOrNull()?.let { annotation ->
+                    // If yes, we log its value
+                    Log.d("Clicked URL", annotation.item)
+                }
+            })
 
         Text(
-            text = buildAnnotatedString {
-                val text = stringResource(R.string.contact_message)
-                append(text)
-
-            },
+            text = stringResource(R.string.contact_message_below),
             style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center,
-            textDecoration = TextDecoration.Underline
+            textAlign = TextAlign.Center
         )
+
+        Button(onClick = { /*TODO*/ }) {
+            Text(text = stringResource(R.string.share_app))
+        }
 
 
     }
