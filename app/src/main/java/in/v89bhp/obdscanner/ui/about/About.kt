@@ -31,7 +31,7 @@ import androidx.core.content.res.ResourcesCompat
 import `in`.v89bhp.obdscanner.BuildConfig
 import `in`.v89bhp.obdscanner.R
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun About(modifier: Modifier = Modifier) {
 
@@ -83,41 +83,8 @@ fun About(modifier: Modifier = Modifier) {
             textAlign = TextAlign.Center
         )
 
-        val annotatedEmail = buildAnnotatedString {
-            val email = stringResource(R.string.email)
-            val startIndex = email.indexOf("89")
-            val endIndex = startIndex + 18
-            append(email)
-            addStyle(
-                style = SpanStyle(
-                    color = Color(0xff64B5F6),
-//                        fontSize = 18.sp,
-                    textDecoration = TextDecoration.Underline
-                ), start = startIndex, end = endIndex
-            )
-
-            // Attach a string annotation that stores a email id to
-            // hyperlinked email id shown:
-            addStringAnnotation(
-                tag = "email",
-                annotation = email,
-                start = startIndex,
-                end = endIndex
-            )
-
-        }
-        ClickableText(
-            modifier = Modifier.wrapContentWidth(),
-            text = annotatedEmail,
-            style = MaterialTheme.typography.bodyLarge,
-            onClick = { offset ->
-                annotatedEmail.getStringAnnotations(
-                    tag = "email", start = offset, end = offset
-                ).firstOrNull()?.let { annotation ->
-                    // If yes, we log its value
-                    Log.d("Clicked URL", annotation.item)
-                }
-            })
+        HyperlinkedText(text = stringResource(R.string.email),
+            onClick = {/*TODO*/ })
 
         Text(
             text = stringResource(R.string.contact_message_below),
@@ -129,6 +96,52 @@ fun About(modifier: Modifier = Modifier) {
             Text(text = stringResource(R.string.share_app))
         }
 
+        HyperlinkedText(text = stringResource(R.string.privacy_policy),
+            onClick = {/*TODO*/ })
+        HyperlinkedText(text = stringResource(R.string.gauge_credit),
+            onClick = {/*TODO*/ })
 
     }
+}
+
+@Composable
+fun HyperlinkedText(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val annotatedText = buildAnnotatedString {
+        val startIndex = 0
+        val endIndex = text.length
+        append(text)
+        addStyle(
+            style = SpanStyle(
+                color = Color(0xff64B5F6),
+                textDecoration = TextDecoration.Underline
+            ), start = startIndex, end = endIndex
+        )
+
+        // Attach a string annotation that stores a email id to
+        // hyperlinked email id shown:
+        addStringAnnotation(
+            tag = "hyperlink",
+            annotation = text,
+            start = startIndex,
+            end = endIndex
+        )
+    }
+
+    ClickableText(
+        modifier = modifier.wrapContentWidth(),
+        text = annotatedText,
+        style = MaterialTheme.typography.bodyLarge,
+        onClick = { offset ->
+            annotatedText.getStringAnnotations(
+                tag = "hyperlink", start = offset, end = offset
+            ).firstOrNull()?.let { annotation ->
+                // If yes, we log its value
+                onClick()
+                Log.d("Clicked URL", annotation.item)
+            }
+        })
 }

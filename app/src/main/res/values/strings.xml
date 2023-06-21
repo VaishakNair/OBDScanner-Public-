@@ -301,6 +301,8 @@
     <string name="version_name" formatted="false" translatable="false">Ver.%s</string>
     <string name="contact_message_above">Need a feature? Have a query? Shoot a mail to</string>
     <string name="contact_message_below">The app is under constant development and your feedback counts!</string>
-    <string name="gauge_credit">Gauges by SpeedView</string>
     <string name="email">89bhpapp@gmail.com</string>
+    <string name="privacy_policy" translatable="false">Privacy Policy</string>
+    <string name="gauge_credit">Gauges by SpeedView</string>
+
 </resources>
