@@ -1,7 +1,9 @@
 package `in`.v89bhp.obdscanner.ui.about
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -31,13 +33,16 @@ import androidx.core.content.res.ResourcesCompat
 import `in`.v89bhp.obdscanner.BuildConfig
 import `in`.v89bhp.obdscanner.R
 
+
 @Preview(showBackground = true)
 @Composable
 fun About(modifier: Modifier = Modifier) {
 
+    val context = LocalContext.current
+
     val launcherIconBitmap = ResourcesCompat.getDrawable(
-        LocalContext.current.resources,
-        R.mipmap.ic_launcher, LocalContext.current.theme
+        context.resources,
+        R.mipmap.ic_launcher, context.theme
     )?.let { drawable ->
         val bitmap = Bitmap.createBitmap(
             drawable.intrinsicWidth, drawable.intrinsicHeight,
@@ -83,8 +88,15 @@ fun About(modifier: Modifier = Modifier) {
             textAlign = TextAlign.Center
         )
 
-        HyperlinkedText(text = stringResource(R.string.email),
-            onClick = {/*TODO*/ })
+        val email = stringResource(R.string.email)
+        HyperlinkedText(text = email,
+            onClick = {
+                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                    data = Uri.parse("mailto:") // only email apps should handle this
+                    putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+                }
+                context.startActivity(Intent.createChooser(intent, "Email"))
+            })
 
         Text(
             text = stringResource(R.string.contact_message_below),
@@ -92,15 +104,36 @@ fun About(modifier: Modifier = Modifier) {
             textAlign = TextAlign.Center
         )
 
-        Button(onClick = { /*TODO*/ }) {
+
+        Button(onClick = {
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(
+                    Intent.EXTRA_TEXT,
+                    context.getString(R.string.share_app_message)
+                ) // TODO Generate play store link for the app and include in the share_app_message string.
+            }
+
+            context.startActivity(Intent.createChooser(intent, "Share Link"))
+        }) {
             Text(text = stringResource(R.string.share_app))
         }
 
         HyperlinkedText(text = stringResource(R.string.privacy_policy),
             modifier = Modifier.padding(top = 32.dp),
-            onClick = {/*TODO*/ })
+            onClick = {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse("https://89bhp.in/privacy_policy.html")
+                }
+                context.startActivity(intent)
+            })
         HyperlinkedText(text = stringResource(R.string.gauge_credit),
-            onClick = {/*TODO*/ })
+            onClick = {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse("https://github.com/anastr/SpeedView")
+                }
+                context.startActivity(intent)
+            })
 
     }
 }

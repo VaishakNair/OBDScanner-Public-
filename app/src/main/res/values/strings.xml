@@ -304,5 +304,6 @@
     <string name="email">89bhpapp@gmail.com</string>
     <string name="privacy_policy" translatable="false">Privacy Policy</string>
     <string name="gauge_credit">Gauges by SpeedView</string>
+    <string name="share_app_message">I am using 89 bhp Android app to scan trouble codes and read diagnostic data from my vehicle. Check it out. It\'s free.\n\nGet 89 bhp on Google Play:\nhttps://v89bhp.page.link/N8fh</string>
 
 </resources>
