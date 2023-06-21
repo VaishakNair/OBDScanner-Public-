@@ -97,6 +97,7 @@ fun About(modifier: Modifier = Modifier) {
         }
 
         HyperlinkedText(text = stringResource(R.string.privacy_policy),
+            modifier = Modifier.padding(top = 32.dp),
             onClick = {/*TODO*/ })
         HyperlinkedText(text = stringResource(R.string.gauge_credit),
             onClick = {/*TODO*/ })
