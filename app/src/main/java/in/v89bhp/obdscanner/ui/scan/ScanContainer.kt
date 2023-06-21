@@ -44,7 +44,8 @@ fun ScanContainer(modifier: Modifier = Modifier) {
 
         HorizontalPager(
             pageCount = titles.size,
-            state = pagerState
+            state = pagerState,
+            userScrollEnabled = false
         ) { page ->
             if (page == 0) { // Tab 1
                 ScanTroubleCodes()
