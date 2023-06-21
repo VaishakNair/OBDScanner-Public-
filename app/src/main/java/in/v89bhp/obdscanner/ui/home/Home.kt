@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.Screen
 import `in`.v89bhp.obdscanner.obdparameters.ParameterHolder
+import `in`.v89bhp.obdscanner.ui.about.About
 import `in`.v89bhp.obdscanner.ui.connectivity.Connectivity
 import `in`.v89bhp.obdscanner.ui.gauges.Gauges
 import `in`.v89bhp.obdscanner.ui.gauges.GaugesAppBarState
@@ -180,7 +181,9 @@ fun Home(
                         onNavigateTo = onNavigateTo,
                         modifier = Modifier.padding(contentPadding)
                     )
-//                NavDrawerItem.ABOUT -> About() // TODO
+                    NavDrawerItem.ABOUT -> About(modifier = Modifier.padding(contentPadding))
+
+                // TODO Add more screens
                 }
             }
             if (GaugesAppBarState.showExitFullScreenSnackbar) {
@@ -230,7 +233,8 @@ enum class NavDrawerItem(@DrawableRes val icon: Int, val label: String) {
     GAUGES(R.drawable.ic_gauges, "Gauges"),
     SCAN(R.drawable.ic_scan, "Scan"),
     CONNECTIVITY(R.drawable.baseline_bluetooth_connected_24, "Connectivity"),
-    SETTINGS(R.drawable.baseline_settings_24, "Settings")
+    SETTINGS(R.drawable.baseline_settings_24, "Settings"),
+    ABOUT(R.drawable.ic_info_outline, "About")
 }
 
 fun performInitializationCleanup(navDrawerItem: NavDrawerItem, scanOtherViewModel: ScanOtherViewModel) {
