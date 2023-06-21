@@ -297,5 +297,8 @@
         \n&#8226; Erase on-board monitoring test results.\n&#8226; <b>NOT</b> erase trouble codes of <i>permanent</i> type.</string>
     <string name="freeze_frame_dtc" formatted="false">"Diagnostic Trouble Code (DTC): %s</string>
     <string name="scanning">Scanning…</string>
-
+    <string name="connect_with_me_message">Built by a petrolhead for other petrolheads. Connect with me on Twitter: @vaishaknair</string>
+    <string name="version_name" formatted="false" translatable="false">Ver.%s</string>
+    <string name="contact_message">Need a feature? Have a query? Shoot a mail to 89bhpapp@gmail.com. The app is under constant development and your feedback counts!</string>
+    <string name="gauge_credit">Gauges by SpeedView</string>
 </resources>
