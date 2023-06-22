@@ -39,6 +39,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import `in`.v89bhp.obdscanner.R
+import `in`.v89bhp.obdscanner.Screen
 import `in`.v89bhp.obdscanner.databinding.ObdCodeListItemBinding
 import `in`.v89bhp.obdscanner.databinding.ScanCompletedBinding
 import `in`.v89bhp.obdscanner.helpers.Utilities
@@ -47,6 +48,7 @@ import `in`.v89bhp.obdscanner.ui.connectivity.CircularProgress
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ScanTroubleCodes(
+    onNavigateTo: (route: String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ScanTroubleCodesViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
@@ -60,7 +62,7 @@ fun ScanTroubleCodes(
         } else if (viewModel.clearing) {
             CircularProgress(text = stringResource(R.string.clearing))
         } else if (viewModel.scanCompleted) {
-            ScanCompleted(viewModel)
+            ScanCompleted(viewModel, onNavigateTo)
         } else {
             StartScan(onClick = { viewModel.startScan() })
         }
@@ -143,7 +145,9 @@ fun StartScan(onClick: () -> Unit, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ScanCompleted(viewModel: ScanTroubleCodesViewModel, modifier: Modifier = Modifier) {
+fun ScanCompleted(viewModel: ScanTroubleCodesViewModel,
+                  onNavigateTo: (route: String) -> Unit,
+                  modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         ScanResultCard(viewModel)
 
@@ -177,10 +181,11 @@ fun ScanCompleted(viewModel: ScanTroubleCodesViewModel, modifier: Modifier = Mod
                             )
                         }
                         freezeFrameButton.setOnClickListener {
-                            viewModel.onObdCodeClicked(
-                                obdCode,
-                                true
-                            )
+                            onNavigateTo(Screen.FreezeFrame.createRoute(obdCode))
+//                            viewModel.onObdCodeClicked(
+//                                obdCode,
+//                                true
+//                            )
                         }
                     }
                 }

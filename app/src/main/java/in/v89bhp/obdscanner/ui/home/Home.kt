@@ -166,6 +166,7 @@ fun Home(
                     )
 
                     NavDrawerItem.SCAN -> ScanContainer(
+                        onNavigateTo = onNavigateTo,
                         modifier = Modifier.padding(
                             contentPadding
                         )

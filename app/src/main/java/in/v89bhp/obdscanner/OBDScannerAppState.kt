@@ -20,7 +20,9 @@ sealed class Screen(val route: String) {
 
     object GaugePicker : Screen("gaugepicker")
 
-    object FreezeFrame : Screen("freezeframe")
+    object FreezeFrame : Screen("freezeframe/{obdCode}") {
+        fun createRoute(obdCode: String) = "freezeframe/$obdCode"
+    }
 }
 
 

@@ -17,7 +17,9 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ScanContainer(modifier: Modifier = Modifier) {
+fun ScanContainer(
+    onNavigateTo: (route: String) -> Unit,
+    modifier: Modifier = Modifier) {
     val titles = listOf(stringResource(R.string.trouble_codes), stringResource(R.string.other))
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState()
@@ -48,7 +50,7 @@ fun ScanContainer(modifier: Modifier = Modifier) {
             userScrollEnabled = false
         ) { page ->
             if (page == 0) { // Tab 1
-                ScanTroubleCodes()
+                ScanTroubleCodes(onNavigateTo = onNavigateTo)
             } else { // Tab 2
                 ScanOther()
             }
