@@ -15,10 +15,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.databinding.FreezeFrameFragmentLayoutBinding
+import `in`.v89bhp.obdscanner.fragments.FreezeFrameFragment
+import `in`.v89bhp.obdscanner.fragments.FreezeFrameState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FreezeFrame(
+    obdCode: String,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -45,7 +48,7 @@ fun FreezeFrame(
             modifier = Modifier.padding(contentPadding),
             factory = FreezeFrameFragmentLayoutBinding::inflate
         ) {
-
+            FreezeFrameState.freezeFrameFragment.obdCode = obdCode
         }
     }
 }

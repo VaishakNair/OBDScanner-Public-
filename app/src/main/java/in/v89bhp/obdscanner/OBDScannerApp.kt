@@ -95,7 +95,9 @@ fun OBDScannerApp(
                 }
 
                 composable(Screen.FreezeFrame.route) { backStackEntry ->
-                    FreezeFrame(navigateBack = {
+                    FreezeFrame(
+                        obdCode = backStackEntry.arguments!!.getString("obdCode")!!,
+                        navigateBack = {
                         homeViewModel.selectedItem =
                             NavDrawerItem.SCAN // Returning from freeze frame option of Scan. Show scan screen
                         appState.navigateBack()

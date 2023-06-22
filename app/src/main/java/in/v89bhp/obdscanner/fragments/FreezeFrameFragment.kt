@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.databinding.FreezeFrameFragmentBinding
+import `in`.v89bhp.obdscanner.ui.gauges.GaugesAppBarState
 import `in`.v89bhp.obdscanner.ui.scan.FreezeFrameRecyclerViewAdapter
 import `in`.v89bhp.obdscanner.ui.scan.FreezeFrameViewModel
 
@@ -19,6 +20,8 @@ import `in`.v89bhp.obdscanner.ui.scan.FreezeFrameViewModel
  * Fragment used to show freeze frame data for a particular DTC.
  */
 class FreezeFrameFragment : Fragment() {
+
+    lateinit var obdCode: String
 
     private lateinit var viewBinding: FreezeFrameFragmentBinding
 
@@ -57,7 +60,7 @@ class FreezeFrameFragment : Fragment() {
                     viewBinding.ffErrorTextView.text = it
                     viewModel.errorMessage = null
                 }
-                viewBinding.dtcTextView.text =  resources.getString(R.string.freeze_frame_dtc).format(requireArguments().getString(KEY_ARG))
+                viewBinding.dtcTextView.text =  resources.getString(R.string.freeze_frame_dtc).format(obdCode)
             }
         })
 
@@ -66,7 +69,12 @@ class FreezeFrameFragment : Fragment() {
 
     }
 
-    companion object {
-        const val KEY_ARG = "fffragment.obdcode"
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        FreezeFrameState.freezeFrameFragment = this
     }
+}
+
+object FreezeFrameState {
+    lateinit var freezeFrameFragment: FreezeFrameFragment
 }
