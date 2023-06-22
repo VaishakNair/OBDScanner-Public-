@@ -31,7 +31,6 @@ fun Settings(onNavigateTo: (route: String) -> Unit, modifier: Modifier = Modifie
             title = "Gauge",
             summary = gaugeName,
             onClick = {
-                // TODO Navigate to GaugeTypePickerFragment
                 onNavigateTo(Screen.GaugeTypePicker.route)
             })
 

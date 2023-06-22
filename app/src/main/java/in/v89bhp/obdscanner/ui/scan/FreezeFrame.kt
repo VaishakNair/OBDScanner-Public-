@@ -1,9 +1,8 @@
-package `in`.v89bhp.obdscanner.ui.settings
+package `in`.v89bhp.obdscanner.ui.scan
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -15,26 +14,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import `in`.v89bhp.obdscanner.R
-import `in`.v89bhp.obdscanner.databinding.GaugeTypePickerFragmentLayoutBinding
-import kotlinx.coroutines.launch
-
+import `in`.v89bhp.obdscanner.databinding.FreezeFrameFragmentLayoutBinding
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GaugeTypePicker(
+fun FreezeFrame(
     navigateBack: () -> Unit,
-    modifier: Modifier = Modifier) {
+    modifier: Modifier = Modifier
+) {
     Scaffold(topBar = {
         TopAppBar(
             title = {
-                Text(stringResource(id = R.string.gauge_type_picker))
+                Text(stringResource(id = R.string.freeze_frame))
             },
             actions = {
 
             },
             navigationIcon = {
                 IconButton(onClick = {
-                   navigateBack()
+                    navigateBack()
                 }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
@@ -43,9 +41,10 @@ fun GaugeTypePicker(
                 }
             })
     }) { contentPadding ->
-        AndroidViewBinding(modifier = Modifier.padding(contentPadding),
-            factory = GaugeTypePickerFragmentLayoutBinding::inflate) {
-//        val myFragment = fragmentContainerView. // TODO Find instance to the fragment.
+        AndroidViewBinding(
+            modifier = Modifier.padding(contentPadding),
+            factory = FreezeFrameFragmentLayoutBinding::inflate
+        ) {
 
         }
     }
