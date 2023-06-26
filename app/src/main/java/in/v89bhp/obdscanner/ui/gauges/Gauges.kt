@@ -27,7 +27,8 @@ import `in`.v89bhp.obdscanner.obdparameters.ParameterHolder
 @Composable
 fun Gauges(navigateBack: () -> Unit,
     modifier: Modifier = Modifier) {
-
+// Wrap in scaffold. Implement full screen top bar hiding logic. Implement Snackbar logic
+    // using scaffold snackbarhost.
 
 
 
