@@ -6,52 +6,28 @@ import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.NavigationDrawerItemDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import `in`.v89bhp.obdscanner.R
-import `in`.v89bhp.obdscanner.Screen
-import `in`.v89bhp.obdscanner.obdparameters.ParameterHolder
-import `in`.v89bhp.obdscanner.ui.about.About
-import `in`.v89bhp.obdscanner.ui.connectivity.Connectivity
-import `in`.v89bhp.obdscanner.ui.gauges.Gauges
-import `in`.v89bhp.obdscanner.ui.gauges.GaugesAppBarState
-import `in`.v89bhp.obdscanner.ui.scan.ScanContainer
 import `in`.v89bhp.obdscanner.ui.scan.ScanOtherViewModel
-import `in`.v89bhp.obdscanner.ui.settings.Settings
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -68,7 +44,10 @@ fun Home(
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    NavItemsGrid(navigationDestinations = NavigationDestination.values().toList(), onNavigateTo = onNavigateTo)
+    NavDestinationsGrid(
+        navigationDestinations = NavigationDestination.values().toList(),
+        onNavigateTo = onNavigateTo
+    )
 
 //    ModalNavigationDrawer(
 //        gesturesEnabled = if (GaugesAppBarState.isFullScreen) false else GaugesAppBarState.navDrawerGesturesEnabled,
@@ -262,9 +241,8 @@ fun performInitializationCleanup(
 }
 
 
-
 @Composable
-fun NavItemsGrid(
+fun NavDestinationsGrid(
     navigationDestinations: List<NavigationDestination>,
     onNavigateTo: (route: String) -> Unit,
     modifier: Modifier = Modifier
@@ -276,7 +254,7 @@ fun NavItemsGrid(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(navigationDestinations) { navigationDestination ->
-            NoteCard(
+            NavDestinationCard(
                 navigationDestination = navigationDestination,
                 onClick = { onNavigateTo(navigationDestination.route) }
             )
@@ -286,7 +264,7 @@ fun NavItemsGrid(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NoteCard(
+fun NavDestinationCard(
     navigationDestination: NavigationDestination,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -303,7 +281,7 @@ fun NoteCard(
     {
         Column(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween,
+            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Icon(

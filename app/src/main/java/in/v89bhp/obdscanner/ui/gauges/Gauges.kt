@@ -25,7 +25,12 @@ import `in`.v89bhp.obdscanner.obdparameters.ParameterHolder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Gauges(modifier: Modifier = Modifier) {
+fun Gauges(navigateBack: () -> Unit,
+    modifier: Modifier = Modifier) {
+
+
+
+
     AndroidViewBinding(
         factory = GaugesFragmentLayoutBinding::inflate
     ) {
