@@ -39,7 +39,7 @@ import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
 import `in`.v89bhp.obdscanner.ui.gauges.GaugePicker
 import `in`.v89bhp.obdscanner.ui.home.Home
 import `in`.v89bhp.obdscanner.ui.home.HomeViewModel
-import `in`.v89bhp.obdscanner.ui.home.NavDrawerItem
+import `in`.v89bhp.obdscanner.ui.home.NavigationDestination
 import `in`.v89bhp.obdscanner.ui.scan.FreezeFrame
 import `in`.v89bhp.obdscanner.ui.settings.GaugeTypePicker
 import kotlinx.coroutines.delay
@@ -82,14 +82,14 @@ fun OBDScannerApp(
                 composable(Screen.GaugeTypePicker.route) { backStackEntry ->
                     GaugeTypePicker(navigateBack = {
                         homeViewModel.selectedItem =
-                            NavDrawerItem.SETTINGS // Returning from Gauge type picker option of settings. Show settings screen
+                            NavigationDestination.SETTINGS // Returning from Gauge type picker option of settings. Show settings screen
                         appState.navigateBack()
                     })
                 }
                 composable(Screen.GaugePicker.route) { backStackEntry ->
                     GaugePicker(navigateBack = {
                         homeViewModel.selectedItem =
-                            NavDrawerItem.GAUGES // Returning from Gauge picker option of Gauges. Show Gauges
+                            NavigationDestination.GAUGES // Returning from Gauge picker option of Gauges. Show Gauges
                         appState.navigateBack()
                     })
                 }
@@ -99,7 +99,7 @@ fun OBDScannerApp(
                         obdCode = backStackEntry.arguments!!.getString("obdCode")!!,
                         navigateBack = {
                         homeViewModel.selectedItem =
-                            NavDrawerItem.SCAN // Returning from freeze frame option of Scan. Show scan screen
+                            NavigationDestination.SCAN // Returning from freeze frame option of Scan. Show scan screen
                         appState.navigateBack()
                     })
                 }
