@@ -49,12 +49,13 @@ import `in`.v89bhp.obdscanner.ui.connectivity.CircularProgress
 @Composable
 fun ScanTroubleCodes(
     onNavigateTo: (route: String) -> Unit,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     viewModel: ScanTroubleCodesViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
 ) {
 
-    val snackbarHostState = remember { SnackbarHostState() }
+
 
     Box(modifier = modifier.fillMaxSize()) {
         if (viewModel.scanning) {
@@ -97,11 +98,6 @@ fun ScanTroubleCodes(
                 viewModel.snackbarState = SnackbarState(false)
             }
         }
-
-        SnackbarHost(
-            hostState = snackbarHostState,
-            modifier = Modifier.align(Alignment.BottomCenter)
-        )
     }
 
     DisposableEffect(lifecycleOwner) {

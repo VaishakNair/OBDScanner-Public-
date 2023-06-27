@@ -88,7 +88,8 @@ fun ScanContainer(
                 state = pagerState
             ) { page ->
                 if (page == 0) { // Tab 1
-                    ScanTroubleCodes(onNavigateTo = onNavigateTo)
+                    ScanTroubleCodes(onNavigateTo = onNavigateTo,
+                    snackbarHostState = snackbarHostState)
                 } else { // Tab 2
                     ScanOther()
                 }
