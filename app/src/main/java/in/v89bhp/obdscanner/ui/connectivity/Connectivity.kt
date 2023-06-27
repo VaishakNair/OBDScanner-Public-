@@ -6,9 +6,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,44 +29,71 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.ui.theme.OBDScannerTheme
 
-@OptIn(ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun Connectivity(
+    navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     connectivityViewModel: ConnectivityViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         viewModelStoreOwner = LocalContext.current as ComponentActivity
     )
 ) {
-    Column(modifier = modifier) {
 
-        val bluetoothMultiplePermissionsState = rememberMultiplePermissionsState(
-            listOf(
-                android.Manifest.permission.BLUETOOTH,
-                android.Manifest.permission.BLUETOOTH_CONNECT,
-                android.Manifest.permission.BLUETOOTH_SCAN,
-            )
-        )
+    Scaffold(
+        topBar = {
 
-        if (bluetoothMultiplePermissionsState.allPermissionsGranted) {
-            // TODO Check if Bluetooth is turned on or not. If not, pop the dialog to turn bluetooth on.
-            ConnectionSetupPager()
-        } else {
+            TopAppBar(
+                title = {
+                    Text(text = stringResource(R.string.connectivity))
+                },
+                actions = {
 
-            Column {
-                Text(
-                    getTextToShowGivenPermissions( // TODO Tweak the logic of this function
-                        bluetoothMultiplePermissionsState.revokedPermissions,
-                        bluetoothMultiplePermissionsState.shouldShowRationale
-                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navigateBack()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                })
+
+        }) { contentPadding ->
+        Column(modifier = modifier.padding(contentPadding)) {
+
+            val bluetoothMultiplePermissionsState = rememberMultiplePermissionsState(
+                listOf(
+                    android.Manifest.permission.BLUETOOTH,
+                    android.Manifest.permission.BLUETOOTH_CONNECT,
+                    android.Manifest.permission.BLUETOOTH_SCAN,
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(onClick = { bluetoothMultiplePermissionsState.launchMultiplePermissionRequest() }) {
-                    Text("Request permissions")
+            )
+
+            if (bluetoothMultiplePermissionsState.allPermissionsGranted) {
+                // TODO Check if Bluetooth is turned on or not. If not, pop the dialog to turn bluetooth on.
+                ConnectionSetupPager()
+            } else {
+
+                Column {
+                    Text(
+                        getTextToShowGivenPermissions( // TODO Tweak the logic of this function
+                            bluetoothMultiplePermissionsState.revokedPermissions,
+                            bluetoothMultiplePermissionsState.shouldShowRationale
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Button(onClick = { bluetoothMultiplePermissionsState.launchMultiplePermissionRequest() }) {
+                        Text("Request permissions")
+                    }
                 }
             }
-        }
 
+        }
     }
+
+
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -101,24 +135,6 @@ private fun getTextToShowGivenPermissions(
     return textToShow.toString()
 }
 
-@Composable
-fun ConnectivityCard(modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(text = stringResource(id = R.string.bluetooth_connection_status).format("Connected"))
-            Text(text = stringResource(id = R.string.obd_connection_status).format("Connected"))
-        }
-    }
-}
 
 @Composable
 fun TipCard(modifier: Modifier = Modifier) {

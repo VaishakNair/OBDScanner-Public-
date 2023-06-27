@@ -36,10 +36,10 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
+import `in`.v89bhp.obdscanner.ui.connectivity.Connectivity
 import `in`.v89bhp.obdscanner.ui.gauges.GaugePicker
 import `in`.v89bhp.obdscanner.ui.gauges.Gauges
 import `in`.v89bhp.obdscanner.ui.home.Home
-import `in`.v89bhp.obdscanner.ui.home.HomeViewModel
 import `in`.v89bhp.obdscanner.ui.home.NavigationDestination
 import `in`.v89bhp.obdscanner.ui.scan.FreezeFrame
 import `in`.v89bhp.obdscanner.ui.scan.ScanContainer
@@ -56,9 +56,6 @@ fun OBDScannerApp(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     appState: OBDScannerAppState = rememberOBDScannerAppState(),
     viewModel: OBDScannerAppViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
-        viewModelStoreOwner = LocalContext.current as ComponentActivity
-    ),
-    homeViewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         viewModelStoreOwner = LocalContext.current as ComponentActivity
     )
 ) {
@@ -82,14 +79,14 @@ fun OBDScannerApp(
                     )
                 }
 
-                composable("gauges") { backStackEntry ->
+                composable(NavigationDestination.GAUGES.route) { backStackEntry ->
                     Gauges(
                         onNavigateTo = { route -> appState.navigateTo(route, backStackEntry) },
                         navigateBack = { appState.navigateBack() }
                     )
                 }
 
-                composable("scan") { backStackEntry ->
+                composable(NavigationDestination.SCAN.route) { backStackEntry ->
                     ScanContainer(
                         backStackEntry = backStackEntry,
                         onNavigateTo = { route -> appState.navigateTo(route, backStackEntry) },
@@ -97,11 +94,17 @@ fun OBDScannerApp(
                     )
                 }
 
+                composable(NavigationDestination.CONNECTIVITY.route) { backStackEntry ->
+                    Connectivity(navigateBack = {
+                        appState.navigateBack()
+                    })
+                }
+
                 // TODO
 
                 composable(Screen.GaugeTypePicker.route) { backStackEntry ->
                     GaugeTypePicker(navigateBack = {
-                           appState.navigateBack()
+                        appState.navigateBack()
                     })
                 }
                 composable(Screen.GaugePicker.route) { backStackEntry ->
@@ -114,7 +117,7 @@ fun OBDScannerApp(
                     FreezeFrame(
                         obdCode = backStackEntry.arguments!!.getString("obdCode")!!,
                         navigateBack = {
-                                    appState.navigateBack()
+                            appState.navigateBack()
                         })
                 }
 

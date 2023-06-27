@@ -6,7 +6,10 @@ import androidx.lifecycle.AndroidViewModel
 class ConnectivityViewModel(
     application: Application
 ) : AndroidViewModel(application) {
-    private val TAG = "ConnectivityViewModel"
+    companion object {
+        private const val TAG = "ConnectivityViewModel"
+    }
+
 
 
 
