@@ -1,6 +1,15 @@
 package `in`.v89bhp.obdscanner.ui.settings
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -15,56 +24,86 @@ import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.Screen
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Settings(onNavigateTo: (route: String) -> Unit, modifier: Modifier = Modifier) {
+fun Settings(
+    onNavigateTo: (route: String) -> Unit,
+    navigateBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val sharedPrefs =
         PreferenceManager.getDefaultSharedPreferences(LocalContext.current)
-    Column(modifier = modifier) {
 
-        val gaugeName = getGaugeName(
-            gaugeType = sharedPrefs.getString(
-                "gaugeType",
-                AwesomeSpeedometer::class.java.name
-            )!!
-        )
-        ComposablePreference(
-            title = "Gauge",
-            summary = gaugeName,
-            onClick = {
-                onNavigateTo(Screen.GaugeTypePicker.route)
-            })
+    Scaffold(
+        topBar = {
 
-        ComposablePreferenceCategory(title = "Units") {
+            TopAppBar(
+                title = {
+                    Text(text = stringResource(R.string.settings))
+                },
+                actions = {
 
-            ComposableListPreference(
-                sharedPrefs = sharedPrefs,
-                title = "Distance",
-                key = "distance",
-                defaultValue = "km",
-                entries = listOf("Kilometre", "Mile"),
-                entryValues = listOf("km", "m")
+                },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navigateBack()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                })
+
+        }) { contentPadding ->
+        Column(modifier = modifier.padding(contentPadding)) {
+
+            val gaugeName = getGaugeName(
+                gaugeType = sharedPrefs.getString(
+                    "gaugeType",
+                    AwesomeSpeedometer::class.java.name
+                )!!
             )
+            ComposablePreference(
+                title = "Gauge",
+                summary = gaugeName,
+                onClick = {
+                    onNavigateTo(Screen.GaugeTypePicker.route)
+                })
 
-            ComposableListPreference(
-                sharedPrefs = sharedPrefs,
-                title = "Temperature",
-                key = "temperature",
-                defaultValue = "c",
-                entries = listOf("Celsius", "Fahrenheit"),
-                entryValues = listOf("c", "f")
-            )
+            ComposablePreferenceCategory(title = "Units") {
 
-            ComposableListPreference(
-                sharedPrefs = sharedPrefs,
-                title = "Pressure",
-                key = "pressure",
-                defaultValue = "p",
-                entries = listOf("PSI", "Bar"),
-                entryValues = listOf("p", "b")
-            )
+                ComposableListPreference(
+                    sharedPrefs = sharedPrefs,
+                    title = "Distance",
+                    key = "distance",
+                    defaultValue = "km",
+                    entries = listOf("Kilometre", "Mile"),
+                    entryValues = listOf("km", "m")
+                )
+
+                ComposableListPreference(
+                    sharedPrefs = sharedPrefs,
+                    title = "Temperature",
+                    key = "temperature",
+                    defaultValue = "c",
+                    entries = listOf("Celsius", "Fahrenheit"),
+                    entryValues = listOf("c", "f")
+                )
+
+                ComposableListPreference(
+                    sharedPrefs = sharedPrefs,
+                    title = "Pressure",
+                    key = "pressure",
+                    defaultValue = "p",
+                    entries = listOf("PSI", "Bar"),
+                    entryValues = listOf("p", "b")
+                )
+            }
+
         }
-
     }
+
 
 }
 
