@@ -83,6 +83,7 @@ fun OBDScannerApp(
 
                 composable("gauges") { backStackEntry ->
                     Gauges(
+                        onNavigateTo = { route -> appState.navigateTo(route, backStackEntry) },
                         navigateBack = { appState.navigateBack() }
                     )
                 }

@@ -5,38 +5,142 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import `in`.v89bhp.obdscanner.R
+import `in`.v89bhp.obdscanner.Screen
 import `in`.v89bhp.obdscanner.databinding.GaugesFragmentLayoutBinding
 import `in`.v89bhp.obdscanner.obdparameters.ParameterHolder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Gauges(navigateBack: () -> Unit,
-    modifier: Modifier = Modifier) {
-// Wrap in scaffold. Implement full screen top bar hiding logic. Implement Snackbar logic
-    // using scaffold snackbarhost.
+fun Gauges(
+    onNavigateTo: (route: String) -> Unit,
+    navigateBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val snackbarHostState = remember { SnackbarHostState() }
 
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        topBar = {
+            if (GaugesAppBarState.isFullScreen.not()) {
+                TopAppBar(
+                    title = {
+                        Text(text = stringResource(R.string.gauges))
+                    },
+                    actions = {
+                        IconButton(onClick = { onNavigateTo(Screen.GaugePicker.route) }) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_add),
+                                contentDescription = "Add Gauge"
+                            )
+                        }
+                        if (ParameterHolder.parameterList.isNotEmpty()) {
+                            IconButton(onClick = {
+                                GaugesAppBarState.onAppBarActionClick(
+                                    R.drawable.ic_fullscreen
+                                )
+                            }) {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_fullscreen),
+                                    contentDescription = "Fullscreen"
+                                )
+                            }
 
+                            IconButton(onClick = {
+                                GaugesAppBarState.onAppBarActionClick(
+                                    R.drawable.ic_info
+                                )
+                            }) {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_info),
+                                    contentDescription = "Info"
+                                )
+                            }
+                            IconButton(onClick = {
+                                GaugesAppBarState.onAppBarActionClick(
+                                    R.drawable.ic_toggle_hud
+                                )
+                            }) {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_toggle_hud),
+                                    contentDescription = "Toggle HUD"
+                                )
+                            }
+                        }
 
-    AndroidViewBinding(
-        factory = GaugesFragmentLayoutBinding::inflate
-    ) {
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            navigateBack()
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.ArrowBack,
+                                contentDescription = "Back"
+                            )
+                        }
+                    })
+            } else { // Fullscreen mode. No Top app bar
+            }
+        }) { contentPadding ->
+        AndroidViewBinding(
+            modifier = Modifier.padding(contentPadding),
+            factory = GaugesFragmentLayoutBinding::inflate
+        )
 
     }
+
+    if (GaugesAppBarState.showExitFullScreenSnackbar) {
+        val fullScreenHint = stringResource(R.string.fullscreenHint)
+        LaunchedEffect(snackbarHostState) {
+            snackbarHostState.showSnackbar(
+                message = fullScreenHint
+            )
+            GaugesAppBarState.showExitFullScreenSnackbar = false
+        }
+
+    }
+    if (GaugesAppBarState.showTryAgainSnackbar) {
+        val tryAgainLabel = stringResource(R.string.try_again)
+        val message = stringResource(R.string.bus_busy)
+        LaunchedEffect(snackbarHostState) {
+            if (snackbarHostState.showSnackbar(
+                    message = message,
+                    duration = SnackbarDuration.Long,
+                    actionLabel = tryAgainLabel
+                ) == SnackbarResult.ActionPerformed
+            ) {
+                GaugesAppBarState.tryAgain()
+            }
+            GaugesAppBarState.showTryAgainSnackbar = false
+        }
+    }
+
 
     // Gauge settings dialog:
     if (GaugesAppBarState.gaugeSettingsDialogState.show) {
