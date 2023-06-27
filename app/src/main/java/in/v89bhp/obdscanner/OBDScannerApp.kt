@@ -36,6 +36,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
+import `in`.v89bhp.obdscanner.ui.about.About
 import `in`.v89bhp.obdscanner.ui.connectivity.Connectivity
 import `in`.v89bhp.obdscanner.ui.gauges.GaugePicker
 import `in`.v89bhp.obdscanner.ui.gauges.Gauges
@@ -63,7 +64,6 @@ fun OBDScannerApp(
     // Grab the current context in this part of the UI tree
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
 
     Box() {
         Column {
@@ -106,7 +106,11 @@ fun OBDScannerApp(
                         navigateBack = { appState.navigateBack() })
                 }
 
-                // TODO
+                composable(NavigationDestination.ABOUT.route) { backStackEntry ->
+                    About(navigateBack = {
+                        appState.navigateBack()
+                    })
+                }
 
                 composable(Screen.GaugeTypePicker.route) { backStackEntry ->
                     GaugeTypePicker(navigateBack = {
@@ -127,13 +131,9 @@ fun OBDScannerApp(
                         })
                 }
 
-// TODO
+                // TODO Add new navigation destinations here
 
 
-                //        composable(Screen.Note.route) { backStackEntry ->
-//            Note(fileName = backStackEntry.arguments?.getString("fileName")!!,
-//                navigateBack = { appState.navigateBack() })
-//        }
             }
 
             with(viewModel.connectivityBannerState) {

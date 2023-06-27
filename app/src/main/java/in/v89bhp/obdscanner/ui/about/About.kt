@@ -13,9 +13,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,16 +35,18 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
 import `in`.v89bhp.obdscanner.BuildConfig
 import `in`.v89bhp.obdscanner.R
 
 
-@Preview(showBackground = true)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun About(modifier: Modifier = Modifier) {
+fun About(
+    navigateBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
 
     val context = LocalContext.current
 
@@ -54,88 +64,117 @@ fun About(modifier: Modifier = Modifier) {
         bitmap
     }
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Image(
-            bitmap = launcherIconBitmap!!.asImageBitmap(), contentDescription = "89 bhp",
-            modifier = Modifier.size(110.dp)
-        )
+    Scaffold(
+        topBar = {
 
-        Text(
-            text = stringResource(R.string.app_name),
-            style = MaterialTheme.typography.headlineSmall
-        )
+            TopAppBar(
+                title = {
+                    Text(text = stringResource(R.string.about))
+                },
+                actions = {
 
-        Text(
-            text = stringResource(R.string.version_name, BuildConfig.VERSION_NAME),
-            style = MaterialTheme.typography.bodyLarge
-        )
+                },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navigateBack()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                })
 
-        Text(
-            text = stringResource(R.string.connect_with_me_message),
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center
-        )
+        }) { contentPadding ->
+        Card(
+            modifier = modifier
+                .padding(contentPadding).padding(8.dp),
 
-        Text(
-            text = stringResource(R.string.contact_message_above),
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center
-        )
+            ) {
+            Column(
+                modifier = Modifier.padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Image(
+                    bitmap = launcherIconBitmap!!.asImageBitmap(), contentDescription = "89 bhp",
+                    modifier = Modifier.size(110.dp)
+                )
 
-        val email = stringResource(R.string.email)
-        HyperlinkedText(text = email,
-            onClick = {
-                val intent = Intent(Intent.ACTION_SENDTO).apply {
-                    data = Uri.parse("mailto:") // only email apps should handle this
-                    putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+                Text(
+                    text = stringResource(R.string.app_name),
+                    style = MaterialTheme.typography.headlineSmall
+                )
+
+                Text(
+                    text = stringResource(R.string.version_name, BuildConfig.VERSION_NAME),
+                    style = MaterialTheme.typography.bodyLarge
+                )
+
+                Text(
+                    text = stringResource(R.string.connect_with_me_message),
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center
+                )
+
+                Text(
+                    text = stringResource(R.string.contact_message_above),
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center
+                )
+
+                val email = stringResource(R.string.email)
+                HyperlinkedText(text = email,
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = Uri.parse("mailto:") // only email apps should handle this
+                            putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+                        }
+                        context.startActivity(Intent.createChooser(intent, "Email"))
+                    })
+
+                Text(
+                    text = stringResource(R.string.contact_message_below),
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center
+                )
+
+
+                Button(onClick = {
+                    val intent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(
+                            Intent.EXTRA_TEXT,
+                            context.getString(R.string.share_app_message)
+                        ) // TODO Generate play store link for the app and include in the share_app_message string.
+                    }
+
+                    context.startActivity(Intent.createChooser(intent, "Share Link"))
+                }) {
+                    Text(text = stringResource(R.string.share_app))
                 }
-                context.startActivity(Intent.createChooser(intent, "Email"))
-            })
 
-        Text(
-            text = stringResource(R.string.contact_message_below),
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center
-        )
+                HyperlinkedText(text = stringResource(R.string.privacy_policy),
+                    modifier = Modifier.padding(top = 32.dp),
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW).apply {
+                            data = Uri.parse("https://89bhp.in/privacy_policy.html")
+                        }
+                        context.startActivity(intent)
+                    })
+                HyperlinkedText(text = stringResource(R.string.gauge_credit),
+                    onClick = {
+                        val intent = Intent(Intent.ACTION_VIEW).apply {
+                            data = Uri.parse("https://github.com/anastr/SpeedView")
+                        }
+                        context.startActivity(intent)
+                    })
 
-
-        Button(onClick = {
-            val intent = Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain"
-                putExtra(
-                    Intent.EXTRA_TEXT,
-                    context.getString(R.string.share_app_message)
-                ) // TODO Generate play store link for the app and include in the share_app_message string.
             }
-
-            context.startActivity(Intent.createChooser(intent, "Share Link"))
-        }) {
-            Text(text = stringResource(R.string.share_app))
         }
-
-        HyperlinkedText(text = stringResource(R.string.privacy_policy),
-            modifier = Modifier.padding(top = 32.dp),
-            onClick = {
-                val intent = Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse("https://89bhp.in/privacy_policy.html")
-                }
-                context.startActivity(intent)
-            })
-        HyperlinkedText(text = stringResource(R.string.gauge_credit),
-            onClick = {
-                val intent = Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse("https://github.com/anastr/SpeedView")
-                }
-                context.startActivity(intent)
-            })
-
     }
+
+
 }
 
 @Composable

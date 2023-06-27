@@ -308,4 +308,5 @@
     <string name="gauge_type_picker">Gauge Type Picker</string>
     <string name="gauges">Gauges</string>
     <string name="scan">Scan</string>
+    <string name="about">About</string>
 </resources>
