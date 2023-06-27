@@ -88,7 +88,7 @@ fun About(
         }) { contentPadding ->
         Card(
             modifier = modifier
-                .padding(contentPadding).padding(8.dp),
+                .padding(contentPadding).padding(16.dp),
 
             ) {
             Column(
