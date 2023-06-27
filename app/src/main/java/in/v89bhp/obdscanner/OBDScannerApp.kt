@@ -91,6 +91,7 @@ fun OBDScannerApp(
 
                 composable("scan") { backStackEntry ->
                     ScanContainer(
+                        backStackEntry = backStackEntry,
                         onNavigateTo = { route -> appState.navigateTo(route, backStackEntry) },
                         navigateBack = { appState.navigateBack() }
                     )

@@ -24,12 +24,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.navigation.NavBackStackEntry
 import `in`.v89bhp.obdscanner.R
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ScanContainer(
+    backStackEntry: NavBackStackEntry,
     onNavigateTo: (route: String) -> Unit,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier
@@ -37,8 +39,8 @@ fun ScanContainer(
     val titles = listOf(stringResource(R.string.trouble_codes), stringResource(R.string.other))
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState()
-
     val snackbarHostState = remember { SnackbarHostState() }
+
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -88,10 +90,12 @@ fun ScanContainer(
                 state = pagerState
             ) { page ->
                 if (page == 0) { // Tab 1
-                    ScanTroubleCodes(onNavigateTo = onNavigateTo,
-                    snackbarHostState = snackbarHostState)
+                    ScanTroubleCodes(
+                        onNavigateTo = onNavigateTo,
+                        snackbarHostState = snackbarHostState
+                    )
                 } else { // Tab 2
-                    ScanOther()
+                    ScanOther(backStackEntry)
                 }
             }
         }

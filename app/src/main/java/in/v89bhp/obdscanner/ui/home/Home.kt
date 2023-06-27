@@ -229,17 +229,6 @@ enum class NavigationDestination(@DrawableRes val icon: Int, val label: String, 
     ABOUT(R.drawable.ic_info_outline, "About", "about")
 }
 
-fun performInitializationCleanup(
-    navigationDestination: NavigationDestination,
-    scanOtherViewModel: ScanOtherViewModel
-) {
-    if (navigationDestination == NavigationDestination.SCAN) {
-        scanOtherViewModel.stopSending = false
-    } else {
-        scanOtherViewModel.onCleared()
-    }
-}
-
 
 @Composable
 fun NavDestinationsGrid(

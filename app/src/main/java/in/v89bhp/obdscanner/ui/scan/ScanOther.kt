@@ -1,8 +1,10 @@
 package `in`.v89bhp.obdscanner.ui.scan
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -20,19 +23,25 @@ import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.NavBackStackEntry
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.databinding.ScanOtherGeneralCardBinding
 import `in`.v89bhp.obdscanner.databinding.ScanOtherOxygenSensorCardBinding
 import `in`.v89bhp.obdscanner.helpers.Utilities
 import `in`.v89bhp.obdscanner.ui.connectivity.CircularProgress
 import `in`.v89bhp.obdscanner.ui.connectivity.ErrorCard
+import kotlinx.coroutines.launch
 
 @Composable
 fun ScanOther(
+    backStackEntry: NavBackStackEntry,
     modifier: Modifier = Modifier,
-    viewModel: ScanOtherViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+    viewModel: ScanOtherViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        viewModelStoreOwner = backStackEntry
+    ),
+    lifecycleOwner: LifecycleOwner = backStackEntry
 ) {
+
     Box(modifier = modifier.fillMaxSize()) {
         if (viewModel.fetching) {
             CircularProgress(text = stringResource(R.string.fetching))
@@ -46,6 +55,8 @@ fun ScanOther(
             StartScan(onClick = { viewModel.loadOtherData() })
         }
     }
+
+
 
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -136,7 +147,9 @@ fun OxygenSensorCard(
                 // Dismiss any existing popup window:
                 viewModel.dismissPopupWindow()
                 viewModel.popupWindow = Utilities.showPopupWindow(
-                    LayoutInflater.from(context), it, context.getString(R.string.oxygen_sensor_types_title),
+                    LayoutInflater.from(context),
+                    it,
+                    context.getString(R.string.oxygen_sensor_types_title),
                     context.getString(R.string.oxygen_sensor_types)
                 )
             }
