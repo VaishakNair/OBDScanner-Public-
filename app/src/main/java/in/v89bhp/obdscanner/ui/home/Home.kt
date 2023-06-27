@@ -2,7 +2,6 @@ package `in`.v89bhp.obdscanner.ui.home
 
 
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,12 +13,10 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,8 +24,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import `in`.v89bhp.obdscanner.R
-import `in`.v89bhp.obdscanner.ui.scan.ScanOtherViewModel
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,187 +32,14 @@ fun Home(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         viewModelStoreOwner = LocalContext.current as ComponentActivity
-    ),
-    scanOtherViewModel: ScanOtherViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    )
 ) {
-
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
 
     NavDestinationsGrid(
         navigationDestinations = NavigationDestination.values().toList(),
         onNavigateTo = onNavigateTo
     )
 
-//    ModalNavigationDrawer(
-//        gesturesEnabled = if (GaugesAppBarState.isFullScreen) false else GaugesAppBarState.navDrawerGesturesEnabled,
-//        drawerState = drawerState,
-//        drawerContent = {
-//            ModalDrawerSheet {
-//                Spacer(Modifier.height(12.dp))
-//                NavigationDestination.values().forEach { navDrawerItem ->
-//                    NavigationDrawerItem(
-//                        icon = {
-//                            Icon(
-//                                painterResource(navDrawerItem.icon),
-//                                contentDescription = null
-//                            )
-//                        },
-//                        label = { Text(navDrawerItem.label) },
-//                        selected = navDrawerItem == homeViewModel.selectedItem,
-//                        onClick = {
-//                            scope.launch { drawerState.close() }
-//                            performInitializationCleanup(navDrawerItem, scanOtherViewModel)
-//                            homeViewModel.selectedItem = navDrawerItem
-//
-//                        },
-//                        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-//                    )
-//
-//                }
-//            }
-//        },
-//        content = {
-//            val snackbarHostState = remember { SnackbarHostState() }
-//            val scope = rememberCoroutineScope()
-//            Scaffold(
-//                snackbarHost = { SnackbarHost(snackbarHostState) },
-//                topBar = {
-//                    if (GaugesAppBarState.isFullScreen.not()) {
-//                        TopAppBar(
-//                            title = {
-//                                Text(homeViewModel.selectedItem.label)
-//                            },
-//                            actions = {
-//                                if (homeViewModel.selectedItem == NavigationDestination.GAUGES) {
-//                                    IconButton(onClick = { onNavigateTo(Screen.GaugePicker.route) }) {
-//                                        Icon(
-//                                            painter = painterResource(R.drawable.ic_add),
-//                                            contentDescription = "Add Gauge"
-//                                        )
-//                                    }
-//                                    if (ParameterHolder.parameterList.isNotEmpty()) {
-//                                        IconButton(onClick = {
-//                                            GaugesAppBarState.onAppBarActionClick(
-//                                                R.drawable.ic_fullscreen
-//                                            )
-//                                        }) {
-//                                            Icon(
-//                                                painter = painterResource(R.drawable.ic_fullscreen),
-//                                                contentDescription = "Fullscreen"
-//                                            )
-//                                        }
-//
-//                                        IconButton(onClick = {
-//                                            GaugesAppBarState.onAppBarActionClick(
-//                                                R.drawable.ic_info
-//                                            )
-//                                        }) {
-//                                            Icon(
-//                                                painter = painterResource(R.drawable.ic_info),
-//                                                contentDescription = "Info"
-//                                            )
-//                                        }
-//                                        IconButton(onClick = {
-//                                            GaugesAppBarState.onAppBarActionClick(
-//                                                R.drawable.ic_toggle_hud
-//                                            )
-//                                        }) {
-//                                            Icon(
-//                                                painter = painterResource(R.drawable.ic_toggle_hud),
-//                                                contentDescription = "Toggle HUD"
-//                                            )
-//                                        }
-//                                    }
-//                                }
-//                            },
-//                            navigationIcon = {
-//                                IconButton(onClick = {
-//                                    // TODO
-//                                    with(drawerState) {
-//                                        if (isOpen) scope.launch { close() }
-//                                        else scope.launch { open() }
-//                                    }
-//                                }) {
-//                                    Icon(
-//                                        imageVector = Icons.Default.Menu,
-//                                        contentDescription = "Back"
-//                                    )
-//                                }
-//                            })
-//                    } else {
-//                    }
-//                }) { contentPadding ->
-//                when (homeViewModel.selectedItem) {
-//                    NavigationDestination.GAUGES -> Gauges(
-//                        modifier = Modifier.padding(
-//                            contentPadding
-//                        )
-//                    )
-//
-//                    NavigationDestination.SCAN -> ScanContainer(
-//                        onNavigateTo = onNavigateTo,
-//                        modifier = Modifier.padding(
-//                            contentPadding
-//                        )
-//                    )
-//
-//                    NavigationDestination.CONNECTIVITY -> Connectivity(
-//                        modifier = Modifier.padding(
-//                            contentPadding
-//                        )
-//                    )
-//
-//                    NavigationDestination.SETTINGS -> Settings(
-//                        onNavigateTo = onNavigateTo,
-//                        modifier = Modifier.padding(contentPadding)
-//                    )
-//
-//                    NavigationDestination.ABOUT -> About(modifier = Modifier.padding(contentPadding))
-//
-//                    // TODO Add more screens
-//                }
-//            }
-//            if (GaugesAppBarState.showExitFullScreenSnackbar) {
-//                val fullScreenHint = stringResource(R.string.fullscreenHint)
-//                LaunchedEffect(snackbarHostState) {
-//                    snackbarHostState.showSnackbar(
-//                        message = fullScreenHint
-//                    )
-//                    GaugesAppBarState.showExitFullScreenSnackbar = false
-//                }
-//
-//            }
-//            if (GaugesAppBarState.showTryAgainSnackbar) {
-//                val tryAgainLabel = stringResource(R.string.try_again)
-//                val message = stringResource(R.string.bus_busy)
-//                LaunchedEffect(snackbarHostState) {
-//                    if (snackbarHostState.showSnackbar(
-//                            message = message,
-//                            duration = SnackbarDuration.Long,
-//                            actionLabel = tryAgainLabel
-//                        ) == SnackbarResult.ActionPerformed
-//                    ) {
-//                        GaugesAppBarState.tryAgain()
-//                    }
-//                    GaugesAppBarState.showTryAgainSnackbar = false
-//                }
-//            }
-//        }
-//
-//    )
-
-    if (drawerState.isOpen || homeViewModel.selectedItem != HomeViewModel.HOME_ITEM) {
-        // IMPORTANT: Enable BackHandler() only when needed. Otherwise it affects
-        // how the UI gets composed.
-        BackHandler() {
-            if (drawerState.isOpen) {
-                scope.launch { drawerState.close() }
-            } else if (homeViewModel.selectedItem != HomeViewModel.HOME_ITEM) {
-                homeViewModel.selectedItem = HomeViewModel.HOME_ITEM
-            }
-        }
-    }
 
 }
 

@@ -101,15 +101,11 @@ fun OBDScannerApp(
 
                 composable(Screen.GaugeTypePicker.route) { backStackEntry ->
                     GaugeTypePicker(navigateBack = {
-                        homeViewModel.selectedItem =
-                            NavigationDestination.SETTINGS // Returning from Gauge type picker option of settings. Show settings screen
-                        appState.navigateBack()
+                           appState.navigateBack()
                     })
                 }
                 composable(Screen.GaugePicker.route) { backStackEntry ->
                     GaugePicker(navigateBack = {
-                        homeViewModel.selectedItem =
-                            NavigationDestination.GAUGES // Returning from Gauge picker option of Gauges. Show Gauges
                         appState.navigateBack()
                     })
                 }
@@ -118,9 +114,7 @@ fun OBDScannerApp(
                     FreezeFrame(
                         obdCode = backStackEntry.arguments!!.getString("obdCode")!!,
                         navigateBack = {
-                            homeViewModel.selectedItem =
-                                NavigationDestination.SCAN // Returning from freeze frame option of Scan. Show scan screen
-                            appState.navigateBack()
+                                    appState.navigateBack()
                         })
                 }
 
