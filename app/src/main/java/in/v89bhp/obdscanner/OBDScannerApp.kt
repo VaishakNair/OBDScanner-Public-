@@ -42,6 +42,7 @@ import `in`.v89bhp.obdscanner.ui.home.Home
 import `in`.v89bhp.obdscanner.ui.home.HomeViewModel
 import `in`.v89bhp.obdscanner.ui.home.NavigationDestination
 import `in`.v89bhp.obdscanner.ui.scan.FreezeFrame
+import `in`.v89bhp.obdscanner.ui.scan.ScanContainer
 import `in`.v89bhp.obdscanner.ui.settings.GaugeTypePicker
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -87,6 +88,15 @@ fun OBDScannerApp(
                         navigateBack = { appState.navigateBack() }
                     )
                 }
+
+                composable("scan") { backStackEntry ->
+                    ScanContainer(
+                        onNavigateTo = { route -> appState.navigateTo(route, backStackEntry) },
+                        navigateBack = { appState.navigateBack() }
+                    )
+                }
+
+                // TODO
 
                 composable(Screen.GaugeTypePicker.route) { backStackEntry ->
                     GaugeTypePicker(navigateBack = {
