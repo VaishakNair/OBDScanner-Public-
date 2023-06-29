@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -28,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -173,6 +177,19 @@ fun OBDScannerApp(
             modifier = Modifier.align(Alignment.BottomCenter)
         )
 
+
+        if(viewModel.shouldShowBluetoothPermissionDeniedButton) {
+            FloatingActionButton(
+                onClick = { /*TODO*/ },
+                modifier = Modifier.align(Alignment.BottomEnd).padding(bottom = 30.dp, end = 8.dp)
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_settings_24),
+                    contentDescription = "Need bluetooth permission"
+                )
+            }
+        }
+
     }
 
     LaunchedEffect(true) {
@@ -215,6 +232,7 @@ fun OBDScannerApp(
                             BluetoothDevice.ACTION_ACL_DISCONNECTED
                         )
                     )
+                    viewModel.updateBluetoothPermissionGrantedState()
                 }
 
                 Lifecycle.Event.ON_PAUSE -> {

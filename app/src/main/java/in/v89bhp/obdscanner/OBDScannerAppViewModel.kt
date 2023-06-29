@@ -30,6 +30,8 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
         const val TAG = "OBDScannerAppViewModel"
     }
 
+    var shouldShowBluetoothPermissionDeniedButton by mutableStateOf(false)
+
     var stopTrying = false
     var isDestroyed = false
 
@@ -225,6 +227,13 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
                 AppRoomDatabase.getDatabase(getApplication())
             }
         }
+    }
+
+    fun updateBluetoothPermissionGrantedState() {
+        // Set shouldShowBluetoothPermissionDenied button to true if
+        // 1. shared prefs rationale is true
+        // 2. Bluetooth permissions are not granted.
+        // 3. We are currently not in the 'Connectivity' nav destination.
     }
 }
 
