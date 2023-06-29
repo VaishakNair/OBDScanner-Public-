@@ -1,7 +1,9 @@
 package `in`.v89bhp.obdscanner
 
+import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.content.Context
 import android.content.IntentFilter
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
@@ -18,7 +20,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,9 +41,13 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.preference.PreferenceManager
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
 import `in`.v89bhp.obdscanner.ui.about.About
 import `in`.v89bhp.obdscanner.ui.connectivity.Connectivity
+import `in`.v89bhp.obdscanner.ui.connectivity.ConnectivityViewModel
 import `in`.v89bhp.obdscanner.ui.gauges.GaugePicker
 import `in`.v89bhp.obdscanner.ui.gauges.Gauges
 import `in`.v89bhp.obdscanner.ui.home.Home
@@ -56,6 +62,7 @@ import kotlinx.coroutines.launch
 /**
  * Screen containing the Navigation host composable with nav drawer component:
  */
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun OBDScannerApp(
     modifier: Modifier = Modifier,
@@ -68,6 +75,7 @@ fun OBDScannerApp(
     // Grab the current context in this part of the UI tree
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
     Box() {
         Column {
@@ -181,7 +189,9 @@ fun OBDScannerApp(
         if(viewModel.shouldShowBluetoothPermissionDeniedButton) {
             FloatingActionButton(
                 onClick = { /*TODO*/ },
-                modifier = Modifier.align(Alignment.BottomEnd).padding(bottom = 30.dp, end = 8.dp)
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 30.dp, end = 8.dp)
             ) {
                 Icon(
                     painter = painterResource(R.drawable.baseline_settings_24),
@@ -232,6 +242,9 @@ fun OBDScannerApp(
                             BluetoothDevice.ACTION_ACL_DISCONNECTED
                         )
                     )
+
+
+
                     viewModel.updateBluetoothPermissionGrantedState()
                 }
 
@@ -262,6 +275,20 @@ fun OBDScannerApp(
             context.unregisterReceiver(
                 viewModel.bluetoothConnectionStateChangeReceiver
             )
+        }
+    }
+
+    val bluetoothMultiplePermissionsState = rememberMultiplePermissionsState(
+        listOf(
+            android.Manifest.permission.BLUETOOTH,
+            android.Manifest.permission.BLUETOOTH_CONNECT,
+            android.Manifest.permission.BLUETOOTH_SCAN,
+        )
+    )
+
+    if (bluetoothMultiplePermissionsState.allPermissionsGranted.not()) { // Bluetooth permissions are not granted
+        if(PreferenceManager.getDefaultSharedPreferences(LocalContext.current).getBoolean(ConnectivityViewModel.BLUETOOTH_PERMISSION_RATIONALE_PREF_KEY, false)){//
+
         }
     }
 }

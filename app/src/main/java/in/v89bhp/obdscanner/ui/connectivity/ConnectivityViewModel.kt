@@ -10,7 +10,7 @@ class ConnectivityViewModel(
 ) : AndroidViewModel(application) {
     companion object {
         private const val TAG = "ConnectivityViewModel"
-        private const val BLUETOOTH_PERMISSION_RATIONALE_PREF_KEY = "shouldShowBluetoothPermissionRationale"
+        const val BLUETOOTH_PERMISSION_RATIONALE_PREF_KEY = "shouldShowBluetoothPermissionRationale"
     }
 
     var shouldShowBluetoothPermissionRationale: Boolean

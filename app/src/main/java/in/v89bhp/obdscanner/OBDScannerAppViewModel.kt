@@ -234,6 +234,7 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
         // 1. shared prefs rationale is true
         // 2. Bluetooth permissions are not granted.
         // 3. We are currently not in the 'Connectivity' nav destination.
+
     }
 }
 
