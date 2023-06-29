@@ -72,22 +72,23 @@ fun Connectivity(
             )
 
             if (bluetoothMultiplePermissionsState.allPermissionsGranted) {
-                // TODO Check if Bluetooth is turned on or not. If not, pop the dialog to turn bluetooth on.
                 ConnectionSetupPager()
             } else {
 
-                Column {
+                Card(modifier = Modifier.padding(16.dp)) {
+                    Column(modifier = Modifier.padding(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally){
                     Text(
-                        getTextToShowGivenPermissions( // TODO Tweak the logic of this function
-                            bluetoothMultiplePermissionsState.revokedPermissions,
-                            bluetoothMultiplePermissionsState.shouldShowRationale
-                        )
+                        text = stringResource(R.string.bluetooth_permission_request)
+
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Button(onClick = { bluetoothMultiplePermissionsState.launchMultiplePermissionRequest() }) {
-                        Text("Request permissions")
+
+                    Button(
+                        modifier = Modifier.padding(top = 8.dp),
+                        onClick = { bluetoothMultiplePermissionsState.launchMultiplePermissionRequest() }) {
+                        Text(text = stringResource(R.string.grant_permission))
                     }
-                }
+                }}
             }
 
         }

@@ -309,4 +309,5 @@
     <string name="gauges">Gauges</string>
     <string name="scan">Scan</string>
     <string name="about">About</string>
+    <string name="grant_permission">Grant permission</string>
 </resources>
