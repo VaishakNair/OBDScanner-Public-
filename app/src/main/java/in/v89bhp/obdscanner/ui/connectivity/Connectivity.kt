@@ -1,10 +1,8 @@
 package `in`.v89bhp.obdscanner.ui.connectivity
 
-import androidx.activity.ComponentActivity
+import android.util.Log
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -19,10 +17,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -32,10 +31,11 @@ import `in`.v89bhp.obdscanner.ui.theme.OBDScannerTheme
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun Connectivity(
+    backStackEntry: NavBackStackEntry,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     connectivityViewModel: ConnectivityViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
-        viewModelStoreOwner = LocalContext.current as ComponentActivity
+        viewModelStoreOwner = backStackEntry
     )
 ) {
 
@@ -76,19 +76,35 @@ fun Connectivity(
             } else {
 
                 Card(modifier = Modifier.padding(16.dp)) {
-                    Column(modifier = Modifier.padding(8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally){
-                    Text(
-                        text = stringResource(R.string.bluetooth_permission_request)
+                    Column(
+                        modifier = Modifier.padding(8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = stringResource(R.string.bluetooth_permission_request),
 
-                    )
 
-                    Button(
-                        modifier = Modifier.padding(top = 8.dp),
-                        onClick = { bluetoothMultiplePermissionsState.launchMultiplePermissionRequest() }) {
-                        Text(text = stringResource(R.string.grant_permission))
+                            )
+                        if (bluetoothMultiplePermissionsState.shouldShowRationale ||
+                            connectivityViewModel.shouldShowBluetoothPermissionRationale
+                        ) {
+                            connectivityViewModel.shouldShowBluetoothPermissionRationale = true
+                            Text(
+                                text = stringResource(R.string.bluetooth_permission_request_rationale),
+                                color = colorResource(R.color.red)
+                            )
+                        }
+                        Log.i(
+                            "Connectivity",
+                            "Should show permission rationale? ${bluetoothMultiplePermissionsState.shouldShowRationale}"
+                        )
+                        Button(
+                            modifier = Modifier.padding(top = 8.dp),
+                            onClick = { bluetoothMultiplePermissionsState.launchMultiplePermissionRequest() }) {
+                            Text(text = stringResource(R.string.grant_permission))
+                        }
                     }
-                }}
+                }
             }
 
         }

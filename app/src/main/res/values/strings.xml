@@ -1,6 +1,4 @@
-<!DOCTYPE resources [
-    <!ENTITY oxygen "Oxygen">
-    ]>
+<!DOCTYPE resources [<!ENTITY oxygen "Oxygen"><!ENTITY grant_permission "Grant permission">]>
 <resources>
     <string name="app_name">89 bhp</string>
     <string name="live_data_service_description">Fetches vehicle data from connected OBD adapter.</string>
@@ -14,7 +12,7 @@
     <string name="bluetooth_connection_status" formatted="false">Bluetooth: %s</string>
     <string name="obd_connection_status" formatted="false">OBD Adapter: %s</string>
     <string name="connectivity_tips">&#8226; Make sure that your phone is connected to the OBD adapter via Bluetooth\n</string>
-    <string name="bluetooth_permission_request_rationale">89 bhp requires Bluetooth permission to connect to OBD adapter. Please grant the permission.</string>
+    <string name="bluetooth_permission_request_rationale">If you deny granting the permission again, 89 bhp won\'t be able to communicate with your vehicle using an OBD adapter. All functionalities including fetching live data and scanning for trouble codes need this permission to work. We will also respect your decision and the \'&grant_permission;\' button below will stop working and you\'ll have to go to app settings to grant the permission.</string>
     <string name="bluetooth_permission_request">89 bhp requires Bluetooth permission to connect to OBD adapter. No location data is collected by the app. Please grant the permission</string>
     <string name="bluetooth_connected" formatted="false">Connected to %s</string>
     <string name="bluetooth_connect_failed" formatted="false">Unable to connect to \'%s\'.\nReason: %s</string>
@@ -52,7 +50,8 @@
     <string name="fuel_system_closed_loop">Closed loop - using &oxygen; sensor(s) as feedback for fuel control</string>
     <string name="fuel_system_open_loop_driving_cond">Open loop due to driving conditions (e.g. power enrichment, deceleration enleanment)</string>
     <string name="fuel_system_open_loop_fault">Open loop due to detected system fault</string>
-    <string name="fuel_system_closed_loop_fault">Closed loop, but fault with at least one &oxygen; sensor - maybe using single &oxygen; sensor for fuel control</string>
+    <string name="fuel_system_closed_loop_fault">Closed loop, but fault with at least one &oxygen;
+        sensor - maybe using single &oxygen; sensor for fuel control</string>
     <string name="no_data" translatable="false">NO DATA</string>
     <string name="mil_engine_run_time">Time run by engine while check engine light is activated (min)</string>
     <string name="time_run_since_dtc_cleared">Time run by engine since diagnostic trouble codes cleared (min)</string>
@@ -293,7 +292,8 @@
         code was fixed or not. No intervention needed.</string>
     <string name="web_browser_absent">Web browser not found</string>
     <string name="clear_dtc_confirmation_message">Are you sure you want to clear the diagnostic trouble code(s)?\n\nClearing will:\n\n&#8226; Erase all diagnostic trouble codes.
-        \n&#8226; Reset the number of trouble codes.\n&#8226; Erase any stored freeze frame data.\n&#8226; Erase all &oxygen; sensor test data.
+        \n&#8226; Reset the number of trouble codes.\n&#8226; Erase any stored freeze frame data.\n&#8226; Erase all &oxygen;
+        sensor test data.
         \n&#8226; Erase on-board monitoring test results.\n&#8226; <b>NOT</b> erase trouble codes of <i>permanent</i> type.</string>
     <string name="freeze_frame_dtc" formatted="false">"Diagnostic Trouble Code (DTC): %s</string>
     <string name="scanning">Scanning…</string>
@@ -309,5 +309,5 @@
     <string name="gauges">Gauges</string>
     <string name="scan">Scan</string>
     <string name="about">About</string>
-    <string name="grant_permission">Grant permission</string>
+    <string name="grant_permission">&grant_permission;</string>
 </resources>

@@ -96,7 +96,9 @@ fun OBDScannerApp(
                 }
 
                 composable(NavigationDestination.CONNECTIVITY.route) { backStackEntry ->
-                    Connectivity(navigateBack = {
+                    Connectivity(
+                        backStackEntry = backStackEntry,
+                        navigateBack = {
                         appState.navigateBack()
                     })
                 }
