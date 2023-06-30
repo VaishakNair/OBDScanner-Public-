@@ -10,16 +10,31 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -54,7 +69,7 @@ import kotlinx.coroutines.launch
 /**
  * Screen containing the Navigation host composable with nav drawer component:
  */
-@OptIn(ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun OBDScannerApp(
     modifier: Modifier = Modifier,
@@ -68,6 +83,9 @@ fun OBDScannerApp(
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+
+    val sheetState = rememberModalBottomSheetState()
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     Box() {
         Column {
@@ -195,7 +213,7 @@ fun OBDScannerApp(
                 ) {// Permission request rationale has been shown:
                     if (appState.navController.currentDestination!!.route != NavigationDestination.CONNECTIVITY.route) { // Not the 'Connectivity' destination
                         FloatingActionButton(
-                            onClick = { /*TODO*/ },
+                            onClick = { showBottomSheet = true },
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
                                 .padding(bottom = 30.dp, end = 8.dp)
@@ -206,6 +224,33 @@ fun OBDScannerApp(
                             )
                         }
                     }
+                }
+            }
+        }
+
+        
+
+        if (showBottomSheet) {
+            ModalBottomSheet(
+                windowInsets = BottomSheetDefaults.windowInsets,
+                onDismissRequest = {
+                    showBottomSheet = false
+                },
+                sheetState = sheetState
+            ) {
+                // Sheet content
+                Text(text = stringResource(R.string.bluetooth_permission_bottom_sheet_request),
+                modifier = Modifier.padding(8.dp))
+                Button(
+                    modifier = Modifier.align(CenterHorizontally),
+                    onClick = {
+                    coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
+                        if (!sheetState.isVisible) {
+                            showBottomSheet = false
+                        }
+                    }
+                }) {
+                    Text(text = stringResource(R.string.open_settings))
                 }
             }
         }
