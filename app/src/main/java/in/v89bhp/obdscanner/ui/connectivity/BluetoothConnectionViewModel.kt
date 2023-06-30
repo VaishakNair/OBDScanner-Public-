@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.provider.Settings
+import android.util.Log
 import androidx.compose.runtime.*
 import androidx.lifecycle.AndroidViewModel
 import `in`.v89bhp.obdscanner.enums.HandlerMessageCodes
@@ -38,10 +39,14 @@ class BluetoothConnectionViewModel(
         } ?: false
     }
 
-    @SuppressLint("MissingPermission")
+
     fun turnBluetoothOn(context: Context) {
         val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-        context.startActivity(enableBtIntent)
+        try {
+            context.startActivity(enableBtIntent)
+        } catch (ex: SecurityException) {
+            Log.e(TAG, "Bluetooth permission(s) not granted", ex)
+        }
     }
 
     fun queryPairedDevices() {
@@ -63,7 +68,7 @@ class BluetoothConnectionViewModel(
         override fun handleMessage(msg: Message) {
             when (msg?.what) {
                 HandlerMessageCodes.MESSAGE_SNACKBAR.ordinal -> {
-                    if(msg.arg1 == 0) {// Connection attempt failed. No need to display for successful connection as it is
+                    if (msg.arg1 == 0) {// Connection attempt failed. No need to display for successful connection as it is
                         // updated in the paired devices list with a Green 'Connected' icon and also in the
                         // paired devices hint card.
                         errorMessage = msg.obj as String

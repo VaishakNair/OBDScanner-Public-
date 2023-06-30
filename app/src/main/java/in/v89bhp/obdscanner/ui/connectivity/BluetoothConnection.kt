@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -186,7 +187,6 @@ fun CircularProgress(text: String, modifier: Modifier = Modifier) {
     }
 }
 
-@SuppressLint("MissingPermission")
 @Composable
 fun PairedDevices(
     pairedDevices: List<BluetoothDevice>,
@@ -225,31 +225,37 @@ fun PairedDevices(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = modifier.padding(16.dp)
             ) {
-                items(pairedDevices, key = { it.address }) { bluetoothDevice ->
-                    val connected =
-                        bluetoothSocket?.let { it.isConnected && it.remoteDevice.name == bluetoothDevice!!.name }
-                            ?: false
-                    Column(modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            if (!connected) {
-                                onConnect(bluetoothDevice)
-                            }
-                        }) {
-                        Text(
-                            text = bluetoothDevice.name,
+                try {
+                    items(pairedDevices, key = { it.address }) { bluetoothDevice ->
+                        val connected =
+                            bluetoothSocket?.let { it.isConnected && it.remoteDevice.name == bluetoothDevice!!.name }
+                                ?: false
+                        Column(modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                if (!connected) {
+                                    onConnect(bluetoothDevice)
+                                }
+                            }) {
+                            Text(
+                                text = bluetoothDevice.name,
 
+                                )
+                            Text(
+                                text = if (connected) "Connected" else "Disconnected",
+                                color = colorResource(
+                                    id = if (connected) android.R.color.holo_green_light else
+                                        android.R.color.holo_red_light
+                                ),
+                                modifier = Modifier.padding(top = 8.dp)
                             )
-                        Text(
-                            text = if (connected) "Connected" else "Disconnected",
-                            color = colorResource(
-                                id = if (connected) android.R.color.holo_green_light else
-                                    android.R.color.holo_red_light
-                            ),
-                            modifier = Modifier.padding(top = 8.dp)
-                        )
-                        Divider(modifier = Modifier.padding(top = 8.dp))
+                            Divider(modifier = Modifier.padding(top = 8.dp))
+                        }
                     }
+                } catch (ex: SecurityException) {
+                    // TODO Find usages and add logic to handle this exception:
+                    Log.e("BluetoothConnection", "Bluetooth permission(s) not granted", ex)
+
                 }
             }
         }
