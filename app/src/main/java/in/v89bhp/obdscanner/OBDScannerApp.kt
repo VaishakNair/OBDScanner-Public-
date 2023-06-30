@@ -1,9 +1,7 @@
 package `in`.v89bhp.obdscanner
 
-import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
-import android.content.Context
 import android.content.IntentFilter
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
@@ -21,12 +19,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -111,8 +103,8 @@ fun OBDScannerApp(
                     Connectivity(
                         backStackEntry = backStackEntry,
                         navigateBack = {
-                        appState.navigateBack()
-                    })
+                            appState.navigateBack()
+                        })
                 }
 
                 composable(NavigationDestination.SETTINGS.route) { backStackEntry ->
@@ -185,20 +177,37 @@ fun OBDScannerApp(
             modifier = Modifier.align(Alignment.BottomCenter)
         )
 
-
-        if(viewModel.shouldShowBluetoothPermissionDeniedButton) {
-            FloatingActionButton(
-                onClick = { /*TODO*/ },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(bottom = 30.dp, end = 8.dp)
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_settings_24),
-                    contentDescription = "Need bluetooth permission"
-                )
+        val bluetoothMultiplePermissionsState = rememberMultiplePermissionsState(
+            listOf(
+                android.Manifest.permission.BLUETOOTH,
+                android.Manifest.permission.BLUETOOTH_CONNECT,
+                android.Manifest.permission.BLUETOOTH_SCAN,
+            )
+        )
+        with(appState.navController.visibleEntries.collectAsState()) {
+            val vv = value
+        if (bluetoothMultiplePermissionsState.allPermissionsGranted.not()) { // Bluetooth permissions are not granted
+            if (PreferenceManager.getDefaultSharedPreferences(LocalContext.current)
+                    .getBoolean(
+                        ConnectivityViewModel.BLUETOOTH_PERMISSION_RATIONALE_PREF_KEY,
+                        false
+                    )
+            ) {// Permission request rationale has been shown:
+                if (appState.navController.currentDestination!!.route != NavigationDestination.CONNECTIVITY.route) {
+                    FloatingActionButton(
+                        onClick = { /*TODO*/ },
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(bottom = 30.dp, end = 8.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.baseline_settings_24),
+                            contentDescription = "Need bluetooth permission"
+                        )
+                    }
+                }
             }
-        }
+        }}
 
     }
 
@@ -242,10 +251,6 @@ fun OBDScannerApp(
                             BluetoothDevice.ACTION_ACL_DISCONNECTED
                         )
                     )
-
-
-
-                    viewModel.updateBluetoothPermissionGrantedState()
                 }
 
                 Lifecycle.Event.ON_PAUSE -> {
@@ -278,19 +283,7 @@ fun OBDScannerApp(
         }
     }
 
-    val bluetoothMultiplePermissionsState = rememberMultiplePermissionsState(
-        listOf(
-            android.Manifest.permission.BLUETOOTH,
-            android.Manifest.permission.BLUETOOTH_CONNECT,
-            android.Manifest.permission.BLUETOOTH_SCAN,
-        )
-    )
 
-    if (bluetoothMultiplePermissionsState.allPermissionsGranted.not()) { // Bluetooth permissions are not granted
-        if(PreferenceManager.getDefaultSharedPreferences(LocalContext.current).getBoolean(ConnectivityViewModel.BLUETOOTH_PERMISSION_RATIONALE_PREF_KEY, false)){//
-
-        }
-    }
 }
 
 @Composable
