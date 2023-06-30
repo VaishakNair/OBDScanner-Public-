@@ -2,7 +2,14 @@ package `in`.v89bhp.obdscanner
 
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.content.Intent
+import android.content.Intent.CATEGORY_DEFAULT
+import android.content.Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
 import android.content.IntentFilter
+import android.net.Uri
+import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -206,7 +213,15 @@ fun OBDScannerApp(
             AlertDialog(onDismissRequest = { },
                 confirmButton = {
                     TextButton(onClick = {
-                        // TODO Open settings screen
+                        // Open app settings:
+                        val intent = Intent(ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                            data = Uri.fromParts("package", context.packageName, null)
+                            addCategory(CATEGORY_DEFAULT)
+                            addFlags(FLAG_ACTIVITY_NEW_TASK)
+                            addFlags(FLAG_ACTIVITY_NO_HISTORY)
+                            addFlags(FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+                        }
+                        context.startActivity(intent)
                         showBluetoothPermissionDeniedDialog = false
                     }) {
                         Text(stringResource(R.string.open_settings))
@@ -222,7 +237,7 @@ fun OBDScannerApp(
                 },
                 title = { Text(text = stringResource(R.string.missing_permission)) },
                 text = {
-                    Text(text = stringResource(R.string.bluetooth_permission_bottom_sheet_request))
+                    Text(text = stringResource(R.string.bluetooth_permission_dialog_text))
                 })
         }
 

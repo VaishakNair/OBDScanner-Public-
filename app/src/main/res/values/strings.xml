@@ -310,7 +310,7 @@
     <string name="scan">Scan</string>
     <string name="about">About</string>
     <string name="grant_permission">&grant_permission;</string>
-    <string name="bluetooth_permission_bottom_sheet_request">Bluetooth permission missing. Please go to settings and grant the permission.</string>
+    <string name="bluetooth_permission_dialog_text">Bluetooth permission missing. Please go to app settings and grant the permission.</string>
     <string name="open_settings">Open settings</string>
     <string name="missing_permission">Missing permission</string>
 </resources>
