@@ -192,40 +192,14 @@ fun OBDScannerApp(
             modifier = Modifier.align(Alignment.BottomCenter)
         )
 
-        val bluetoothMultiplePermissionsState = rememberMultiplePermissionsState(
-            listOf(
-                android.Manifest.permission.BLUETOOTH,
-                android.Manifest.permission.BLUETOOTH_CONNECT,
-                android.Manifest.permission.BLUETOOTH_SCAN,
-            )
+
+
+        MissingBluetoothPermissionFloatingActionButton(
+            appState = appState,
+            onClick = { showBluetoothPermissionDeniedDialog = true },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
         )
-        with(appState.navController.visibleEntries.collectAsState()) {// To trigger recomposition
-            val vv = value // when nav host destinations change.
-            if (bluetoothMultiplePermissionsState.allPermissionsGranted.not()) { // Bluetooth permissions are not granted
-                if (PreferenceManager.getDefaultSharedPreferences(LocalContext.current)
-                        .getBoolean(
-                            ConnectivityViewModel.BLUETOOTH_PERMISSION_RATIONALE_PREF_KEY,
-                            false
-                        )
-                ) {// Permission request rationale has been shown:
-                    if (appState.navController.currentDestination!!.route != NavigationDestination.CONNECTIVITY.route) { // Not the 'Connectivity' destination
-                        FloatingActionButton(
-                            onClick = { showBluetoothPermissionDeniedDialog = true },
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .padding(bottom = 30.dp, end = 8.dp)
-                        ) {
-                            Icon(
-                                painter = painterResource(R.drawable.baseline_settings_24),
-                                contentDescription = "Need bluetooth permission"
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
-
 
         if (showBluetoothPermissionDeniedDialog) {
 
@@ -357,6 +331,46 @@ fun ConnectivityBanner(
             launch {
                 delay(5000)
                 currentOnHide()
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun MissingBluetoothPermissionFloatingActionButton(
+    appState: OBDScannerAppState,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val bluetoothMultiplePermissionsState = rememberMultiplePermissionsState(
+        listOf(
+            android.Manifest.permission.BLUETOOTH,
+            android.Manifest.permission.BLUETOOTH_CONNECT,
+            android.Manifest.permission.BLUETOOTH_SCAN,
+        )
+    )
+
+    with(appState.navController.visibleEntries.collectAsState()) {// To trigger recomposition
+        val vv = value // when nav host destinations change.
+        if (bluetoothMultiplePermissionsState.allPermissionsGranted.not()) { // Bluetooth permissions are not granted
+            if (PreferenceManager.getDefaultSharedPreferences(LocalContext.current)
+                    .getBoolean(
+                        ConnectivityViewModel.BLUETOOTH_PERMISSION_RATIONALE_PREF_KEY,
+                        false
+                    )
+            ) {// Permission request rationale has been shown:
+                if (appState.navController.currentDestination!!.route != NavigationDestination.CONNECTIVITY.route) { // Not the 'Connectivity' destination
+                    FloatingActionButton(
+                        onClick = onClick,
+                        modifier = modifier.padding(bottom = 30.dp, end = 8.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.baseline_settings_24),
+                            contentDescription = "Need bluetooth permission"
+                        )
+                    }
+                }
             }
         }
     }
