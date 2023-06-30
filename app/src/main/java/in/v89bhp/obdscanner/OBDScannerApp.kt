@@ -365,7 +365,7 @@ fun MissingBluetoothPermissionFloatingActionButton(
             android.Manifest.permission.BLUETOOTH_SCAN,
         )
     )
-
+    
     with(appState.navController.visibleEntries.collectAsState()) {// To trigger recomposition
         val vv = value // when nav host destinations change.
         if (bluetoothMultiplePermissionsState.allPermissionsGranted.not()) { // Bluetooth permissions are not granted
@@ -378,10 +378,11 @@ fun MissingBluetoothPermissionFloatingActionButton(
                 if (appState.navController.currentDestination!!.route != NavigationDestination.CONNECTIVITY.route) { // Not the 'Connectivity' destination
                     FloatingActionButton(
                         onClick = onClick,
-                        modifier = modifier.padding(bottom = 30.dp, end = 8.dp)
+                        modifier = modifier.padding(bottom = 30.dp, end = 8.dp),
+                        contentColor = colorResource(id = R.color.red)
                     ) {
                         Icon(
-                            painter = painterResource(R.drawable.baseline_settings_24),
+                            painter = painterResource(R.drawable.round_warning_24),
                             contentDescription = "Need bluetooth permission"
                         )
                     }
