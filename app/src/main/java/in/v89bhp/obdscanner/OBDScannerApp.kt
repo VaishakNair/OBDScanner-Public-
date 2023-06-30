@@ -10,19 +10,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.BottomSheetDefaults
-import androidx.compose.material3.Button
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -34,7 +32,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -84,8 +81,8 @@ fun OBDScannerApp(
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
-    val sheetState = rememberModalBottomSheetState()
-    var showBottomSheet by remember { mutableStateOf(false) }
+
+    var showBluetoothPermissionDeniedDialog by remember { mutableStateOf(false) }
 
     Box() {
         Column {
@@ -213,7 +210,7 @@ fun OBDScannerApp(
                 ) {// Permission request rationale has been shown:
                     if (appState.navController.currentDestination!!.route != NavigationDestination.CONNECTIVITY.route) { // Not the 'Connectivity' destination
                         FloatingActionButton(
-                            onClick = { showBottomSheet = true },
+                            onClick = { showBluetoothPermissionDeniedDialog = true },
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
                                 .padding(bottom = 30.dp, end = 8.dp)
@@ -228,31 +225,31 @@ fun OBDScannerApp(
             }
         }
 
-        
 
-        if (showBottomSheet) {
-            ModalBottomSheet(
-                windowInsets = BottomSheetDefaults.windowInsets,
-                onDismissRequest = {
-                    showBottomSheet = false
-                },
-                sheetState = sheetState
-            ) {
-                // Sheet content
-                Text(text = stringResource(R.string.bluetooth_permission_bottom_sheet_request),
-                modifier = Modifier.padding(8.dp))
-                Button(
-                    modifier = Modifier.align(CenterHorizontally),
-                    onClick = {
-                    coroutineScope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            showBottomSheet = false
-                        }
+
+        if (showBluetoothPermissionDeniedDialog) {
+
+            AlertDialog(onDismissRequest = { },
+                confirmButton = {
+                    TextButton(onClick = {
+                        // TODO Open settings screen
+                        showBluetoothPermissionDeniedDialog = false
+                    }) {
+                        Text(stringResource(R.string.open_settings))
                     }
-                }) {
-                    Text(text = stringResource(R.string.open_settings))
-                }
-            }
+                },
+                dismissButton = {
+                    TextButton(onClick = {
+                        showBluetoothPermissionDeniedDialog = false
+                    }) {
+                        Text(stringResource(R.string.cancel))
+                    }
+
+                },
+                title = { Text(text = stringResource(R.string.missing_permission)) },
+                text = {
+                    Text(text = stringResource(R.string.bluetooth_permission_bottom_sheet_request))
+                })
         }
 
     }
