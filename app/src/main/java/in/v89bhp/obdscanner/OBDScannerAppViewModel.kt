@@ -173,7 +173,6 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
     }
 
     val bluetoothConnectionStateChangeReceiver = object : BroadcastReceiver() {
-        @SuppressLint("MissingPermission")
         override fun onReceive(context: Context?, intent: Intent?) {
             val bluetoothConnectionState = intent?.action
             val bluetoothDevice =
@@ -193,20 +192,29 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
                 }
 
                 BluetoothHelper.ACTION_BT_CONNECTED -> {
-                    // Display green 'Connected to $pairedDeviceName' header
-                    connectivityBannerState = ConnectivityBannerState(
-                        show = true,
-                        message = (getApplication() as Context).getString(
-                            R.string.connected_to,
-                            bluetoothDevice!!.name
-                        ),
-                        background = ConnectivityGreen,
-                        autoHide = true  // Hides connectivity banner after 5 secs
-                    )
+                    try {
+                        // Display green 'Connected to $pairedDeviceName' header
+                        connectivityBannerState = ConnectivityBannerState(
+                            show = true,
+                            message = (getApplication() as Context).getString(
+                                R.string.connected_to,
+                                bluetoothDevice!!.name
+                            ),
+                            background = ConnectivityGreen,
+                            autoHide = true  // Hides connectivity banner after 5 secs
+                        )
 
-                    // Store name of connected device to default shared preferences file
-                    PreferenceManager.getDefaultSharedPreferences(getApplication()).edit()
-                        .putString("deviceName", bluetoothDevice.name).apply()
+                        // Store name of connected device to default shared preferences file
+                        PreferenceManager.getDefaultSharedPreferences(getApplication()).edit()
+                            .putString("deviceName", bluetoothDevice.name).apply()
+                    } catch (ex: SecurityException) {
+                        Log.e(TAG, "Bluetooth permission(s) not granted", ex)
+                        connectivityBannerState = ConnectivityBannerState(
+                            show = true,
+                            message = (getApplication() as Context).getString(R.string.offline),
+                            background = ConnectivityYellow
+                        )
+                    }
                 }
             }
         }

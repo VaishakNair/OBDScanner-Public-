@@ -1,6 +1,5 @@
 package `in`.v89bhp.obdscanner.ui.connectivity
 
-import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
@@ -25,7 +24,10 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -253,7 +255,6 @@ fun PairedDevices(
                         }
                     }
                 } catch (ex: SecurityException) {
-                    // TODO Find usages and add logic to handle this exception:
                     Log.e("BluetoothConnection", "Bluetooth permission(s) not granted", ex)
 
                 }
@@ -263,7 +264,6 @@ fun PairedDevices(
 }
 
 
-@SuppressLint("MissingPermission")
 @Composable
 fun PairedDeviceHintCard(
     pairedDevices: List<BluetoothDevice>,
@@ -282,13 +282,17 @@ fun PairedDeviceHintCard(
                 BluetoothHelper.socket // Socket that's currently in the bt helper. It may be null, connected or disconnected
             var connected = false
             var connectedDeviceName: String? = null
-            for (bluetoothDevice in pairedDevices) {
-                bluetoothSocket?.let {
-                    if (it.isConnected && it.remoteDevice.name == bluetoothDevice.name) {
-                        connected = true
-                        connectedDeviceName = bluetoothDevice.name
+            try {
+                for (bluetoothDevice in pairedDevices) {
+                    bluetoothSocket?.let {
+                        if (it.isConnected && it.remoteDevice.name == bluetoothDevice.name) {
+                            connected = true
+                            connectedDeviceName = bluetoothDevice.name
+                        }
                     }
                 }
+            } catch (ex: SecurityException) {
+                Log.e("BluetoothConnection", "Bluetooth permission(s) not granted", ex)
             }
 
 
@@ -315,6 +319,7 @@ fun PairedDeviceHintCard(
             }
         }
 
+
     }
 }
 
@@ -325,16 +330,9 @@ fun CircularProgressPreview() {
     CircularProgress(text = "Loading...")
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PairedDevicesPreview() {
-//    PairedDevices(listOf(BluetoothDevicz("1", "boAt"), BluetoothDevicz("2", "Jabra")))
-}
 
 @Preview(showBackground = true)
 @Composable
 fun TurnBluetoothOnPreview() {
     TurnBluetoothOn(onClick = { /*TODO*/ })
 }
-
-data class BluetoothDevicz(val address: String, val name: String)
