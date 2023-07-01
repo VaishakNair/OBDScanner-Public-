@@ -72,7 +72,7 @@ fun Connectivity(
             )
 
             if (bluetoothMultiplePermissionsState.allPermissionsGranted) {
-                ConnectionSetupPager()
+                ConnectionSetupPager(backStackEntry)
             } else {
 
                 Card(modifier = Modifier.padding(16.dp)) {

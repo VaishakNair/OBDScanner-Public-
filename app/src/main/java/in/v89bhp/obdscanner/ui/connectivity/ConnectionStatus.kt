@@ -28,6 +28,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavBackStackEntry
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.helpers.ElmHelper
 import `in`.v89bhp.obdscanner.ui.theme.HoloGreenLight
@@ -36,9 +37,10 @@ import `in`.v89bhp.obdscanner.ui.theme.PurpleGrey40
 
 @Composable
 fun ConnectionStatus(
+    backStackEntry: NavBackStackEntry,
     modifier: Modifier = Modifier,
     viewModel: ConnectionStatusViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
-        viewModelStoreOwner = LocalContext.current as ComponentActivity
+        viewModelStoreOwner = backStackEntry
     )
 ) {
 

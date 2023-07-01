@@ -26,16 +26,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
 import `in`.v89bhp.obdscanner.R
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
-@Preview
 @Composable
 fun ConnectionSetupPager(
+    backStackEntry: NavBackStackEntry,
     modifier: Modifier = Modifier,
     viewModel: ConnectionSetupPagerViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
-        viewModelStoreOwner = LocalContext.current as ComponentActivity
+        viewModelStoreOwner = backStackEntry
     )
 ) {
     Box {
@@ -54,8 +55,8 @@ fun ConnectionSetupPager(
             // Page content
             when (page) { // TODO Add new connection screens here:
                 0 -> BluetoothIntro()
-                1 -> BluetoothConnection()
-                2 -> ConnectionStatus()
+                1 -> BluetoothConnection(backStackEntry)
+                2 -> ConnectionStatus(backStackEntry)
                 else -> throw AssertionError("Illegal argument")
             }
         }
