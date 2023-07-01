@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -125,9 +126,11 @@ fun NavDestinationCard(
 
             Text(text = navigationDestination.label)
             if (navigationDestination == NavigationDestination.CONNECTIVITY) {
-                Row() {
-                    Text(
+                Row(modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center) {
+                    Text(modifier = Modifier.padding(end = 8.dp),
                         text = stringResource(R.string.obd),
+                        style = MaterialTheme.typography.labelLarge,
                         color = colorResource(
                             id = if (ElmHelper.elmInitialized.observeAsState(
                                     initial = false
@@ -136,7 +139,9 @@ fun NavDestinationCard(
                         )
                     )
                     Text(
+                        modifier = Modifier.padding(start = 8.dp),
                         text = stringResource(R.string.ecu),
+                        style = MaterialTheme.typography.labelLarge,
                         color = colorResource(
                             id = if (ElmHelper.ecuInitialized.observeAsState(
                                     initial = false
