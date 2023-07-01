@@ -2,6 +2,7 @@ package `in`.v89bhp.obdscanner
 
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.CATEGORY_DEFAULT
 import android.content.Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
@@ -252,6 +253,13 @@ fun OBDScannerApp(
         viewModel.loadDatabase()
     }
 
+    LaunchedEffect(true) {
+        if (isFirstTime(context)) {// Show connectivity screen (which in turn contains the bluetooth permission request screen) when
+            // app is opened for the firs time.
+            appState.navController.navigate(NavigationDestination.CONNECTIVITY.route)
+        }
+    }
+
     // If `lifecycleOwner` changes, dispose and reset the effect
     DisposableEffect(lifecycleOwner) {
         // Create an observer that triggers our remembered callbacks
@@ -366,7 +374,7 @@ fun MissingBluetoothPermissionFloatingActionButton(
             android.Manifest.permission.BLUETOOTH_SCAN,
         )
     )
-    
+
     with(appState.navController.visibleEntries.collectAsState()) {// To trigger recomposition
         val vv = value // when nav host destinations change.
         if (bluetoothMultiplePermissionsState.allPermissionsGranted.not()) { // Bluetooth permissions are not granted
@@ -392,4 +400,19 @@ fun MissingBluetoothPermissionFloatingActionButton(
             }
         }
     }
+}
+
+fun isFirstTime(context: Context): Boolean {
+    val isFirstTime = PreferenceManager.getDefaultSharedPreferences(context)
+        .getBoolean(
+            "isFirstTime",
+            true
+        )
+
+    if (isFirstTime) {// TODO Add other first time tasks here:
+        PreferenceManager.getDefaultSharedPreferences(context).edit()
+            .putBoolean("isFirstTime", false).apply()
+    }
+
+    return isFirstTime
 }
