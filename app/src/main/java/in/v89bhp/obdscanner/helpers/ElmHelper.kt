@@ -337,8 +337,7 @@ object ElmHelper {
 
                         lastCommand.contains("ATE0") -> {
                             elmInitialized.value =
-                                true // Initiation sequence completed, switch to view model handler
-                            // and execute the original command that was sent
+                                true // ELM initialization complete, start ECU initialization
                             ecuInitializationHandler.reset()
                             mHandler = ecuInitializationHandler
                             connectedThread!!.send("0100\r")// Fetch PIDs supported by service 01. This should be supported by all ECUs
