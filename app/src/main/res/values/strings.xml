@@ -313,4 +313,6 @@
     <string name="bluetooth_permission_dialog_text">Bluetooth permission missing. Please go to app settings and grant the permission.</string>
     <string name="open_settings">Open settings</string>
     <string name="missing_permission">Missing permission</string>
+    <string name="obd">OBD</string>
+    <string name="ecu">ECU</string>
 </resources>
