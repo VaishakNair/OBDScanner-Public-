@@ -15,8 +15,6 @@ class ConnectionStatusViewModel(application: Application) : AndroidViewModel(app
         const val TAG = "ConnectionStatusViewModel"
     }
 
-    var isFirstTime = true
-
     var isConnecting by mutableStateOf(false)
 
     var isError by mutableStateOf(false)

@@ -1,6 +1,5 @@
 package `in`.v89bhp.obdscanner.ui.connectivity
 
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -57,9 +55,8 @@ fun ConnectionStatus(
         } else {
             // Contains the three circles and other text showing connection status from 89 bhp to OBD adapter and vehicle ECU
             ConnectionStatusCard(onTryAgain = {
-                viewModel.isFirstTime = false
                 viewModel.loadConnectionStatus()
-            }, isFirstTime = viewModel.isFirstTime)
+            })
         }
     }
 
@@ -92,7 +89,6 @@ fun ErrorCard(errorMessage: String, onClick: () -> Unit, modifier: Modifier = Mo
 @Composable
 fun ConnectionStatusCard(
     onTryAgain: () -> Unit,
-    isFirstTime: Boolean,
     modifier: Modifier = Modifier
 ) {
     val isElmInitialized = ElmHelper.elmInitialized.value as Boolean
@@ -142,7 +138,32 @@ fun ConnectionStatusCard(
             obdAdapterStatusHint = stringResource(id = if (isElmInitialized) R.string.connected else R.string.disconnected),
             vehicleECUStatusHint = stringResource(id = if (isECUInitialized) R.string.connected else R.string.disconnected)
         )
-        if (isFirstTime) {
+
+
+        if (isElmInitialized) {
+            if (isECUInitialized) {
+                Text(
+                    text = stringResource(R.string.connection_successful),
+                    modifier = Modifier.padding(8.dp)
+                )
+            } else {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    Text(text = stringResource(R.string.ign_off_error))
+                    Button(
+                        onClick = onTryAgain,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(8.dp)
+                    ) {
+                        Text(text = stringResource(R.string.try_again))
+                    }
+                }
+            }
+        } else {
             Button(
                 onClick = onTryAgain,
                 modifier = Modifier
@@ -151,33 +172,7 @@ fun ConnectionStatusCard(
             ) {
                 Text(text = stringResource(R.string.connect))
             }
-        } else {
-            if (isElmInitialized) {
-                if (isECUInitialized) {
-                    Text(
-                        text = stringResource(R.string.connection_successful),
-                        modifier = Modifier.padding(8.dp)
-                    )
-                } else {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    ) {
-                        Text(text = stringResource(R.string.ign_off_error))
-                        Button(
-                            onClick = onTryAgain,
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .padding(8.dp)
-                        ) {
-                            Text(text = stringResource(R.string.try_again))
-                        }
-                    }
-                }
-            }
         }
-
     }
 }
 
