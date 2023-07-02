@@ -15,6 +15,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -49,6 +50,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
@@ -95,75 +97,82 @@ fun OBDScannerApp(
 
     Box() {
         Column {
-            NavHost(
-                navController = appState.navController,
-                startDestination = Screen.Home.route,
-                modifier = modifier.weight(0.97f)
-            ) {
-                composable(Screen.Home.route) { backStackEntry ->
-                    Home(
-                        onNavigateTo = { route ->
-                            appState.navigateTo(route, backStackEntry)
-                        }
-                    )
-                }
+            Box(modifier = Modifier.weight(0.97f)) {
+                NavHost(
+                    navController = appState.navController,
+                    startDestination = Screen.Home.route,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    composable(Screen.Home.route) { backStackEntry ->
+                        Home(
+                            onNavigateTo = { route ->
+                                appState.navigateTo(route, backStackEntry)
+                            }
+                        )
+                    }
 
-                composable(NavigationDestination.GAUGES.route) { backStackEntry ->
-                    Gauges(
-                        onNavigateTo = { route -> appState.navigateTo(route, backStackEntry) },
-                        navigateBack = { appState.navigateBack() }
-                    )
-                }
+                    composable(NavigationDestination.GAUGES.route) { backStackEntry ->
+                        Gauges(
+                            onNavigateTo = { route -> appState.navigateTo(route, backStackEntry) },
+                            navigateBack = { appState.navigateBack() }
+                        )
+                    }
 
-                composable(NavigationDestination.SCAN.route) { backStackEntry ->
-                    ScanContainer(
-                        backStackEntry = backStackEntry,
-                        onNavigateTo = { route -> appState.navigateTo(route, backStackEntry) },
-                        navigateBack = { appState.navigateBack() }
-                    )
-                }
+                    composable(NavigationDestination.SCAN.route) { backStackEntry ->
+                        ScanContainer(
+                            backStackEntry = backStackEntry,
+                            onNavigateTo = { route -> appState.navigateTo(route, backStackEntry) },
+                            navigateBack = { appState.navigateBack() }
+                        )
+                    }
 
-                composable(NavigationDestination.CONNECTIVITY.route) { backStackEntry ->
-                    Connectivity(
-                        backStackEntry = backStackEntry,
-                        navigateBack = {
+                    composable(NavigationDestination.CONNECTIVITY.route) { backStackEntry ->
+                        Connectivity(
+                            backStackEntry = backStackEntry,
+                            navigateBack = {
+                                appState.navigateBack()
+                            })
+                    }
+
+                    composable(NavigationDestination.SETTINGS.route) { backStackEntry ->
+                        Settings(onNavigateTo = { route ->
+                            appState.navigateTo(
+                                route,
+                                backStackEntry
+                            )
+                        },
+                            navigateBack = { appState.navigateBack() })
+                    }
+
+                    composable(NavigationDestination.ABOUT.route) { backStackEntry ->
+                        About(navigateBack = {
                             appState.navigateBack()
                         })
-                }
+                    }
 
-                composable(NavigationDestination.SETTINGS.route) { backStackEntry ->
-                    Settings(onNavigateTo = { route -> appState.navigateTo(route, backStackEntry) },
-                        navigateBack = { appState.navigateBack() })
-                }
-
-                composable(NavigationDestination.ABOUT.route) { backStackEntry ->
-                    About(navigateBack = {
-                        appState.navigateBack()
-                    })
-                }
-
-                composable(Screen.GaugeTypePicker.route) { backStackEntry ->
-                    GaugeTypePicker(navigateBack = {
-                        appState.navigateBack()
-                    })
-                }
-                composable(Screen.GaugePicker.route) { backStackEntry ->
-                    GaugePicker(navigateBack = {
-                        appState.navigateBack()
-                    })
-                }
-
-                composable(Screen.FreezeFrame.route) { backStackEntry ->
-                    FreezeFrame(
-                        obdCode = backStackEntry.arguments!!.getString("obdCode")!!,
-                        navigateBack = {
+                    composable(Screen.GaugeTypePicker.route) { backStackEntry ->
+                        GaugeTypePicker(navigateBack = {
                             appState.navigateBack()
                         })
+                    }
+                    composable(Screen.GaugePicker.route) { backStackEntry ->
+                        GaugePicker(navigateBack = {
+                            appState.navigateBack()
+                        })
+                    }
+
+                    composable(Screen.FreezeFrame.route) { backStackEntry ->
+                        FreezeFrame(
+                            obdCode = backStackEntry.arguments!!.getString("obdCode")!!,
+                            navigateBack = {
+                                appState.navigateBack()
+                            })
+                    }
+
+                    // TODO Add new navigation destinations here
+
+
                 }
-
-                // TODO Add new navigation destinations here
-
-
             }
 
             with(viewModel.connectivityBannerState) {
@@ -173,7 +182,9 @@ fun OBDScannerApp(
                         background = background,
                         autoHide = autoHide,
                         onHide = { viewModel.hideConnectivityBanner() },
-                        modifier = Modifier.weight(0.03f)
+                        modifier = Modifier
+                            .weight(0.03f)
+                            .zIndex(3f)
 
                     )
 
