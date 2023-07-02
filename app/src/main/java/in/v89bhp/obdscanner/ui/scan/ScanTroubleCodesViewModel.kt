@@ -268,7 +268,7 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
 //                requireParentFragment().childFragmentManager.commit {
 //                    val ffFragment = FreezeFrameFragment()
 //                    ffFragment.arguments = Bundle().apply { putString(FreezeFrameFragment.KEY_ARG, obdCode) }
-////                replace(R.id.scan_container_pager, ffFragment) // TODO
+////                replace(R.id.scan_container_pager, ffFragment) // TODO Implemented. Remove after checking.
         }
     }
 
