@@ -232,12 +232,6 @@ class GaugesFragment : Fragment() {
 
     fun onAppBarActionClick(item: Int) =
         when (item) {
-            R.drawable.ic_add -> {
-                // TODO Open gauge picker fragment.
-                //            R.id.gauge_picker_dest -> item.onNavDestinationSelected(findNavController())
-
-            }
-
             R.drawable.ic_fullscreen -> {
                 hideSystemUi()
             }

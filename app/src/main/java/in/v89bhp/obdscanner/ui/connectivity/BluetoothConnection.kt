@@ -321,16 +321,5 @@ fun PairedDeviceHintCard(
     }
 }
 
-/////////////////////////////////////////// Previews ////////////////////////////////
-@Preview
-@Composable
-fun CircularProgressPreview() {
-    CircularProgress(text = "Loading...")
-}
 
 
-@Preview(showBackground = true)
-@Composable
-fun TurnBluetoothOnPreview() {
-    TurnBluetoothOn(onClick = { /*TODO*/ })
-}
