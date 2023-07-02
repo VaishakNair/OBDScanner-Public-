@@ -146,7 +146,7 @@ fun About(
                         putExtra(
                             Intent.EXTRA_TEXT,
                             context.getString(R.string.share_app_message)
-                        ) // TODO Generate play store link for the app and include in the share_app_message string.
+                        )
                     }
 
                     context.startActivity(Intent.createChooser(intent, "Share Link"))
