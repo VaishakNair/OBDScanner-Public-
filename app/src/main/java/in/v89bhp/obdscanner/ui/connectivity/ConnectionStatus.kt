@@ -46,9 +46,11 @@ fun ConnectionStatus(
     )
 ) {
 
-    LaunchedEffect(key1 = viewModel) {
-        Log.i("ConnectionStatus.kt", "Starting loading of connection status.")
-        viewModel.loadConnectionStatus()
+    LaunchedEffect(viewModel.pageDrawn) {
+        if(viewModel.pageDrawn) {
+            Log.i("ConnectionStatus.kt", "Starting loading of connection status.")
+            viewModel.loadConnectionStatus()
+        }
     }
 
     Box(modifier = modifier) {

@@ -15,6 +15,8 @@ class ConnectionStatusViewModel(application: Application) : AndroidViewModel(app
         const val TAG = "ConnectionStatusViewModel"
     }
 
+    var pageDrawn by mutableStateOf(false)
+
     var isConnecting by mutableStateOf(false)
 
     var isError by mutableStateOf(false)

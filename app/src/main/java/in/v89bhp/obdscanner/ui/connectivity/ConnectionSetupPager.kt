@@ -1,6 +1,5 @@
 package `in`.v89bhp.obdscanner.ui.connectivity
 
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,9 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import `in`.v89bhp.obdscanner.R
@@ -37,6 +34,9 @@ fun ConnectionSetupPager(
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ConnectionSetupPagerViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+        viewModelStoreOwner = backStackEntry
+    ),
+    connectionStatusViewModel: ConnectionStatusViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         viewModelStoreOwner = backStackEntry
     )
 ) {
@@ -105,7 +105,13 @@ fun ConnectionSetupPager(
 
             IconButton(
                 onClick = {
-                    coroutineScope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) }
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+
+                        connectionStatusViewModel.pageDrawn = pagerState.currentPage == 2
+
+                    }
+
                 },
                 enabled = pagerState.currentPage == 0 || (pagerState.currentPage != pageCount - 1 && viewModel.isNextButtonEnabled)
             ) {
