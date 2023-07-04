@@ -59,4 +59,4 @@ class OBDScannerAppState(
  * This is used to de-duplicate navigation events.
  */
 private fun NavBackStackEntry.lifecycleIsResumed() =
-    this.getLifecycle().currentState == Lifecycle.State.RESUMED
+    this.lifecycle.currentState == Lifecycle.State.RESUMED

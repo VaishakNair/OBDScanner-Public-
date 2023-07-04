@@ -38,7 +38,7 @@ fun ScanContainer(
 ) {
     val titles = listOf(stringResource(R.string.trouble_codes), stringResource(R.string.other))
     val coroutineScope = rememberCoroutineScope()
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState {titles.size}
     val snackbarHostState = remember { SnackbarHostState() }
 
 
@@ -86,7 +86,6 @@ fun ScanContainer(
             }
 
             HorizontalPager(
-                pageCount = titles.size,
                 state = pagerState
             ) { page ->
                 if (page == 0) { // Tab 1

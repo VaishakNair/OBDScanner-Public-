@@ -42,11 +42,12 @@ fun ConnectionSetupPager(
 ) {
     Box {
         val pageCount = 3
-        val pagerState = rememberPagerState()
+        val pagerState = rememberPagerState {
+            pageCount
+        }
         val coroutineScope = rememberCoroutineScope()
 
         HorizontalPager(
-            pageCount = pageCount,
             state = pagerState,
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.Top,
