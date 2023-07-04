@@ -49,22 +49,18 @@ fun ConnectionStatus(
         if (viewModel.isConnecting) {
             CancellableCircularProgress(text = stringResource(R.string.connecting),
                 onCancel = { viewModel.cancel() })
-        } else if (viewModel.isError) {// Error card for bluetooth connection errors:
-            ErrorCard(
-                errorMessage = viewModel.errorMessage,
-                onClick = { viewModel.loadConnectionStatus() })
-
-        } else {
+        }
+        else {
             // Contains the three circles and other text showing connection status from 89 bhp to OBD adapter and vehicle ECU
             ConnectionStatusCard(
                 navigateBack = navigateBack,
+                isError = viewModel.isError,
+                errorMessage = viewModel.errorMessage,
                 onTryAgain = {
-                viewModel.loadConnectionStatus()
-            })
+                    viewModel.loadConnectionStatus()
+                })
         }
     }
-
-
 }
 
 @Composable
@@ -90,16 +86,12 @@ fun ErrorCard(errorMessage: String, onClick: () -> Unit, modifier: Modifier = Mo
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ConnectionStatusCardPreview() {
-    ConnectionStatusCard({}, {})
-}
-
 @Composable
 fun ConnectionStatusCard(
     navigateBack: () -> Unit,
     onTryAgain: () -> Unit,
+    isError: Boolean,
+    errorMessage: String,
     modifier: Modifier = Modifier
 ) {
     val isElmInitialized = ElmHelper.elmInitialized.value as Boolean
@@ -152,51 +144,70 @@ fun ConnectionStatusCard(
             vehicleECUStatusHint = stringResource(id = if (isECUInitialized) R.string.connected else R.string.disconnected)
         )
 
-
-        if (isElmInitialized) {
-            if (isECUInitialized) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                ) {
+        if (isError) {
+            Column(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
                 Text(
-                    text = stringResource(R.string.connection_successful),
-                    modifier = Modifier.padding(8.dp)
+                    text = errorMessage
                 )
                 Button(
-                    onClick = navigateBack,
+                    onClick = onTryAgain,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .padding(8.dp)
                 ) {
-                    Text(text = stringResource(R.string.done))
-                }}
-            } else {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                ) {
-                    Text(text = stringResource(R.string.ign_off_error))
-                    Button(
-                        onClick = onTryAgain,
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(8.dp)
-                    ) {
-                        Text(text = stringResource(R.string.try_again))
-                    }
+                    Text(text = stringResource(R.string.try_again))
                 }
             }
         } else {
-            Button(
-                onClick = onTryAgain,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(8.dp)
-            ) {
-                Text(text = stringResource(R.string.connect))
+            if (isElmInitialized) {
+                if (isECUInitialized) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.connection_successful)
+                        )
+                        Button(
+                            onClick = navigateBack,
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(8.dp)
+                        ) {
+                            Text(text = stringResource(R.string.done))
+                        }
+                    }
+                } else {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+                    ) {
+                        Text(text = stringResource(R.string.ign_off_error))
+                        Button(
+                            onClick = onTryAgain,
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(8.dp)
+                        ) {
+                            Text(text = stringResource(R.string.try_again))
+                        }
+                    }
+                }
+            } else {
+                Button(
+                    onClick = onTryAgain,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(8.dp)
+                ) {
+                    Text(text = stringResource(R.string.connect))
+                }
             }
         }
     }
