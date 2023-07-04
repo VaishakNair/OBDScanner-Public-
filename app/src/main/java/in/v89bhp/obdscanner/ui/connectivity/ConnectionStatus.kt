@@ -207,15 +207,6 @@ fun ConnectionStatusCard(
                         }
                     }
                 }
-            } else {
-                Button(
-                    onClick = onTryAgain,
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(8.dp)
-                ) {
-                    Text(text = stringResource(R.string.connect))
-                }
             }
         }
     }
