@@ -34,6 +34,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ConnectionSetupPager(
     backStackEntry: NavBackStackEntry,
+    navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ConnectionSetupPagerViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         viewModelStoreOwner = backStackEntry
@@ -56,7 +57,7 @@ fun ConnectionSetupPager(
             when (page) { // TODO Add new connection screens here:
                 0 -> BluetoothIntro()
                 1 -> BluetoothConnection(backStackEntry)
-                2 -> ConnectionStatus(backStackEntry)
+                2 -> ConnectionStatus(backStackEntry, navigateBack)
                 else -> throw AssertionError("Illegal argument")
             }
         }

@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavBackStackEntry
@@ -89,6 +90,12 @@ fun ErrorCard(errorMessage: String, onClick: () -> Unit, modifier: Modifier = Mo
     }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun ConnectionStatusCardPreview() {
+    ConnectionStatusCard({}, {})
+}
+
 @Composable
 fun ConnectionStatusCard(
     navigateBack: () -> Unit,
@@ -97,6 +104,8 @@ fun ConnectionStatusCard(
 ) {
     val isElmInitialized = ElmHelper.elmInitialized.value as Boolean
     val isECUInitialized = ElmHelper.ecuInitialized.value as Boolean
+
+
     Card(
         modifier = modifier
             .fillMaxWidth()
