@@ -219,7 +219,7 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
                 HandlerMessageCodes.MESSAGE_RESPONSE.ordinal -> {
 
                     val obdParameter = Class.forName(
-                        "`in`.v89bhp.obdscanner.obdparameters.other.Parameter${otherPids[currentIndex].classNameSuffix
+                        "in.v89bhp.obdscanner.obdparameters.other.Parameter${otherPids[currentIndex].classNameSuffix
                         }"
                     ).constructors[0].newInstance(
                         application.applicationContext
