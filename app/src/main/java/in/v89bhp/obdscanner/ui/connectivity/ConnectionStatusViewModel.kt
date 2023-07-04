@@ -18,7 +18,7 @@ class ConnectionStatusViewModel(application: Application) : AndroidViewModel(app
     var isConnecting by mutableStateOf(false)
 
     var isError by mutableStateOf(false)
-    lateinit var errorMessage: String
+    var errorMessage: String = ""
 
     var elmVersion: String? = null
 
