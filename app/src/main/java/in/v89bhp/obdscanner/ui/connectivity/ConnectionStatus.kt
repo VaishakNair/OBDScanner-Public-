@@ -36,6 +36,7 @@ import `in`.v89bhp.obdscanner.ui.theme.PurpleGrey40
 @Composable
 fun ConnectionStatus(
     backStackEntry: NavBackStackEntry,
+    navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ConnectionStatusViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         viewModelStoreOwner = backStackEntry
@@ -54,7 +55,9 @@ fun ConnectionStatus(
 
         } else {
             // Contains the three circles and other text showing connection status from 89 bhp to OBD adapter and vehicle ECU
-            ConnectionStatusCard(onTryAgain = {
+            ConnectionStatusCard(
+                navigateBack = navigateBack,
+                onTryAgain = {
                 viewModel.loadConnectionStatus()
             })
         }
@@ -88,6 +91,7 @@ fun ErrorCard(errorMessage: String, onClick: () -> Unit, modifier: Modifier = Mo
 
 @Composable
 fun ConnectionStatusCard(
+    navigateBack: () -> Unit,
     onTryAgain: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -142,10 +146,23 @@ fun ConnectionStatusCard(
 
         if (isElmInitialized) {
             if (isECUInitialized) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
                 Text(
                     text = stringResource(R.string.connection_successful),
                     modifier = Modifier.padding(8.dp)
                 )
+                Button(
+                    onClick = navigateBack,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(8.dp)
+                ) {
+                    Text(text = stringResource(R.string.done))
+                }}
             } else {
                 Column(
                     modifier = Modifier

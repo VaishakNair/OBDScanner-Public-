@@ -315,4 +315,5 @@
     <string name="missing_permission">Missing permission</string>
     <string name="obd">OBD</string>
     <string name="ecu">ECU</string>
+    <string name="done">Done</string>
 </resources>
