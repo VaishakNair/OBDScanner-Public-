@@ -21,7 +21,7 @@
         app:layout_constraintTop_toBottomOf="@+id/popupTitleTextView"
         tools:text="Previously cleared code still waiting for its monitors to complete. It may or may not come back depending on whether the issue that caused the previous code was fixed or not." />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/popupCloseImageView"
         android:layout_width="14dp"
         android:layout_height="14dp"

@@ -71,6 +71,19 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
         _scanning = true
         _scanCompleted = false
         ElmHelper.send(mHandler, "0101\r")
+//        populateDummyValues()
+    }
+
+    fun populateDummyValues() {// For debugging UX:
+        _pendingCount = 1
+        _permanentCount = 1
+        _confirmedCount = 1
+        _obdCodes.add(Pair("U0100", "Permanent"))
+        _obdCodes.add(Pair("L0101", "Confirmed"))
+        _obdCodes.add("C0102" to "Pending")
+        _scanning = false
+        _scanCompleted = true
+
     }
 
     fun clearCodes() {
