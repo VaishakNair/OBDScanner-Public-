@@ -115,7 +115,7 @@ class FreezeFrameViewModel(application: Application) : AndroidViewModel(applicat
 
 
                     val obdParameter = Class.forName(
-                        "`in`.v89bhp.obdscanner.obdparameters.Parameter${pids[currentIndex].classNameSuffix
+                        "in.v89bhp.obdscanner.obdparameters.Parameter${pids[currentIndex].classNameSuffix
                         }"
                     ).constructors[0].newInstance(
                         application.applicationContext, this@FreezeFrameViewModel, null
