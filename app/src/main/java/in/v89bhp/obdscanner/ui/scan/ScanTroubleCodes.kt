@@ -152,7 +152,7 @@ fun ScanCompleted(viewModel: ScanTroubleCodesViewModel,
                 Card(
                     modifier = modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
+                        .padding(4.dp)
                 ) {
                     AndroidViewBinding(factory = ObdCodeListItemBinding::inflate) {
                         obdCodeTextView.text = obdCode
