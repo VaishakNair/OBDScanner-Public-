@@ -3,7 +3,6 @@ package `in`.v89bhp.obdscanner.ui.scan
 
 import android.view.LayoutInflater
 import android.view.View
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,15 +17,12 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -144,6 +140,7 @@ fun StartScan(onClick: () -> Unit, modifier: Modifier = Modifier) {
 fun ScanCompleted(viewModel: ScanTroubleCodesViewModel,
                   onNavigateTo: (route: String) -> Unit,
                   modifier: Modifier = Modifier) {
+    val context = LocalContext.current
     Column(modifier = modifier) {
         ScanResultCard(viewModel)
 
@@ -171,17 +168,13 @@ fun ScanCompleted(viewModel: ScanTroubleCodesViewModel,
                         freezeFrameButton.visibility =
                             if (category.contains("FF")) View.VISIBLE else View.GONE
                         detailsButton.setOnClickListener {
-                            viewModel.onObdCodeClicked(
-                                obdCode,
-                                false
+                            viewModel.getObdCodeDetails(
+                                obdCode = obdCode,
+                                context = context
                             )
                         }
                         freezeFrameButton.setOnClickListener {
                             onNavigateTo(Screen.FreezeFrame.createRoute(obdCode))
-//                            viewModel.onObdCodeClicked(
-//                                obdCode,
-//                                true
-//                            )
                         }
                     }
                 }

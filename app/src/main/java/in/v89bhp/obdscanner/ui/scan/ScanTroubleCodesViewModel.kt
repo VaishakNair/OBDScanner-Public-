@@ -252,24 +252,19 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
         return "$prefix${dtc.substring(1)}"
     }
 
-    fun onObdCodeClicked(obdCode: String, ff: Boolean) {
-        if (!ff) {
+    fun getObdCodeDetails(obdCode: String, context: Context) {
+
             val webSearchIntent = Intent(Intent.ACTION_WEB_SEARCH)
             webSearchIntent.putExtra(SearchManager.QUERY, obdCode + " obd code")
             try {
-                (getApplication() as Context).startActivity(webSearchIntent)
+                context.startActivity(webSearchIntent)
             } catch (ex: ActivityNotFoundException) {
                 snackbarState = SnackbarState(
                     true,
                     (getApplication() as Context).getString(R.string.web_browser_absent)
                 )
             }
-        } else {// Freeze frame icon clicked
-//                requireParentFragment().childFragmentManager.commit {
-//                    val ffFragment = FreezeFrameFragment()
-//                    ffFragment.arguments = Bundle().apply { putString(FreezeFrameFragment.KEY_ARG, obdCode) }
-////                replace(R.id.scan_container_pager, ffFragment) // TODO Implemented. Remove after checking.
-        }
+
     }
 
     fun dismissPopupWindow() {
