@@ -22,7 +22,7 @@ class IMReadinessSinceDtcClearedViewModel(application: Application) : AndroidVie
     val monitorStatuses: List<DtcMonitorStatus>
     get() = _monitorStatuses
 
-    val monitorStatusesList: MutableList<DtcMonitorStatus> = mutableListOf()
+    private val monitorStatusesList: MutableList<DtcMonitorStatus> = mutableListOf()
 
 
     var errorMessage: String? = null

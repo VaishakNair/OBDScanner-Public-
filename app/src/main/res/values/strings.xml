@@ -319,5 +319,6 @@
     <string name="since_dtc_cleared">Since DTC cleared</string>
     <string name="this_driving_cycle">This driving cycle</string>
     <string name="im_readiness">I/M Readiness</string>
+    <string name="loading">Loading…</string>
 
 </resources>
