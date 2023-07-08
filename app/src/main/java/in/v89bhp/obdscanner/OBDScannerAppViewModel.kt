@@ -111,7 +111,7 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
         return if (ActivityCompat.checkSelfPermission(
                 getApplication(),
                 Manifest.permission.BLUETOOTH_CONNECT
-            ) != PackageManager.PERMISSION_GRANTED
+            ) == PackageManager.PERMISSION_GRANTED
         ) {
             val deviceName = PreferenceManager.getDefaultSharedPreferences(getApplication())
                 .getString("deviceName", null)
