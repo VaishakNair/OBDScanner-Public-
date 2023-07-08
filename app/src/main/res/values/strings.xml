@@ -316,4 +316,8 @@
     <string name="obd">OBD</string>
     <string name="ecu">ECU</string>
     <string name="done">Done</string>
+    <string name="since_dtc_cleared">Since DTC cleared</string>
+    <string name="this_driving_cycle">This driving cycle</string>
+    <string name="im_readiness">I/M Readiness</string>
+
 </resources>
