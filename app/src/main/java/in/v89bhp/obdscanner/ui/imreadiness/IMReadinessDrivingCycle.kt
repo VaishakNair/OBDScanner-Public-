@@ -18,10 +18,10 @@ import `in`.v89bhp.obdscanner.ui.theme.ConnectivityGreen
 import `in`.v89bhp.obdscanner.ui.theme.HoloRedLight
 
 @Composable
-fun IMReadinessSinceDtcCleared(
+fun IMReadinessDrivingCycle(
     backStackEntry: NavBackStackEntry,
     modifier: Modifier = Modifier,
-    viewModel: IMReadinessSinceDtcClearedViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+    viewModel: IMReadinessDrivingCycleViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         viewModelStoreOwner = backStackEntry
     ),
     lifecycleOwner: LifecycleOwner = backStackEntry

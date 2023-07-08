@@ -320,5 +320,6 @@
     <string name="this_driving_cycle">This driving cycle</string>
     <string name="im_readiness">I/M Readiness</string>
     <string name="loading">Loading…</string>
+    <string name="engine_off_not_supported">ECU is not returning any response. Make sure that the engine is running and try again. This feature is ECU dependent and your ECU might not be supporting it.</string>
 
 </resources>
