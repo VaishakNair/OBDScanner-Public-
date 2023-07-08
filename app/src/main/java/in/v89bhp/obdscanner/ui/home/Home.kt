@@ -71,6 +71,7 @@ enum class NavigationDestination(@DrawableRes val icon: Int, val label: String, 
     GAUGES(R.drawable.ic_gauges, "Gauges", "gauges"),
     SCAN(R.drawable.ic_scan, "Scan", "scan"),
     CONNECTIVITY(R.drawable.baseline_bluetooth_connected_24, "Connectivity", "connectivity"),
+    IM_READINESS(R.drawable.ic_assignment_black_24dp, "I/M Readiness", "imreadiness"),
     SETTINGS(R.drawable.baseline_settings_24, "Settings", "settings"),
     ABOUT(R.drawable.ic_info_outline, "About", "about")
 }

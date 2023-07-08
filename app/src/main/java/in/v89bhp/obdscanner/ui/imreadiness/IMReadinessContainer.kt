@@ -32,7 +32,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun IMReadinessContainer(
     backStackEntry: NavBackStackEntry,
-    onNavigateTo: (route: String) -> Unit,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {

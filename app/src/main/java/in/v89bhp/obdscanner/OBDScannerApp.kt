@@ -67,6 +67,7 @@ import `in`.v89bhp.obdscanner.ui.gauges.GaugePicker
 import `in`.v89bhp.obdscanner.ui.gauges.Gauges
 import `in`.v89bhp.obdscanner.ui.home.Home
 import `in`.v89bhp.obdscanner.ui.home.NavigationDestination
+import `in`.v89bhp.obdscanner.ui.imreadiness.IMReadinessContainer
 import `in`.v89bhp.obdscanner.ui.scan.FreezeFrame
 import `in`.v89bhp.obdscanner.ui.scan.ScanContainer
 import `in`.v89bhp.obdscanner.ui.settings.GaugeTypePicker
@@ -128,6 +129,14 @@ fun OBDScannerApp(
 
                     composable(NavigationDestination.CONNECTIVITY.route) { backStackEntry ->
                         Connectivity(
+                            backStackEntry = backStackEntry,
+                            navigateBack = {
+                                appState.navigateBack()
+                            })
+                    }
+
+                    composable(NavigationDestination.IM_READINESS.route) { backStackEntry ->
+                        IMReadinessContainer(
                             backStackEntry = backStackEntry,
                             navigateBack = {
                                 appState.navigateBack()
