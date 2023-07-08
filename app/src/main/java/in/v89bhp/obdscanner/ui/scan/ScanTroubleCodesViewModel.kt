@@ -70,8 +70,8 @@ class ScanTroubleCodesViewModel(application: Application) : AndroidViewModel(app
     fun startScan() {
         _scanning = true
         _scanCompleted = false
-//        ElmHelper.send(mHandler, "0101\r")
-        populateDummyValues()
+        ElmHelper.send(mHandler, "0101\r")
+//        populateDummyValues()
     }
 
     fun populateDummyValues() {// For debugging UX:
