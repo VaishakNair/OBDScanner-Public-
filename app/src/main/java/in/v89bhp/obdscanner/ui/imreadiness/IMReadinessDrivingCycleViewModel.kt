@@ -48,16 +48,18 @@ class IMReadinessDrivingCycleViewModel(application: Application) : AndroidViewMo
      * Set necessary fields for UX and start communication with ELM327
      */
     fun loadMonitorStatuses() {
-        _isError = false
-        _loading = true
+        if(_loading.not()) {
+            _isError = false
+            _loading = true
 
-        fetchedSupportedMonitors = false
+            fetchedSupportedMonitors = false
 
-        // Remove any items already present in the list (Occurs when a configuration change happens after the list has been populated)
-        monitorStatusesList.clear()
-        _monitorStatuses.clear()
+            // Remove any items already present in the list (Occurs when a configuration change happens after the list has been populated)
+            monitorStatusesList.clear()
+            _monitorStatuses.clear()
 
-        fetchMonitorStatuses()
+            fetchMonitorStatuses()
+        }
 
     }
 

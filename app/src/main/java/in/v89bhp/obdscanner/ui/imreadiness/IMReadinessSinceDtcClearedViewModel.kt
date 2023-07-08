@@ -43,6 +43,7 @@ class IMReadinessSinceDtcClearedViewModel(application: Application) : AndroidVie
      * Set necessary fields for UX and start communication with ELM327
      */
     fun loadMonitorStatuses() {
+        if(_loading.not()) {
             _isError = false
             _loading = true
 
@@ -51,6 +52,7 @@ class IMReadinessSinceDtcClearedViewModel(application: Application) : AndroidVie
             monitorStatusesList.clear()
 
             fetchMonitorStatuses()
+        }
 
     }
 

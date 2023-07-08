@@ -84,7 +84,8 @@ fun IMReadinessContainer(
             }
 
             HorizontalPager(
-                state = pagerState
+                state = pagerState,
+                userScrollEnabled = true,
             ) { page ->
                 if (page == 0) { // Tab 1
                     IMReadinessSinceDtcCleared(backStackEntry = backStackEntry)
