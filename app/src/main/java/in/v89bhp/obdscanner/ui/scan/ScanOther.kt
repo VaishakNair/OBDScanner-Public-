@@ -117,6 +117,7 @@ fun OxygenSensorCard(
                     ).apply {
                         leftMargin = resources.getDimension(R.dimen.margin).toInt()
                         bottomMargin = leftMargin
+                        rightMargin = leftMargin
                     }
 
                     text = context.getString(R.string.key_colon_value, key, value)
@@ -182,6 +183,7 @@ fun GeneralCard(
                             ).apply {
                                 leftMargin = resources.getDimension(R.dimen.margin).toInt()
                                 bottomMargin = leftMargin
+                                rightMargin = leftMargin
                             }
 
                             text = context.getString(R.string.key_colon_value, key, value)
