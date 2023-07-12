@@ -83,7 +83,7 @@ fun ScanOtherCompleted(
     viewModel: ScanOtherViewModel,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(modifier = modifier) {
+    LazyColumn(modifier = modifier.padding(4.dp)) {
         item {
             GeneralCard(viewModel)
         }
@@ -105,7 +105,7 @@ fun OxygenSensorCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(4.dp)
     ) {
         AndroidViewBinding(factory = ScanOtherOxygenSensorCardBinding::inflate) {
 
@@ -166,7 +166,7 @@ fun GeneralCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(4.dp)
     ) {
         AndroidViewBinding(factory = ScanOtherGeneralCardBinding::inflate) {
             generalLayout.apply {
