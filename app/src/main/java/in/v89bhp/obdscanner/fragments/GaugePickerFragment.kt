@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -95,7 +96,7 @@ class GaugePickerFragment : Fragment(), PidsRecyclerViewAdapter.ViewHolder.PidCl
                     requireActivity(), gaugesViewModel, null
                 ) as BaseParameter
             )
-
+            GaugesAppBarState.searchTextFieldValue = TextFieldValue("")
             GaugesAppBarState.navigateBack()
         }
     }

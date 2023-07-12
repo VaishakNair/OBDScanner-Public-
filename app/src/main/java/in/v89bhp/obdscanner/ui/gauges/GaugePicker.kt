@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import `in`.v89bhp.obdscanner.R
@@ -42,6 +43,7 @@ fun GaugePicker(
             },
             navigationIcon = {
                 IconButton(onClick = {
+                    GaugesAppBarState.searchTextFieldValue = TextFieldValue("")
                     navigateBack()
                 }) {
                     Icon(
@@ -85,4 +87,6 @@ fun GaugePicker(
     LaunchedEffect(navigateBack) {
         GaugesAppBarState.navigateBack = navigateBack
     }
+
+
 }
