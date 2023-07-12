@@ -70,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="65dp"
                 tools:text="Diagnostic Trouble Code (DTC): P0145"
-                android:background="@color/colorPrimaryDark" android:textColor="@android:color/white"
+                android:background="@color/purple_200" android:textColor="@android:color/white"
                 android:gravity="center_vertical" android:paddingLeft="8dp"
                 android:visibility="@{viewModel.fetching ? View.GONE : View.VISIBLE}"/>
 
