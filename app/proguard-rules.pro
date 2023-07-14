@@ -20,16 +20,16 @@
 # hide the original source file name.
 -renamesourcefileattribute SourceFile
 
--keep public class pw.softwareengineer.v89bhp.obdparameters.*
--keep public class pw.softwareengineer.v89bhp.obdparameters.other.*
+-keep public class in.v89bhp.obdscanner.obdparameters.*
+-keep public class in.v89bhp.obdscanner.obdparameters.other.*
 
 
 
 
--keepclassmembers public class pw.softwareengineer.v89bhp.obdparameters.* {
+-keepclassmembers public class in.v89bhp.obdscanner.obdparameters.* {
     <init>(...);
 }
 
--keepclassmembers public class pw.softwareengineer.v89bhp.obdparameters.other.* {
+-keepclassmembers public class in.v89bhp.obdscanner.obdparameters.other.* {
     <init>(...);
 }
