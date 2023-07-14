@@ -53,8 +53,24 @@ android {
         }
 
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // Enables code shrinking, obfuscation, and optimization for only
+            // your project's release build type. Make sure to use a build
+            // variant with `isDebuggable=false`.
+            minifyEnabled = true
+
+
+            // Enables resource shrinking, which is performed by the
+            // Android Gradle plugin.
+            shrinkResources = true
+
+            // Includes the default ProGuard rules files that are packaged with
+            // the Android Gradle plugin. To learn more, go to the section about
+            // R8 configuration files.
+            proguardFiles(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
+            )
+
             buildConfigField("String", "APP_NAME", "\"89bhp\"")
         }
     }
@@ -83,13 +99,12 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
-    implementation 'androidx.activity:activity-compose:1.7.2'
-    implementation "androidx.compose.runtime:runtime:1.4.3"
+    implementation 'androidx.activity:activity-compose:1.7.1'
+    implementation "androidx.compose.runtime:runtime"
 //    implementation platform('androidx.compose:compose-bom:2022.10.00')
     implementation 'androidx.compose.ui:ui:1.4.3'
-    implementation 'androidx.compose.ui:ui-graphics:1.4.3'
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_ui_version"
-    implementation "androidx.compose.material3:material3:1.1.1"
+    implementation "androidx.compose.material3:material3:1.0.1"
     implementation "androidx.navigation:navigation-compose:$nav_version"
     implementation "com.google.accompanist:accompanist-permissions:0.31.2-alpha"
 

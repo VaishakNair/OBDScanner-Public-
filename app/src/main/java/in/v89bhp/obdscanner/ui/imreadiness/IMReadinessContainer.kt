@@ -37,7 +37,7 @@ fun IMReadinessContainer(
 ) {
     val titles = listOf(stringResource(R.string.since_dtc_cleared), stringResource(R.string.this_driving_cycle))
     val coroutineScope = rememberCoroutineScope()
-    val pagerState = rememberPagerState {titles.size}
+    val pagerState = rememberPagerState()
 
 
     Scaffold(
@@ -84,6 +84,7 @@ fun IMReadinessContainer(
             }
 
             HorizontalPager(
+                pageCount = titles.size,
                 state = pagerState,
                 userScrollEnabled = true,
             ) { page ->

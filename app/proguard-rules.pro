@@ -14,8 +14,22 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+-keepattributes SourceFile,LineNumberTable
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
-#-renamesourcefileattribute SourceFile
+-renamesourcefileattribute SourceFile
+
+-keep public class pw.softwareengineer.v89bhp.obdparameters.*
+-keep public class pw.softwareengineer.v89bhp.obdparameters.other.*
+
+
+
+
+-keepclassmembers public class pw.softwareengineer.v89bhp.obdparameters.* {
+    <init>(...);
+}
+
+-keepclassmembers public class pw.softwareengineer.v89bhp.obdparameters.other.* {
+    <init>(...);
+}
