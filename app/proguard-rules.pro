@@ -33,3 +33,7 @@
 -keepclassmembers public class in.v89bhp.obdscanner.obdparameters.other.* {
     <init>(...);
 }
+
+-keep public class in.v89bhp.obdscanner.obdparameters.* {<fields>; <init>(...);}
+-keep public class in.v89bhp.obdscanner.obdparameters.other.* {<fields>; <init>(...);}
+-keep public class com.github.anastr.speedviewlib.* {<fields>; <init>(...);}
