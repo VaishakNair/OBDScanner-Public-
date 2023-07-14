@@ -19,7 +19,7 @@ class GaugePickerViewModel(application: Application) : AndroidViewModel(applicat
         ParameterIdRepository(dao)
     }
 
-    val pids: MutableLiveData<List<ParameterId>> = MutableLiveData()
+    val pids: MutableLiveData<List<ParameterId>?> = MutableLiveData()
 
     private lateinit var allPids: List<ParameterId>
 

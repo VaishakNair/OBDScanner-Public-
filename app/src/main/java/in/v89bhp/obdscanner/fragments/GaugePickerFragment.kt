@@ -11,12 +11,14 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.obdparameters.BaseParameter
 import `in`.v89bhp.obdscanner.obdparameters.ParameterHolder
+import `in`.v89bhp.obdscanner.room.entities.ParameterId
 import `in`.v89bhp.obdscanner.ui.gauges.GaugePickerViewModel
 import `in`.v89bhp.obdscanner.ui.gauges.GaugesAppBarState
 import `in`.v89bhp.obdscanner.ui.gauges.GaugesViewModel
@@ -67,7 +69,7 @@ class GaugePickerFragment : Fragment(), PidsRecyclerViewAdapter.ViewHolder.PidCl
             adapter = PidsRecyclerViewAdapter(
                 context,
                 this@GaugePickerFragment,
-                viewModel.pids,
+                viewModel.pids as LiveData<List<ParameterId>>,
                 this@GaugePickerFragment
             )
         }
