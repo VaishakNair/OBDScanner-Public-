@@ -1,5 +1,6 @@
 package `in`.v89bhp.obdscanner.helpers
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
@@ -7,6 +8,8 @@ import android.bluetooth.BluetoothSocket
 import android.content.Context
 import android.content.Intent
 import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.content.ContextCompat.getSystemService
@@ -120,6 +123,7 @@ object BluetoothHelper {
                         it.connect()
                         connected(bluetoothDevice.name)
                         applicationContext.sendBroadcast(Intent(ACTION_BT_CONNECTED).apply{putExtra(BluetoothDevice.EXTRA_DEVICE, bluetoothDevice)})
+                        ElmHelper.send(initializationHandler, "ATI\r")
                         _connecting = false
                         connectingLiveData.postValue(false)
                         Log.i(TAG, "Connected to ${bluetoothDevice.name}")
@@ -189,4 +193,26 @@ object BluetoothHelper {
             mHandler?.sendMessage(msg!!)
         }
     }
+
+    /** Handles elm, ecu initialization responses */
+    private val initializationHandler = @SuppressLint("HandlerLeak")
+    object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            val response: String = msg?.obj as String
+            when (msg?.what) {
+                HandlerMessageCodes.MESSAGE_ERROR.ordinal -> {
+                    if(msg.arg1 != HandlerMessageCodes.MESSAGE_ERROR_IGNITION_OFF.ordinal) {
+                        Log.i(TAG, "Error: $response")
+
+                    }
+
+                }
+
+                HandlerMessageCodes.MESSAGE_RESPONSE_AT_COMMAND.ordinal -> {
+                    Log.i(TAG, "Elm version: $response")
+                }
+            }
+        }
+    }
+
 }
