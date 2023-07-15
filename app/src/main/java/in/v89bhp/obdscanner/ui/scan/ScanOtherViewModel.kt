@@ -89,6 +89,9 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
      */
     fun loadOtherData() {
         viewModelScope.launch {
+
+            if (_fetching) return@launch
+
             _isError = false
             scanCompleted = false
             _fetching = true
@@ -109,6 +112,7 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
             otherPids = withContext(Dispatchers.IO) {
                 repository.otherPidsSynchronous
             }
+
             fetchOtherData()
         }
     }
