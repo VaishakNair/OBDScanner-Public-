@@ -5,7 +5,6 @@ import android.content.Context
 import android.view.View
 import android.view.Window
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,7 +31,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -133,27 +131,20 @@ fun Gauges(
 
     val window = (context as Activity).window
     LaunchedEffect(GaugesAppBarState.isFullScreen) {
-
-        WindowCompat.setDecorFitsSystemWindows((context as Activity).window, GaugesAppBarState.isFullScreen.not())
-
-        val windowInsetsController =
-            WindowCompat.getInsetsController(window, window.decorView)
-        // Configure the behavior of the hidden system bars.
-        windowInsetsController.systemBarsBehavior =
-            WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
-
-
-        if(GaugesAppBarState.isFullScreen) {
-            windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
-
-        } else {
-            windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
-        }
-
+        toggleSystemBarsVisibility(
+            context = context,
+            window = window,
+            isVisible = GaugesAppBarState.isFullScreen.not()
+        )
     }
 
-    BackHandler() {
-        toggleSystemBarsVisibility(context, window, true)
+    BackHandler {
+        // Make system bars visible:
+        toggleSystemBarsVisibility(
+            context = context,
+            window = window,
+            isVisible = true
+        )
         navigateBack()
     }
 
@@ -262,7 +253,7 @@ fun toggleSystemBarsVisibility(context: Context, window: Window, isVisible: Bool
         WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
 
 
-    if(isVisible) {
+    if (isVisible) {
         windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
     } else {
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())

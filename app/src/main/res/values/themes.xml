@@ -2,6 +2,7 @@
 <resources>
 
     <style name="Theme.OBDScanner" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Makes window occupy the camera cutout area also when status bar is hidden -->
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
     </style>
 </resources>
