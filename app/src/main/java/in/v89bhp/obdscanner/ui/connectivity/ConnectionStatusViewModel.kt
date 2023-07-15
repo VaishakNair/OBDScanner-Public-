@@ -17,7 +17,7 @@ class ConnectionStatusViewModel(application: Application) : AndroidViewModel(app
 
     var pageDrawn by mutableStateOf(false)
 
-    var isConnecting by mutableStateOf(false)
+    var isConnecting by mutableStateOf(true)
 
     var isError by mutableStateOf(false)
     var errorMessage: String = ""
