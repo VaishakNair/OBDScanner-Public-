@@ -36,9 +36,7 @@ import kotlinx.coroutines.launch
 fun ScanOther(
     backStackEntry: NavBackStackEntry,
     modifier: Modifier = Modifier,
-    viewModel: ScanOtherViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
-        viewModelStoreOwner = backStackEntry
-    ),
+    viewModel: ScanOtherViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
     lifecycleOwner: LifecycleOwner = backStackEntry
 ) {
 
