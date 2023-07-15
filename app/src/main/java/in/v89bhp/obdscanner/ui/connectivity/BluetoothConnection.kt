@@ -40,6 +40,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavBackStackEntry
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.helpers.BluetoothHelper
+import java.lang.IllegalArgumentException
 
 @Composable
 fun BluetoothConnection(
@@ -144,7 +145,11 @@ fun SystemBroadcastReceiver(
 
         // When the effect leaves the Composition, remove the callback
         onDispose {
+            try {
             context.unregisterReceiver(broadcast)
+            } catch(ex: IllegalArgumentException) {
+                Log.i("BluetoothConnection.kt", ex.toString())
+            }
         }
     }
 }

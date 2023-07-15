@@ -11,6 +11,7 @@ import android.content.Intent.FLAG_ACTIVITY_NO_HISTORY
 import android.content.IntentFilter
 import android.net.Uri
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -315,10 +316,23 @@ fun OBDScannerApp(
                 }
 
                 Lifecycle.Event.ON_PAUSE -> {
-                    context.unregisterReceiver(viewModel.bluetoothStateChangeReceiver)
-                    context.unregisterReceiver(
-                        viewModel.bluetoothConnectionStateChangeReceiver
-                    )
+                    // Sometimes the IllegalArgumentException
+                    // gets thrown when the receiver is not already
+                    // registered. Ignore it.
+                    try {
+                        context.unregisterReceiver(viewModel.bluetoothStateChangeReceiver)
+                    } catch (ex: IllegalArgumentException) {
+                        Log.i("OBDScannerApp.kt", ex.toString())
+                    }
+
+                    try {
+
+                        context.unregisterReceiver(
+                            viewModel.bluetoothConnectionStateChangeReceiver
+                        )
+                    } catch (ex: IllegalArgumentException) {
+                        Log.i("OBDScannerApp.kt", ex.toString())
+                    }
                 }
 
                 Lifecycle.Event.ON_DESTROY -> {
@@ -337,10 +351,18 @@ fun OBDScannerApp(
         // When the effect leaves the Composition, remove the observer
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
-            context.unregisterReceiver(viewModel.bluetoothStateChangeReceiver)
-            context.unregisterReceiver(
-                viewModel.bluetoothConnectionStateChangeReceiver
-            )
+            try {
+                context.unregisterReceiver(viewModel.bluetoothStateChangeReceiver)
+            } catch (ex: IllegalArgumentException) {
+                Log.i("OBDScannerApp.kt", ex.toString())
+            }
+            try {
+                context.unregisterReceiver(
+                    viewModel.bluetoothConnectionStateChangeReceiver
+                )
+            } catch (ex: IllegalArgumentException) {
+                Log.i("OBDScannerApp.kt", ex.toString())
+            }
         }
     }
 
