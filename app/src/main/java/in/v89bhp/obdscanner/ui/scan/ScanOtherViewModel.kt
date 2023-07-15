@@ -40,7 +40,7 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
 
     var scanCompleted by mutableStateOf(false)
 
-    private val _otherData = mutableListOf<String>().toMutableStateList()
+//    private val _otherData = mutableListOf<String>().toMutableStateList()
 
 
     val otherDataList: MutableList<String> = mutableListOf()
@@ -102,6 +102,7 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
 
             // Remove any items already present in the list/ map (Occurs when a configuration change happens after the list has been populated)
             currentIndex = 0
+//            _otherData.clear()
             otherDataList.clear()
             _otherDataMap.clear()
 
@@ -143,7 +144,7 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
 
             else -> {// End of parameter list reached. Show result
                 currentIndex = 0
-                _otherData.addAll(otherDataList)
+//                _otherData.addAll(otherDataList)
                 otherDataList.associateByTo(_otherDataMap,
                     {it.substringBefore(':').trim()},
                     {it.substringAfter(':').trim()})
