@@ -34,7 +34,9 @@ fun ScanContainer(
     backStackEntry: NavBackStackEntry,
     onNavigateTo: (route: String) -> Unit,
     navigateBack: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    scanOtherViewModel: ScanOtherViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    scanTroubleCodesViewModel: ScanTroubleCodesViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
 ) {
     val titles = listOf(stringResource(R.string.trouble_codes), stringResource(R.string.other))
     val coroutineScope = rememberCoroutineScope()
@@ -89,6 +91,10 @@ fun ScanContainer(
                 pageCount = titles.size,
                 state = pagerState
             ) { page ->
+
+                scanTroubleCodesViewModel.dismissPopupWindow()
+                scanOtherViewModel.dismissPopupWindow()
+
                 if (page == 0) { // Tab 1
                     ScanTroubleCodes(
                         onNavigateTo = onNavigateTo,
