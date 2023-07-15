@@ -9,6 +9,9 @@ import android.os.*
 import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -208,10 +211,12 @@ class GaugesFragment : Fragment() {
     private fun hideSystemUi() {
         GaugesAppBarState.showExitFullScreenSnackbar = true
 
-        activity?.window?.decorView?.systemUiVisibility =
-            View.SYSTEM_UI_FLAG_FULLSCREEN or
-                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                    View.SYSTEM_UI_FLAG_IMMERSIVE
+        GaugesAppBarState.isFullScreen = true
+
+//        activity?.window?.decorView?.systemUiVisibility =
+//            View.SYSTEM_UI_FLAG_FULLSCREEN or
+//                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+//                    View.SYSTEM_UI_FLAG_IMMERSIVE
     }
 
 

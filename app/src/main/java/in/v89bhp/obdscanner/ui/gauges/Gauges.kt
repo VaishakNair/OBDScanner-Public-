@@ -1,6 +1,11 @@
 package `in`.v89bhp.obdscanner.ui.gauges
 
+import android.app.Activity
+import android.content.Context
 import android.view.View
+import android.view.Window
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,10 +32,17 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.viewinterop.AndroidViewBinding
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import `in`.v89bhp.obdscanner.R
 import `in`.v89bhp.obdscanner.Screen
 import `in`.v89bhp.obdscanner.databinding.GaugesFragmentLayoutBinding
@@ -43,7 +55,9 @@ fun Gauges(
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
+    val systemUiController: SystemUiController = rememberSystemUiController()
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -108,11 +122,39 @@ fun Gauges(
             } else { // Fullscreen mode. No Top app bar
             }
         }) { contentPadding ->
+
         AndroidViewBinding(
-            modifier = Modifier.padding(contentPadding),
+            modifier = if (GaugesAppBarState.isFullScreen.not()) Modifier.padding(contentPadding) else Modifier,
             factory = GaugesFragmentLayoutBinding::inflate
         )
 
+    }
+
+
+    val window = (context as Activity).window
+    LaunchedEffect(GaugesAppBarState.isFullScreen) {
+
+        WindowCompat.setDecorFitsSystemWindows((context as Activity).window, GaugesAppBarState.isFullScreen.not())
+
+        val windowInsetsController =
+            WindowCompat.getInsetsController(window, window.decorView)
+        // Configure the behavior of the hidden system bars.
+        windowInsetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
+
+
+        if(GaugesAppBarState.isFullScreen) {
+            windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+
+        } else {
+            windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
+        }
+
+    }
+
+    BackHandler() {
+        toggleSystemBarsVisibility(context, window, true)
+        navigateBack()
     }
 
     if (GaugesAppBarState.showExitFullScreenSnackbar) {
@@ -207,5 +249,22 @@ fun Gauges(
                     )
                 }
             })
+    }
+}
+
+fun toggleSystemBarsVisibility(context: Context, window: Window, isVisible: Boolean) {
+    WindowCompat.setDecorFitsSystemWindows((context as Activity).window, isVisible)
+
+    val windowInsetsController =
+        WindowCompat.getInsetsController(window, window.decorView)
+    // Configure the behavior of the hidden system bars.
+    windowInsetsController.systemBarsBehavior =
+        WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
+
+
+    if(isVisible) {
+        windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
+    } else {
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 }

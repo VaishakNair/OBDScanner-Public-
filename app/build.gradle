@@ -127,6 +127,9 @@ dependencies {
     // Compose live data interoperability:
     implementation "androidx.compose.runtime:runtime-livedata:1.4.3"
 
+    // System UI Controller:
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.28.0"
+
     constraints {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.0") {
             because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
