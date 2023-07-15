@@ -101,6 +101,7 @@ class ScanOtherViewModel(application: Application) : AndroidViewModel(applicatio
 
 
             // Remove any items already present in the list/ map (Occurs when a configuration change happens after the list has been populated)
+            currentIndex = 0
             otherDataList.clear()
             _otherDataMap.clear()
 
