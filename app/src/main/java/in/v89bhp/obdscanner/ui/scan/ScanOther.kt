@@ -3,12 +3,15 @@ package `in`.v89bhp.obdscanner.ui.scan
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
@@ -129,28 +132,28 @@ fun OxygenSensorCard(
 
 
                 // Ignore calls during recomposition
-                loop@ for ((key, value) in viewModel.otherDataMap.entries) {
-                    if (key.contains(
-                            context.getString(R.string.oxygen),
-                            true
-                        )
-                    ) {// Oxygen sensor-related data
-                        for (childView in children) {
-                            if (childView is TextView) {
-                                if (childView.text == context.getString(
-                                        R.string.key_colon_value,
-                                        key,
-                                        value
-                                    )
-                                ) {
-
-                                    break@loop
-                                }
-                            }
-                        }
-                        addView(getChildTextView(key, value))
-                    }
-                }
+//                loop@ for ((key, value) in viewModel.otherDataMap.entries) {
+//                    if (key.contains(
+//                            context.getString(R.string.oxygen),
+//                            true
+//                        )
+//                    ) {// Oxygen sensor-related data
+//                        for (childView in children) {
+//                            if (childView is TextView) {
+//                                if (childView.text == context.getString(
+//                                        R.string.key_colon_value,
+//                                        key,
+//                                        value
+//                                    )
+//                                ) {
+//
+//                                    break@loop
+//                                }
+//                            }
+//                        }
+//                        addView(getChildTextView(key, value))
+//                    }
+//                }
             }
 
             oxygenSensorTypeTextView.text = viewModel.oxygenSensorType
@@ -163,6 +166,19 @@ fun OxygenSensorCard(
                     context.getString(R.string.oxygen_sensor_types_title),
                     context.getString(R.string.oxygen_sensor_types)
                 )
+            }
+        }
+
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+             for ((key, value) in viewModel.otherDataMap.entries) {
+                if (key.contains(
+                        context.getString(R.string.oxygen),
+                        true
+                    )
+                ) {// Oxygen sensor-related data
+                    Text(text = context.getString(R.string.key_colon_value, key, value))
+
+                }
             }
         }
     }
