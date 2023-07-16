@@ -169,23 +169,25 @@ fun GeneralCard(
     ) {
         AndroidViewBinding(factory = ScanOtherGeneralCardBinding::inflate) {
             generalLayout.apply {
-                for ((key, value) in viewModel.otherDataMap.entries) {
-                    if (key.contains(context.getString(R.string.oxygen), true)
-                            .not()
-                    ) {// Not related to oxygen sensors.
-                        // O2 sensor data is displayed separately.
-                        addView(TextView(context).apply {
-                            layoutParams = LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT
-                            ).apply {
-                                leftMargin = resources.getDimension(R.dimen.margin).toInt()
-                                bottomMargin = leftMargin
-                                rightMargin = leftMargin
-                            }
+                if (childCount == 1) { // Ignore calls during recomposition
+                    for ((key, value) in viewModel.otherDataMap.entries) {
+                        if (key.contains(context.getString(R.string.oxygen), true)
+                                .not()
+                        ) {// Not related to oxygen sensors.
+                            // O2 sensor data is displayed separately.
+                            addView(TextView(context).apply {
+                                layoutParams = LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT
+                                ).apply {
+                                    leftMargin = resources.getDimension(R.dimen.margin).toInt()
+                                    bottomMargin = leftMargin
+                                    rightMargin = leftMargin
+                                }
 
-                            text = context.getString(R.string.key_colon_value, key, value)
-                        })
+                                text = context.getString(R.string.key_colon_value, key, value)
+                            })
+                        }
                     }
                 }
             }
