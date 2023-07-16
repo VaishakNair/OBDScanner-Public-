@@ -1,10 +1,8 @@
 package `in`.v89bhp.obdscanner.ui.scan
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,13 +11,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidViewBinding
+import androidx.core.view.children
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
@@ -30,7 +27,6 @@ import `in`.v89bhp.obdscanner.databinding.ScanOtherOxygenSensorCardBinding
 import `in`.v89bhp.obdscanner.helpers.Utilities
 import `in`.v89bhp.obdscanner.ui.connectivity.CircularProgress
 import `in`.v89bhp.obdscanner.ui.connectivity.ErrorCard
-import kotlinx.coroutines.launch
 
 @Composable
 fun ScanOther(
@@ -131,17 +127,28 @@ fun OxygenSensorCard(
                     )
                 }
 
-                oxygenSensorsListLayout.apply {
-                    if (childCount == 0) { // Ignore calls during recomposition
-                        for ((key, value) in viewModel.otherDataMap.entries) {
-                            if (key.contains(
-                                    context.getString(R.string.oxygen),
-                                    true
-                                )
-                            ) {// Oxygen sensor-related data
-                                addView(getChildTextView(key, value))
+
+                // Ignore calls during recomposition
+                loop@ for ((key, value) in viewModel.otherDataMap.entries) {
+                    if (key.contains(
+                            context.getString(R.string.oxygen),
+                            true
+                        )
+                    ) {// Oxygen sensor-related data
+                        for (childView in children) {
+                            if (childView is TextView) {
+                                if (childView.text == context.getString(
+                                        R.string.key_colon_value,
+                                        key,
+                                        value
+                                    )
+                                ) {
+
+                                    break@loop
+                                }
                             }
                         }
+                        addView(getChildTextView(key, value))
                     }
                 }
             }
