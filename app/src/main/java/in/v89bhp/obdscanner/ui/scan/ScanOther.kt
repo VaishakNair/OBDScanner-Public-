@@ -130,13 +130,18 @@ fun OxygenSensorCard(
                         )
                     )
                 }
-                for ((key, value) in viewModel.otherDataMap.entries) {
-                    if (key.contains(
-                            context.getString(R.string.oxygen),
-                            true
-                        )
-                    ) {// Oxygen sensor-related data
-                        addView(getChildTextView(key, value))
+
+                oxygenSensorsListLayout.apply {
+                    if (childCount == 0) { // Ignore calls during recomposition
+                        for ((key, value) in viewModel.otherDataMap.entries) {
+                            if (key.contains(
+                                    context.getString(R.string.oxygen),
+                                    true
+                                )
+                            ) {// Oxygen sensor-related data
+                                addView(getChildTextView(key, value))
+                            }
+                        }
                     }
                 }
             }
