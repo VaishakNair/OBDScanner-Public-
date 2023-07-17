@@ -234,7 +234,7 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
                 )
 
             } else {
-                if (BluetoothHelper.socket?.isConnected?.not() != false) {
+                if (BluetoothHelper.socket?.isConnected?.not() != false) { // Bluetooth socket is not currently connected:
                     establishLastConnection()
                 }
             }
