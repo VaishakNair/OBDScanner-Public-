@@ -203,16 +203,16 @@ fun OBDScannerApp(
 
         }
 
-        if (viewModel.showConnectingSnackbar) {
-            val cancelLabel = stringResource(R.string.cancel)
+        with (viewModel.connectingSnackbarState) {
+
             LaunchedEffect(snackbarHostState) {
                 if (snackbarHostState.showSnackbar(
-                        message = viewModel.connectivityBannerState.message,
-                        duration = SnackbarDuration.Indefinite,
-                        actionLabel = cancelLabel
+                        message = message,
+                        duration = duration,
+                        actionLabel = actionLabel
                     ) == SnackbarResult.ActionPerformed
                 ) {
-                    viewModel.cancelConnection()
+                    action()
                 }
             }
         }

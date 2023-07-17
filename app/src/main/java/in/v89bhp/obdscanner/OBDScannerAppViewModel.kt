@@ -13,6 +13,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.util.Log
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.core.app.ActivityCompat
@@ -45,7 +46,15 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
             background = ConnectivityYellow
         )
     )
-    var showConnectingSnackbar by mutableStateOf(false)
+//    var showConnectingSnackbar by mutableStateOf(false)
+
+    var connectingSnackbarState by mutableStateOf(ConnectingSnackbarState(
+        show = false,
+        message = connectivityBannerState.message,
+        duration = SnackbarDuration.Indefinite,
+        actionLabel = application.getString(R.string.cancel),
+        action = { cancelConnection() }
+    ))
 
     lateinit var lastConnectedDevice: BluetoothDevice
 
@@ -273,4 +282,12 @@ data class ConnectivityBannerState(
     val message: String,
     val background: Color,
     val autoHide: Boolean = false
+)
+
+data class ConnectingSnackbarState(
+    val show: Boolean,
+    val message: String,
+    val duration: SnackbarDuration,
+    val actionLabel: String,
+    val action: () -> Unit
 )
