@@ -314,6 +314,14 @@ fun OBDScannerApp(
                             BluetoothDevice.ACTION_ACL_DISCONNECTED
                         )
                     )
+
+                    // Try to establish last connection if Bluetooth is turned on. Scenario:
+                    // User turns on Bluetooth first and then opens the app:
+                    if(BluetoothHelper.bluetoothAdapter?.let {
+                            it.isEnabled
+                        } == true) {
+                        viewModel.establishLastConnection()
+                    }
                 }
 
                 Lifecycle.Event.ON_PAUSE -> {

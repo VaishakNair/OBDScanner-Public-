@@ -77,7 +77,7 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
     }
 
 
-    private fun establishLastConnection() {
+    internal fun establishLastConnection() {
         if (ActivityCompat.checkSelfPermission(
                 (getApplication()),
                 Manifest.permission.BLUETOOTH_CONNECT
