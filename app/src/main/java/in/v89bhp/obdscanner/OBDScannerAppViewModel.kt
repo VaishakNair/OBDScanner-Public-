@@ -34,8 +34,6 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
         const val TAG = "OBDScannerAppViewModel"
     }
 
-    var shouldShowBluetoothPermissionDeniedButton by mutableStateOf(false)
-
     var stopTrying = false
     var isDestroyed = false
 
@@ -46,7 +44,6 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
             background = ConnectivityYellow
         )
     )
-//    var showConnectingSnackbar by mutableStateOf(false)
 
     var connectingSnackbarState by mutableStateOf(ConnectingSnackbarState(
         show = false,
