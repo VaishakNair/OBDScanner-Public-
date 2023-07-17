@@ -203,16 +203,17 @@ fun OBDScannerApp(
 
         }
 
-        with (viewModel.connectingSnackbarState) {
-
-            LaunchedEffect(snackbarHostState) {
-                if (snackbarHostState.showSnackbar(
-                        message = message,
-                        duration = duration,
-                        actionLabel = actionLabel
-                    ) == SnackbarResult.ActionPerformed
-                ) {
-                    action()
+        with(viewModel.connectingSnackbarState) {
+            if (show) {
+                LaunchedEffect(viewModel.connectingSnackbarState, snackbarHostState) {
+                    if (snackbarHostState.showSnackbar(
+                            message = message,
+                            duration = duration,
+                            actionLabel = actionLabel
+                        ) == SnackbarResult.ActionPerformed
+                    ) {
+                        action()
+                    }
                 }
             }
         }

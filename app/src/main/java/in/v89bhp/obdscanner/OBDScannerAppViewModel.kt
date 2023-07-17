@@ -101,7 +101,11 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
                         background = ConnectivityYellow
                     )
 
-                    showConnectingSnackbar = true
+                    connectingSnackbarState = ConnectingSnackbarState(show = true,
+                        message = connectivityBannerState.message,
+                        duration = SnackbarDuration.Indefinite,
+                        actionLabel = (getApplication() as Context).getString(R.string.cancel),
+                        action = { cancelConnection() })
                     BluetoothHelper.connect(bluetoothConnectionHandler, device)
                 } else {
                     // Display 'You are offline' header
@@ -158,7 +162,12 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
 
                     1 -> {// Connection established
                         // Dismiss the 'Connecting to' snackbar
-                        showConnectingSnackbar = false
+                        connectingSnackbarState = ConnectingSnackbarState(show = false,
+                            message = "",
+                            duration = SnackbarDuration.Indefinite,
+                            actionLabel = "",
+                            action = { })
+
                         // Display green 'Connected to $pairedDeviceName' header
                         connectivityBannerState = ConnectivityBannerState(
                             show = true,
