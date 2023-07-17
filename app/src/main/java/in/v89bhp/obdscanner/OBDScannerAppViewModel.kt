@@ -273,14 +273,6 @@ class OBDScannerAppViewModel(application: Application) : AndroidViewModel(applic
             }
         }
     }
-
-    fun updateBluetoothPermissionGrantedState() {
-        // Set shouldShowBluetoothPermissionDenied button to true if
-        // 1. shared prefs rationale is true
-        // 2. Bluetooth permissions are not granted.
-        // 3. We are currently not in the 'Connectivity' nav destination.
-
-    }
 }
 
 data class ConnectivityBannerState(
