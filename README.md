@@ -34,7 +34,7 @@ Android's native UI toolkit Jetpack Compose is used for rendering the UI and Kot
 
 ## Screenshots
 
-![Home](screenshots/home.png)
+![Home](screenshots/home.png =350x700)
 ![Gauges](screenshots/gauges.png)
 ![Scan trouble codes](screenshots/scan_codes.png)
 ![Freeze frame](screenshots/freeze_frame.png)
