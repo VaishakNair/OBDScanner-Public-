@@ -33,5 +33,12 @@ Vehicle Information (ECU dependent)
 Android's native UI toolkit Jetpack Compose is used for rendering the UI and Kotlin Coroutines are used for asynchronous tasks. Uses MVVM architecture.
 
 ## Screenshots
-![Connection Status](screenshots/connection_status.png)
+
 ![Home](screenshots/home.png)
+![Gauges](screenshots/gauges.png)
+![Scan trouble codes](screenshots/scan_codes.png)
+![Freeze frame](screenshots/freeze_frame.png)
+![Connection Status](screenshots/connection_status.png)
+![Quick parameter search](screenshots/parameter_list.png)
+![Vehicle info](screenshots/vehicle_info.png)
+![Emission test readiness](screenshots/im_readiness.png)
