@@ -1,24 +1,26 @@
 # 89 bhp
-89 bhp is an Android app written in Kotlin that uses Bluetooth to communicate with a Vehicle's ECU. Features include:
+89 bhp is an Android app written in Kotlin that uses Bluetooth to communicate with a Vehicle's ECU.
 
-Scanner
+## Features
+
+### Scanner
 - Quickly scan trouble codes.
 - Fetch freeze frame data.
 - Clear trouble codes and turn OFF check engine light.
 
-Inspection and Maintenance (I/M) Readiness
+### Inspection and Maintenance (I/M) Readiness
 - View completion status of monitors needed to pass the emissions test.
 - Readiness since DTC cleared.
 - Readiness of the current driving cycle.
 
-Live Data
+### Live Data
 - Monitor parameters like speed, turbo boost etc. in real time.
 - 79 parameters in total. More to be added soon.
 - Fullscreen mode.
 - Pinch-resizeable gauges.
 - 4 gauge types to choose from.
 
-Vehicle Information (ECU dependent)
+### Vehicle Information (ECU dependent)
 - Vehicle Identification Number (VIN).
 - Location of Oxygen sensors.
 - Type (narrowband/ wideband) of Oxygen sensors.
