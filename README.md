@@ -43,3 +43,6 @@ Android's native UI toolkit Jetpack Compose is used for rendering the UI and Kot
 ![Quick parameter search](screenshots/parameter_list.png)
 ![Vehicle info](screenshots/vehicle_info.png)
 ![Emission test readiness](screenshots/im_readiness.png)
+
+##  Android app on Google Play
+[![Download](https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=in.v89bhp.obdscanner)
